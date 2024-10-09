@@ -20,3 +20,5 @@ export const roles = [
     rolAdi: "Teknoloji Ekibi",
   },
 ];
+
+export const rollerAdi = roles.map((rol) => rol.rolAdi);
