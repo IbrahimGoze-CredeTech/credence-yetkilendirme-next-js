@@ -6,7 +6,7 @@ import { roles } from "../modals/roller";
 import { yetkilerAdi } from "../modals/yetkiler";
 import { useModalContext } from "../context";
 
-export default function SummaryDataGrid() {
+export default function KisiDataGrid() {
   const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([])
   const modalContext = useModalContext();
 
@@ -77,6 +77,7 @@ export default function SummaryDataGrid() {
 
   return (
     <>
+      <h1 className="text-3xl font-medium my-4">Kişi Bilgileri</h1>
       <DataGrid
         id="kisiOzet"
         keyExpr="id"

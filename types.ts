@@ -83,3 +83,12 @@ export type RolYetkiOzet = {
   rolAdi: string;
   yetkiler: string[];
 };
+
+export type Talep = {
+  talepId: number;
+  talepEdenKisiId: number;
+  olusturulmaTarihi: string;
+  durum: string;
+  durumTarihi: string;
+  talepEdenKisiAdi: string;
+};

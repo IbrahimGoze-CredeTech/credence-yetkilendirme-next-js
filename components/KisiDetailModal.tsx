@@ -1,7 +1,8 @@
 "use client";
+
 import React, { useEffect, useState } from 'react';
 import { useModalContext } from '../context';
-import { EkstraYetki, Kisi } from '../types';
+import { Kisi } from '../types';
 import DataGrid, {
   Column,
   Editing,
@@ -10,14 +11,12 @@ import DataGrid, {
   FilterRow,
   MasterDetail,
 } from "devextreme-react/data-grid";
-import { SavedEvent } from "devextreme/ui/data_grid";
 
 import { rolDataGridConfig } from '../configs/rol-data-grid-config';
 import { yetkiDataGridConfig } from '../configs/yetki-data-grid-config';
 import { ekstraYetkilerDataGridConfig } from '../configs/ekstra-yetkiler-data-grid-config';
-import { formatDate } from '../utils';
 
-export default function DetailDataGridModal() {
+export default function KisiDetailModal() {
   const modalContext = useModalContext();
 
   const [employees, setEmployees] = useState<Kisi[]>([]); // API'den gelecek roller için state
