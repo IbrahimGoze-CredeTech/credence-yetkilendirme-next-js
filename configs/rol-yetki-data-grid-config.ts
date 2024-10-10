@@ -14,15 +14,17 @@ export const rolyetkiDataGridConfig: IDataGridOptions = {
     {
       dataField: "rolAdi",
       caption: "Rol",
-      lookup: {
-        dataSource: roles,
-        valueExpr: "rolAdi",
-        displayExpr: "rolAdi",
-      },
+      allowFiltering: false,
+      // lookup: {
+      //   dataSource: roles,
+      //   valueExpr: "rolAdi",
+      //   displayExpr: "rolAdi",
+      // },
     },
     {
       dataField: "yetkiAdi",
       caption: "Yetki",
+      allowEditing: true,
       lookup: {
         dataSource: yetkiler,
         valueExpr: "yetkiAdi",

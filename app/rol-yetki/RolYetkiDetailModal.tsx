@@ -84,6 +84,7 @@ export default function RolYetkiDetailModal() {
             mode="row"
             allowUpdating={true}
             allowDeleting={true}
+            allowAdding={true}
             useIcons={true} // Simge kullanmayı etkinleştir
           />
 
