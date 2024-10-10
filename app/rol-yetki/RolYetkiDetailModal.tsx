@@ -73,7 +73,7 @@ export default function RolYetkiDetailModal() {
       <div style={{ position: 'relative', pointerEvents: "auto", userSelect: "none", zIndex: 3, top: "20%" }} className="w-[80vw] bg-white p-4 rounded-md" onPointerDown={(e) => e.stopPropagation()}>
 
         {/* Rol Adı Başlık olarak gösteriliyor */}
-        {rolAdi && <h2 className="text-2xl font-bold text-black mb-2 pt-12">{rolAdi}</h2>}
+        {rolAdi && <h2 className="text-3xl font-bold text-center text-black  pt-8">{rolAdi}</h2>}
 
         <DataGrid
           id="gridContainer"
