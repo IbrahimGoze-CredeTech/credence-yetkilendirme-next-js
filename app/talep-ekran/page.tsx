@@ -1,5 +1,6 @@
 'use client';
 
+import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
 import { Talep } from '@/types';
 import { DataGrid } from 'devextreme-react';
 import React, { useEffect, useState } from 'react'
@@ -23,7 +24,10 @@ export default function TalepEkranPage() {
   return (
     <div className='p-4'>
       <h1 className="text-3xl font-medium my-4">Talepler</h1>
-      <DataGrid dataSource={talepler} />
+      <DataGrid dataSource={talepler}
+        {...talepDataGridConfig}
+      />
+
     </div>
   )
 }
