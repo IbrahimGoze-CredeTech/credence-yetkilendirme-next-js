@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation"; // next/navigation'dan useRouter'ı import edin
+import { useRouter, usePathname } from "next/navigation"; // next/navigation'dan usePathname'i de import edin
 
 
 interface NavbarProps {
@@ -11,9 +11,14 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ userName, userSurname, userRole }) => {
   const router = useRouter();
+  const pathname = usePathname(); // Şu anki sayfa yolunu alır
 
   const handleButtonClick = () => {
-    router.push("/rol-yetki"); // Yeni sayfaya yönlendirme
+    if (pathname === "/rol-yetki") {
+      router.push("/"); // Eğer zaten "rol-yetki" sayfasındaysa anasayfaya yönlendirin
+    } else {
+      router.push("/rol-yetki"); // Eğer başka bir sayfadaysa "rol-yetki" sayfasına yönlendirin
+    }
   };
 
   const handleLogout =  () => {
@@ -36,7 +41,7 @@ const Navbar: React.FC<NavbarProps> = ({ userName, userSurname, userRole }) => {
         onClick={handleButtonClick}
         className="absolute bottom-4 left-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
-        Rol-Yetki Güncelleme
+        {pathname === "/rol-yetki" ? "Anasayfaya Dön" : "Rol-Yetki Güncelleme"}
       </button>
 
       {/* Çıkış yap butonu ekleniyor */}

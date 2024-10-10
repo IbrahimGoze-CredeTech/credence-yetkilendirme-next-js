@@ -70,3 +70,16 @@ export type EkstraYetki = {
   ekstraYetkiOnaylayan: string;
   ekstraYetkiOnaylanmaTarihi: string; // Can be changed to `Date` if necessary
 };
+export type RolYetki = {
+  rolId: number; // Rol ID
+  rolAdi: string; // Rol Adı
+  yetkiId: number; // Yetki ID
+  yetkiAdi: string; // Yetki Adı
+  eylemlerTuruId: number; // Eylem Türü ID
+};
+
+export type RolYetkiOzet = {
+  id: number;
+  rolAdi: string;
+  yetkiler: string[];
+};
