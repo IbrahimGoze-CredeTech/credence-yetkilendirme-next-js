@@ -1,23 +1,3 @@
-export enum authorityDataKeys {
-  kisiAdi = "kisiAdi",
-  kisiSoyadi = "kisiSoyadi",
-  rolAdi = "rolAdi",
-  baslangicTarihi = "baslangicTarihi",
-  bitisTarihi = "bitisTarihi",
-  talepEden = "talepEden",
-  onaylayan = "onaylayan",
-  onaylanmaTarihi = "onaylanmaTarihi",
-  yetkiAdi = "yetkiAdi",
-  departman = "departman",
-  siniflandirmaSeviyesi = "siniflandirmaSeviyesi",
-}
-
-// export type Yetki = {
-//   yetkiId: number;
-//   yetkiAdi: string;
-//   siniflandirma: string;
-// };
-
 export type KisiOzet = {
   id: number;
   ad: string;
@@ -91,4 +71,23 @@ export type Talep = {
   durum: string;
   durumTarihi: string;
   talepEdenKisiAdi: string;
+  rolAtama?: RolAtama;
+  rolCikarma?: RolCikarma;
+};
+
+export type RolAtama = {
+  kisiId: number;
+  kisiAdi: string;
+  rolId: number;
+  rolAdi: string;
+  rolBaslangicTarihi: string;
+  rolBitisTarihi: string;
+};
+
+export type RolCikarma = {
+  kisiId: number;
+  kisiAdi: string;
+  rolId: number;
+  rolAdi: string;
+  rolCikarmaTarihi: string;
 };
