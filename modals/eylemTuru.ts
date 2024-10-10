@@ -1,14 +1,5 @@
-export const eylemTuru = [
-  {
-    eylemTuruId: 0,
-    eylemAdi: "Engelle",
-  },
-  {
-    eylemTuruId: 1,
-    eylemAdi: "Oku",
-  },
-  {
-    eylemTuruId: 2,
-    eylemAdi: "Yaz",
-  },
-];
+export enum EylemTuruEnum {
+  Oku = 1,
+  Yaz = 2,
+  Engel = 3,
+}

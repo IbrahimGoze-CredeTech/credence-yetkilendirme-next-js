@@ -1,33 +1,41 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useModalContext } from '../../context';
-import { Rol } from '../../types';
+import { Rol, RolYetki } from '../../types';
 import DataGrid, {
   Column,
   Editing,
   Paging,
-  Popup,
   FilterRow,
 } from "devextreme-react/data-grid";
-import { Button } from 'devextreme-react'; // Buton bileşenini içe aktar
+import { Button, Popup } from 'devextreme-react'; // Buton bileşenini içe aktar
+import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
 
 export default function RolYetkiDetailModal() {
   const modalContext = useModalContext();
-  const [employees, setEmployees] = useState<Rol[]>([]);
+  const [employees, setEmployees] = useState<RolYetki[]>([]);
   const [selectedRowData, setSelectedRowData] = useState<Rol | null>(null);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [rolAdi, setRolAdi] = useState<string | null>(null); // Rol Adını tutacak state
 
   useEffect(() => {
     if (!modalContext?.isOpen) return;
 
     const fetchData = async () => {
-      console.log("id in detail: ", modalContext.id);
+      // console.log("id in detail: ", modalContext.id);
 
       try {
         const response = await fetch(`http://192.168.30.90:98/api/Rol/yetkiler/${modalContext.id}`);
         if (!response.ok) throw new Error("Network response was not ok");
         const bilgilerData = await response.json();
         setEmployees(bilgilerData);
+        console.log('rol-yetki: ', bilgilerData);
+
+
+        // Gelen verilerden ilk rol'ün adını alıyoruz (örnek olarak)
+        if (bilgilerData.length > 0) {
+          setRolAdi(bilgilerData[0].rolAdi); // İlk kaydın rol adını al
+        }
       } catch (error) {
         console.error("There was a problem with your fetch operation:", error);
       }
@@ -53,10 +61,6 @@ export default function RolYetkiDetailModal() {
   const handleRowClick = (e) => {
     setSelectedRowData(e.data);
     setIsPopupVisible(true);
-    // console.log("row data: ", e.data);
-
-    // modalContext.setId(e.data.id)
-
   };
 
   const handleClosePopup = () => {
@@ -69,13 +73,18 @@ export default function RolYetkiDetailModal() {
       modalContext.toggle();
     }}>
       <div style={{ position: 'relative', pointerEvents: "auto", userSelect: "none", zIndex: 3, top: "20%" }} className="w-[80vw] bg-white p-4 rounded-md" onPointerDown={(e) => e.stopPropagation()}>
+
+        {/* Rol Adı Başlık olarak gösteriliyor */}
+        {rolAdi && <h2 className="text-3xl font-bold text-center text-black  pt-8">{rolAdi}</h2>}
+
         <DataGrid
           id="gridContainer"
           dataSource={employees}
-          keyExpr="rolAdi"
+          keyExpr="yetkiAdi"
           allowColumnReordering={true}
           showBorders={true}
           onRowClick={handleRowClick}
+          {...rolyetkiDataGridConfig}
         >
           <FilterRow visible={true} />
           <Paging enabled={true} />
@@ -83,10 +92,10 @@ export default function RolYetkiDetailModal() {
             mode="row"
             allowUpdating={true}
             allowDeleting={true}
+            allowAdding={true}
             useIcons={true} // Simge kullanmayı etkinleştir
           />
 
-          <Column dataField="rolAdi" caption="Rol" />
           <Column dataField="yetkiAdi" caption="Yetki" />
           <Column dataField="eylemlerTuruId" caption="Eylem Türü" />
 
@@ -113,22 +122,7 @@ export default function RolYetkiDetailModal() {
           </Column>
         </DataGrid>
 
-        <Popup
-          title="Rol Düzenle"
-          showTitle={true}
-          visible={isPopupVisible}
-          onHiding={handleClosePopup}
-          width={700}
-          height={600}
-        >
-          {selectedRowData && (
-            <div>
-              <p><strong>Rol:</strong> {selectedRowData.rolAdi}</p>
-              <p><strong>Yetki:</strong> {selectedRowData.yetkiAdi}</p>
-              <p><strong>Eylem Türü:</strong> {selectedRowData.eylemlerTuruId}</p>
-            </div>
-          )}
-        </Popup>
+
       </div>
     </div>
   );

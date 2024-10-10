@@ -3,6 +3,7 @@ import React from "react";
 import { usePathname } from "next/navigation"; // next/navigation'dan usePathname'i de import edin
 import Link from "next/link";
 
+
 interface NavbarProps {
   userName: string;
   userSurname: string;

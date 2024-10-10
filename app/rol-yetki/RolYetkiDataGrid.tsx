@@ -6,6 +6,7 @@ import { RolYetkiOzet } from "../../types"; // KisiOzet tipi güncellenmeli
 import { yetkilerAdi } from "../../modals/yetkiler";
 import { useModalContext } from "../../context";
 import { RowClickEvent } from "devextreme/ui/data_grid";
+import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
 
 export default function RolYetkiDataGrid() {
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
@@ -17,7 +18,7 @@ export default function RolYetkiDataGrid() {
         if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       });
-      console.log('rol-yetki: ', response);
+      // console.log('rol-yetki: ', response);
       setRolYetki(response);
     };
     fetchData();
@@ -25,7 +26,7 @@ export default function RolYetkiDataGrid() {
 
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
   function rolesToFilterItem(item: string) {
-    console.log('item: ', item);
+    // console.log('item: ', item);
 
     return {
       text: item,
@@ -91,6 +92,7 @@ export default function RolYetkiDataGrid() {
           allowUpdating: true,
           allowDeleting: true,
           mode: "row",
+          useIcons: true
         }}
       >
         <FilterRow visible={true} />
@@ -99,6 +101,7 @@ export default function RolYetkiDataGrid() {
         <Column dataField="rolAdi" caption="Rol" dataType="string"
           // headerFilter={rolesHeaderFilter}
           // filterOperations={rolesFilterOperations}
+
           allowHeaderFiltering={false}
         />
         <Column
