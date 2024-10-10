@@ -1,7 +1,7 @@
 "use client";
 import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
-import { KisiOzet, Yetki } from "../../types";
+import { KisiOzet, Yetki } from "../types";
 import { roles } from "../modals/roller";
 import { yetkilerAdi } from "../modals/yetkiler";
 import { useModalContext } from "../context";

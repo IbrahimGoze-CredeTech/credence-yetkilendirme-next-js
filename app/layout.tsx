@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 import { Metadata } from "next";
 import "./globals.css";
-import { ModalContextWrapper } from "./context";
+import { ModalContextWrapper } from "../context";
 import "devextreme/dist/css/dx.light.css";
 import { ReactNode } from "react";
 

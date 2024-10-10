@@ -1,4 +1,4 @@
-import { Yetki } from "../../types";
+import { Yetki } from "../types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isYetkiArray = (data: any): data is Yetki[] => {

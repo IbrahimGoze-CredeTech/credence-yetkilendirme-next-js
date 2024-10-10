@@ -1,8 +1,8 @@
 // pages/index.tsx
-import SummaryDataGrid from "./components/SummaryDataGrid";
-import DetailDataGridModal from "./components/DetailDataGridModal";
-import NavBar from "./components/NavBar";
-import { ModalContextWrapper } from "./context"; // ModalContextWrapper'ı import edin
+import SummaryDataGrid from "../components/SummaryDataGrid";
+import DetailDataGridModal from "../components/DetailDataGridModal";
+import NavBar from "../components/NavBar";
+import { ModalContextWrapper } from "../context"; // ModalContextWrapper'ı import edin
 import "devextreme/dist/css/dx.light.css";
 
 export default function Home() {

@@ -1,130 +1,135 @@
 "use client";
-import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
-import { useEffect, useState } from "react";
-import { RolYetki } from "../../types"; // KisiOzet tipi güncellenmeli
-import { roles, rollerAdi } from "../modals/roller";
-import { yetkilerAdi } from "../modals/yetkiler";
-import { useModalContext } from "../context";
+import React, { useEffect, useState } from 'react';
+import { useModalContext } from '../../context';
+import { Rol } from '../../types';
+import DataGrid, {
+  Column,
+  Editing,
+  Paging,
+  Popup,
+  FilterRow,
+} from "devextreme-react/data-grid";
+import { Button } from 'devextreme-react'; // Buton bileşenini içe aktar
 
 export default function RolYetkiDetailModal() {
-  const [rolYetki, setRolYetki] = useState<RolYetki[]>([]);
   const modalContext = useModalContext();
+  const [employees, setEmployees] = useState<Rol[]>([]);
+  const [selectedRowData, setSelectedRowData] = useState<Rol | null>(null);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   useEffect(() => {
+    if (!modalContext?.isOpen) return;
+
     const fetchData = async () => {
-      const response = await fetch("http://192.168.30.90:98/api/Rol/rol-yetki").then((response) => {
+      console.log("id ", modalContext.id);
+
+      try {
+        const response = await fetch(`http://192.168.30.90:98/api/Rol/yetkiler/${modalContext.id}`);
         if (!response.ok) throw new Error("Network response was not ok");
-        return response.json();
-      });
-      console.log('rol-yetki: ', response);
-      setRolYetki(response);
+        const bilgilerData = await response.json();
+        setEmployees(bilgilerData);
+      } catch (error) {
+        console.error("There was a problem with your fetch operation:", error);
+      }
     };
+
     fetchData();
-  }, []);
+  }, [modalContext?.isOpen]);
 
-  const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
-  function rolesToFilterItem(item: string) {
-    return {
-      text: item,
-      value: item
+  useEffect(() => {
+    if (modalContext?.isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      setSelectedRowData(null);
+      setIsPopupVisible(false);
+    }
+
+    return () => {
+      document.body.style.overflow = '';
     };
-  }
-
-  const rolesHeaderFilter = {
-    dataSource: {
-      store: {
-        type: "array",
-        data: rollerAdi
-      },
-      map: rolesToFilterItem
-    }
-  };
-
-  const yetkilerHeaderFilter = {
-    dataSource: {
-      store: {
-        type: "array",
-        data: yetkilerAdi
-      },
-      map: rolesToFilterItem
-    }
-  };
+  }, [modalContext?.isOpen]);
 
   const handleRowClick = (e) => {
-    modalContext.setId(e.data.rolAdi); // Seçilen satırın rol adını ayarlayın
-    modalContext.toggle(); // Modalı aç
+    setSelectedRowData(e.data);
+    setIsPopupVisible(true);
+    // console.log("row data: ", e.data);
+
+    // modalContext.setId(e.data.id)
+
   };
 
-  // Rol ve Yetkileri formatlamak için yardımcı fonksiyon
-  const formatRolYetkiData = (data) => {
-    const formattedData = {};
-
-    data.forEach(item => {
-      const key = item.rolAdi; // Rol adı ile grupluyoruz
-      if (!formattedData[key]) {
-        formattedData[key] = {
-          rolAdi: item.rolAdi,
-          yetkiAdi: [item.yetkiAdi], // Yetki adı dizisi
-          eylemlerTuruId: item.eylemlerTuruId
-        };
-      } else {
-        // Eğer rol zaten varsa, yalnızca o rol için yetkileri ekliyoruz
-        if (!formattedData[key].yetkiAdi.includes(item.yetkiAdi)) {
-          formattedData[key].yetkiAdi.push(item.yetkiAdi); // Var olan rol için yetkileri ekliyoruz
-        }
-      }
-    });
-
-    // Tekrar eden rollerden kurtulup virgüllü yetkileri oluşturuyoruz
-    return Object.values(formattedData).map(item => ({
-      rolAdi: item.rolAdi,
-      yetkiAdi: item.yetkiAdi.join(', '), // Virgülle ayırıyoruz
-      eylemlerTuruId: item.eylemlerTuruId
-    }));
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
   };
-
-  const formattedRolYetki = formatRolYetkiData(rolYetki);
 
   return (
-    <>
-      <DataGrid
-        id="rolYetki"
-        keyExpr="rolAdi" // Anahtar olarak rolAdını kullan
-        dataSource={formattedRolYetki} // Formatlanmış veriyi kullan
-        showRowLines={true}
-        showBorders={true}
-        onRowClick={handleRowClick} // Satıra tıklandığında bilgileri al
-        editing={{
-          allowAdding: true,
-          allowUpdating: true,
-          allowDeleting: true,
-          mode: "popup",
-        }}
-      >
-        <FilterRow visible={true} />
-        <HeaderFilter visible={true} />
+    <div style={{ position: 'fixed', zIndex: 2 }} className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm min-h-[100vh] h-full overflow-auto ${modalContext?.isOpen ? "visible" : "hidden"}`} onPointerDown={(e) => {
+      e.stopPropagation();
+      modalContext.toggle();
+    }}>
+      <div style={{ position: 'relative', pointerEvents: "auto", userSelect: "none", zIndex: 3, top: "20%" }} className="w-[80vw] bg-white p-4 rounded-md" onPointerDown={(e) => e.stopPropagation()}>
+        <DataGrid
+          id="gridContainer"
+          dataSource={employees}
+          keyExpr="rolAdi"
+          allowColumnReordering={true}
+          showBorders={true}
+          onRowClick={handleRowClick}
+        >
+          <FilterRow visible={true} />
+          <Paging enabled={true} />
+          <Editing
+            mode="row"
+            allowUpdating={true}
+            allowDeleting={true}
+            useIcons={true} // Simge kullanmayı etkinleştir
+          />
 
-        <Column dataField="rolAdi" caption="Rol" dataType="string"
-          headerFilter={rolesHeaderFilter}
-          filterOperations={rolesFilterOperations}
-        />
-        <Column
-          dataField="yetkiAdi"
-          caption="Yetki"
-          dataType="string"
-          filterOperations={rolesFilterOperations}
-          headerFilter={yetkilerHeaderFilter}
-        />
-        <Column
-          dataField="eylemlerTuruId"
-          caption="Eylem Türü"
-          dataType="string"
-        />
-      </DataGrid>
+          <Column dataField="rolAdi" caption="Rol" />
+          <Column dataField="yetkiAdi" caption="Yetki" />
+          <Column dataField="eylemlerTuruId" caption="Eylem Türü" />
 
-      {/* Detayların gösterileceği modal burada açılacak */}
-      {/* Modal içeriğini burada ayarlayın */}
-      {/* Örnek bir modal yapısını entegre edebilirsiniz */}
-    </>
+          {/* Edit ve Delete simgeleri için özel simgeler ekleyin */}
+          <Column
+            type="buttons"
+            width={100}
+            caption="İşlemler"
+          >
+            <Button
+              icon="edit" // Edit simgesi
+              onClick={(e) => {
+                // Düzenleme işlemini burada yönetebilirsiniz
+                e.event.stopPropagation(); // Satır tıklamasını durdur
+              }}
+            />
+            <Button
+              icon="trash" // Silme simgesi
+              onClick={(e) => {
+                // Silme işlemini burada yönetebilirsiniz
+                e.event.stopPropagation(); // Satır tıklamasını durdur
+              }}
+            />
+          </Column>
+        </DataGrid>
+
+        <Popup
+          title="Rol Düzenle"
+          showTitle={true}
+          visible={isPopupVisible}
+          onHiding={handleClosePopup}
+          width={700}
+          height={600}
+        >
+          {selectedRowData && (
+            <div>
+              <p><strong>Rol:</strong> {selectedRowData.rolAdi}</p>
+              <p><strong>Yetki:</strong> {selectedRowData.yetkiAdi}</p>
+              <p><strong>Eylem Türü:</strong> {selectedRowData.eylemlerTuruId}</p>
+            </div>
+          )}
+        </Popup>
+      </div>
+    </div>
   );
 }

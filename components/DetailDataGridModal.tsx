@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useModalContext } from '../context';
-import { EkstraYetki, Kisi } from '../../types';
+import { EkstraYetki, Kisi } from '../types';
 import DataGrid, {
   Column,
   Editing,
