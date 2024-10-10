@@ -6,6 +6,7 @@ import { RolYetkiOzet } from "../../types"; // KisiOzet tipi güncellenmeli
 import { yetkilerAdi } from "../../modals/yetkiler";
 import { useModalContext } from "../../context";
 import { RowClickEvent } from "devextreme/ui/data_grid";
+import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
 
 export default function RolYetkiDataGrid() {
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
@@ -100,6 +101,7 @@ export default function RolYetkiDataGrid() {
         <Column dataField="rolAdi" caption="Rol" dataType="string"
           // headerFilter={rolesHeaderFilter}
           // filterOperations={rolesFilterOperations}
+
           allowHeaderFiltering={false}
         />
         <Column

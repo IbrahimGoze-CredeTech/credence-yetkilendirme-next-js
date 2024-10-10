@@ -6,10 +6,9 @@ import DataGrid, {
   Column,
   Editing,
   Paging,
-  Popup,
   FilterRow,
 } from "devextreme-react/data-grid";
-import { Button } from 'devextreme-react'; // Buton bileşenini içe aktar
+import { Button, Popup } from 'devextreme-react'; // Buton bileşenini içe aktar
 import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
 
 export default function RolYetkiDetailModal() {
@@ -17,6 +16,8 @@ export default function RolYetkiDetailModal() {
   const [employees, setEmployees] = useState<Rol[]>([]);
   const [selectedRowData, setSelectedRowData] = useState<Rol | null>(null);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [rolAdi, setRolAdi] = useState<string | null>(null); // Rol Adını tutacak state
+
   useEffect(() => {
     if (!modalContext?.isOpen) return;
 
@@ -28,6 +29,11 @@ export default function RolYetkiDetailModal() {
         if (!response.ok) throw new Error("Network response was not ok");
         const bilgilerData = await response.json();
         setEmployees(bilgilerData);
+
+        // Gelen verilerden ilk rol'ün adını alıyoruz (örnek olarak)
+        if (bilgilerData.length > 0) {
+          setRolAdi(bilgilerData[0].rolAdi); // İlk kaydın rol adını al
+        }
       } catch (error) {
         console.error("There was a problem with your fetch operation:", error);
       }
@@ -53,10 +59,6 @@ export default function RolYetkiDetailModal() {
   const handleRowClick = (e) => {
     setSelectedRowData(e.data);
     setIsPopupVisible(true);
-    // console.log("row data: ", e.data);
-
-    // modalContext.setId(e.data.id)
-
   };
 
   const handleClosePopup = () => {
@@ -69,10 +71,14 @@ export default function RolYetkiDetailModal() {
       modalContext.toggle();
     }}>
       <div style={{ position: 'relative', pointerEvents: "auto", userSelect: "none", zIndex: 3, top: "20%" }} className="w-[80vw] bg-white p-4 rounded-md" onPointerDown={(e) => e.stopPropagation()}>
+
+        {/* Rol Adı Başlık olarak gösteriliyor */}
+        {rolAdi && <h2 className="text-2xl font-bold text-black mb-2 pt-12">{rolAdi}</h2>}
+
         <DataGrid
           id="gridContainer"
           dataSource={employees}
-          keyExpr="rolAdi"
+          keyExpr="yetkiAdi"
           allowColumnReordering={true}
           showBorders={true}
           onRowClick={handleRowClick}
@@ -88,7 +94,6 @@ export default function RolYetkiDetailModal() {
             useIcons={true} // Simge kullanmayı etkinleştir
           />
 
-          <Column dataField="rolAdi" caption="Rol" />
           <Column dataField="yetkiAdi" caption="Yetki" />
           <Column dataField="eylemlerTuruId" caption="Eylem Türü" />
 

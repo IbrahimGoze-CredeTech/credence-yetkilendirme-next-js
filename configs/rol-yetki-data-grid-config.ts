@@ -12,16 +12,6 @@ export const rolyetkiDataGridConfig: IDataGridOptions = {
   showRowLines: true,
   columns: [
     {
-      dataField: "rolAdi",
-      caption: "Rol",
-      allowFiltering: false,
-      // lookup: {
-      //   dataSource: roles,
-      //   valueExpr: "rolAdi",
-      //   displayExpr: "rolAdi",
-      // },
-    },
-    {
       dataField: "yetkiAdi",
       caption: "Yetki",
       allowEditing: true,
