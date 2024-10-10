@@ -18,7 +18,7 @@ export default function RolYetkiDataGrid() {
         if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       });
-      console.log('rol-yetki: ', response);
+      // console.log('rol-yetki: ', response);
       setRolYetki(response);
     };
     fetchData();
@@ -26,7 +26,7 @@ export default function RolYetkiDataGrid() {
 
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
   function rolesToFilterItem(item: string) {
-    console.log('item: ', item);
+    // console.log('item: ', item);
 
     return {
       text: item,
