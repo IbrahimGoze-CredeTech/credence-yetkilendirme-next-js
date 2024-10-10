@@ -91,6 +91,7 @@ export default function RolYetkiDataGrid() {
           allowUpdating: true,
           allowDeleting: true,
           mode: "row",
+          useIcons: true
         }}
       >
         <FilterRow visible={true} />

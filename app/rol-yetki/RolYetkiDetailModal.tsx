@@ -10,13 +10,13 @@ import DataGrid, {
   FilterRow,
 } from "devextreme-react/data-grid";
 import { Button } from 'devextreme-react'; // Buton bileşenini içe aktar
+import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
 
 export default function RolYetkiDetailModal() {
   const modalContext = useModalContext();
   const [employees, setEmployees] = useState<Rol[]>([]);
   const [selectedRowData, setSelectedRowData] = useState<Rol | null>(null);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-
   useEffect(() => {
     if (!modalContext?.isOpen) return;
 
@@ -76,6 +76,7 @@ export default function RolYetkiDetailModal() {
           allowColumnReordering={true}
           showBorders={true}
           onRowClick={handleRowClick}
+          {...rolyetkiDataGridConfig}
         >
           <FilterRow visible={true} />
           <Paging enabled={true} />

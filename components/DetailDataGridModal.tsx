@@ -110,7 +110,17 @@ export default function DetailDataGridModal() {
                   dataSource={data.data.roller} // Nested data from roller
                   showBorders={true}
                   {...rolDataGridConfig}
-                />
+                >
+                  {/* Düzenleme yapılandırması */}
+                  <Editing
+                    mode="row" // Düzenleme işlemi popup içinde yapılacak
+                    allowUpdating={true} // Güncelleme izni
+                    allowDeleting={true} // Silme izni
+                    allowAdding={true} // Ekleme izni
+                    useIcons={true} // Simge kullanımı
+                  />
+                </DataGrid>
+
                 {/* Yetkiler Sub-grid */}
                 <h4 className="text-3xl font-semibold mt-12">Yetkiler</h4>
                 <DataGrid
