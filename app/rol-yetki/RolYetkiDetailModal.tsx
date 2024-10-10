@@ -21,7 +21,7 @@ export default function RolYetkiDetailModal() {
     if (!modalContext?.isOpen) return;
 
     const fetchData = async () => {
-      console.log("id ", modalContext.id);
+      console.log("id in detail: ", modalContext.id);
 
       try {
         const response = await fetch(`http://192.168.30.90:98/api/Rol/yetkiler/${modalContext.id}`);

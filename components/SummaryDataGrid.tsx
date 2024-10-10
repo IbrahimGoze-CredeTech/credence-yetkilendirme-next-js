@@ -1,7 +1,7 @@
 "use client";
 import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
-import { KisiOzet, Yetki } from "../types";
+import { KisiOzet } from "../types";
 import { roles } from "../modals/roller";
 import { yetkilerAdi } from "../modals/yetkiler";
 import { useModalContext } from "../context";
@@ -27,7 +27,7 @@ export default function SummaryDataGrid() {
 
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
   function rolesToFilterItem(item: string) {
-    console.log('item: ', item);
+    // console.log('item: ', item);
     return {
       text: item,
       value: item

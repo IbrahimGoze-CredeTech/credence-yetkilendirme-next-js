@@ -77,3 +77,9 @@ export type RolYetki = {
   yetkiAdi: string; // Yetki Adı
   eylemlerTuruId: number; // Eylem Türü ID
 };
+
+export type RolYetkiOzet = {
+  id: number;
+  rolAdi: string;
+  yetkiler: string[];
+};
