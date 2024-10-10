@@ -1,14 +1,14 @@
 export const eylemTuru = [
   {
     eylemTuruId: 0,
-    eylemAdi: "Engelle",
+    eylemAdi: "Bekliyor",
   },
   {
     eylemTuruId: 1,
-    eylemAdi: "Oku",
+    eylemAdi: "Onaylandı",
   },
   {
     eylemTuruId: 2,
-    eylemAdi: "Yaz",
+    eylemAdi: "Reddedildi",
   },
 ];

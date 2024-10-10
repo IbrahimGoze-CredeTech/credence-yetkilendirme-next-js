@@ -120,22 +120,7 @@ export default function RolYetkiDetailModal() {
           </Column>
         </DataGrid>
 
-        <Popup
-          title="Rol Düzenle"
-          showTitle={true}
-          visible={isPopupVisible}
-          onHiding={handleClosePopup}
-          width={700}
-          height={600}
-        >
-          {selectedRowData && (
-            <div>
-              <p><strong>Rol:</strong> {selectedRowData.rolAdi}</p>
-              <p><strong>Yetki:</strong> {selectedRowData.yetkiAdi}</p>
-              <p><strong>Eylem Türü:</strong> {selectedRowData.eylemlerTuruId}</p>
-            </div>
-          )}
-        </Popup>
+
       </div>
     </div>
   );

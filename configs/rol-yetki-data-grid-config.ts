@@ -25,6 +25,7 @@ export const rolyetkiDataGridConfig: IDataGridOptions = {
     {
       dataField: "eylemlerTuruId",
       caption: "Eylem Türü",
+      allowEditing: true,
       lookup: {
         dataSource: eylemTuru,
         valueExpr: "eylemTuruId",
