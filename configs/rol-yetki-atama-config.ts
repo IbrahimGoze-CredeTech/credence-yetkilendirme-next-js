@@ -1,5 +1,6 @@
 import { IDataGridOptions } from "devextreme-react/data-grid";
 import { yetkiler } from "../modals/yetkiler";
+import { roles } from "@/modals/roller";
 
 export const rolyetkiAtamaConfig: IDataGridOptions = {
   id: "rolyetkiatama",
@@ -13,6 +14,11 @@ export const rolyetkiAtamaConfig: IDataGridOptions = {
     {
       dataField: "rolAdi",
       caption: "Rol",
+      lookup: {
+        dataSource: roles,
+        valueExpr: "rolAdi",
+        displayExpr: "rolAdi",
+      },
     },
     {
       dataField: "yetkiAdi",
