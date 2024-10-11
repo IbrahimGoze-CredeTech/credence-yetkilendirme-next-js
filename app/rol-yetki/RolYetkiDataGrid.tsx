@@ -3,10 +3,11 @@
 import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { RolYetkiOzet } from "../../types"; // KisiOzet tipi güncellenmeli
-import { yetkilerAdi } from "../../modals/yetkiler";
+import { yetkiler, yetkilerAdi } from "../../modals/yetkiler";
 import { useModalContext } from "../../context";
 import { RowClickEvent } from "devextreme/ui/data_grid";
-import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
+import { rolyetkiAtamaConfig } from '../../configs/rol-yetki-atama-config';
+import { TagBox } from "devextreme-react";
 
 export default function RolYetkiDataGrid() {
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
@@ -87,6 +88,9 @@ export default function RolYetkiDataGrid() {
         showRowLines={true}
         showBorders={true}
         onRowClick={handleRowClick} // Satıra tıklandığında bilgileri al
+        //{...rolyetkiAtamaConfig}
+
+
         editing={{
           allowAdding: true,
           allowUpdating: true,
@@ -95,6 +99,7 @@ export default function RolYetkiDataGrid() {
           useIcons: true
         }}
       >
+
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
 
@@ -111,15 +116,22 @@ export default function RolYetkiDataGrid() {
           filterOperations={rolesFilterOperations}
           headerFilter={yetkilerHeaderFilter}
           calculateFilterExpression={calculateFilterExpression}
-          allowEditing={false}
+          allowEditing={true}
         />
         {/* <Column
           dataField="eylemlerTuruId"
           caption="Eylem Türü"
           dataType="string"
-        /> */}
+          /> */}
       </DataGrid>
 
+
+      <TagBox items={yetkiler}
+        displayExpr="yetkiAdi"
+        valueExpr="yetkiId"
+        selectAllMode="allPages"
+        showSelectionControls={true}>
+      </TagBox>
       {/* Detayların gösterileceği modal burada açılacak */}
       {/* Modal içeriğini burada ayarlayın */}
       {/* Örnek bir modal yapısını entegre edebilirsiniz */}
