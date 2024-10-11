@@ -1,6 +1,13 @@
 import { IDataGridOptions } from "devextreme-react/data-grid";
 import { yetkiler } from "../modals/yetkiler";
-import { eylemTuru } from "../modals/eylemTuru";
+import { EylemTuruEnum } from "../modals/eylemTuru";
+
+const eylemTuruLookup = Object.keys(EylemTuruEnum)
+  .filter((key) => isNaN(Number(key))) // Get only string keys (names)
+  .map((key) => ({
+    eylemTuruId: EylemTuruEnum[key as keyof typeof EylemTuruEnum],
+    eylemTuruAdi: key,
+  }));
 
 export const yetkiDataGridConfig: IDataGridOptions = {
   id: "yekidatagrid",
@@ -25,7 +32,7 @@ export const yetkiDataGridConfig: IDataGridOptions = {
       dataField: "eylemlerTuruId",
       caption: "Eylem Türü",
       lookup: {
-        dataSource: eylemTuru,
+        dataSource: eylemTuruLookup,
         valueExpr: "eylemTuruId",
         displayExpr: "eylemAdi",
       },
