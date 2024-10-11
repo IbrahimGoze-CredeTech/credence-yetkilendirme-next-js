@@ -1,8 +1,5 @@
-"use client";
 import React from "react";
-import { usePathname } from "next/navigation"; // next/navigation'dan usePathname'i de import edin
 import Link from "next/link";
-
 
 interface NavbarProps {
   userName: string;
@@ -11,14 +8,12 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ userName, userSurname, userRole }) => {
-  const pathname = usePathname(); // Şu anki sayfa yolunu alır
 
   return (
     <nav className="bg-gradient-to-bl from-blue-900 to-green-500 p-5 h-full flex items-center justify-between">
       <div id="Buttons" className="space-x-4">
-        <Link href={pathname === "/rol-yetki" ? "/" : "/rol-yetki"} className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold" >
-          {pathname === "/rol-yetki" ? "Anasayfaya Dön" : "Rol-Yetki Güncelleme"}
-        </Link>
+        <Link href={"/rol-yetki"} className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Rol-Yetki</Link>
+        <Link href="/" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Anasayfaya</Link>
         <Link href="/talep-ekran" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Talepler</Link>
       </div>
 
