@@ -14,6 +14,7 @@ export default function RolYetkiDataGrid() {
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
   const modalContext = useModalContext();
 
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("http://192.168.30.90:98/api/Rol/ozet-rol-yetki").then((response) => {
