@@ -3,11 +3,12 @@
 import DataGrid, { Column, FilterRow, HeaderFilter, Editing, Popup, Form } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { RolYetkiOzet } from "../../types";
-import { yetkiler } from "../../modals/yetkiler"; // Yetkiler listesi
+import { yetkiler, yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
 import { useModalContext } from "../../context";
 import { RowClickEvent } from "devextreme/ui/data_grid";
 import { Item } from "devextreme-react/form"; // Form item'larını eklemek için kullanacağız
 import { TagBox } from "devextreme-react";
+import { roles } from "@/modals/roller";
 
 export default function RolYetkiDataGrid() {
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
@@ -30,6 +31,39 @@ export default function RolYetkiDataGrid() {
     modalContext.setId(e.data.id);
     modalContext.toggle();
     console.log("e data: ", e.data);
+  };
+  function rolesToFilterItem(item: { id: number; rolAdi: string }) {
+    console.log('item: ', item);
+    return {
+      text: item.rolAdi, // rollerin adını döndürüyoruz
+      value: item.id     // rollerin id'sini döndürüyoruz
+    };
+  }
+  function yetkilerToFilterItem(item: { id: number; yetkiAdi: string }) {
+    console.log('item: ', item);
+    return {
+      text: item.yetkiAdi, // rollerin adını döndürüyoruz
+      value: item.id     // rollerin id'sini döndürüyoruz
+    };
+  }
+
+  const rolesHeaderFilter = {
+    dataSource: {
+      store: {
+        type: "array",
+        data: roles
+      },
+      map: rolesToFilterItem
+    }
+  };
+  const yetkilerHeaderFilter = {
+    dataSource: {
+      store: {
+        type: "array",
+        data: yetkiler
+      },
+      map: yetkilerToFilterItem
+    }
   };
 
   // TagBox için yetki listesi (çoklu seçim)
@@ -69,18 +103,20 @@ export default function RolYetkiDataGrid() {
           dataField="rolAdi"
           caption="Rol"
           dataType="string"
-          allowHeaderFiltering={false}
           allowEditing={true}
+          headerFilter={rolesHeaderFilter}
         />
 
         {/* Yetkiler sütunu */}
         <Column
           dataField="yetkiler"
           caption="Yetki"
-          dataType="object"
-          allowHeaderFiltering={false}
+          dataType="string"
+          allowHeaderFiltering={true}
           allowEditing={true}
           cellRender={renderYetkilerCell}
+          headerFilter={yetkilerHeaderFilter}
+          filterOperations={rolesFilterOperations}
         />
 
         {/* Popup düzenleme ayarları */}
