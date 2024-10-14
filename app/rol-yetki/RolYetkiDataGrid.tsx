@@ -3,7 +3,7 @@
 import DataGrid, { Column, FilterRow, HeaderFilter, Editing, Popup, Form } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { RolYetkiOzet } from "../../types";
-import { yetkiler } from "../../modals/yetkiler"; // Yetkiler listesi
+import { yetkiler, yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
 import { useModalContext } from "../../context";
 import { RowClickEvent } from "devextreme/ui/data_grid";
 import { Item } from "devextreme-react/form"; // Form item'larını eklemek için kullanacağız
@@ -71,6 +71,30 @@ export default function RolYetkiDataGrid() {
   };
 
   // TagBox için yetki listesi (çoklu seçim)
+  function calculateFilterExpression(filterValue: string, selectedFilterOperation: string | null = '=') {
+    const column = this;
+
+    if (filterValue) {
+      const selector = (data: RolYetkiOzet) => {
+        const applyOperation = (arg1: string, arg2: string, op: string) => {
+          if (op === "=") return arg1 === arg2;
+          if (op === "contains") return arg1.includes(arg2);
+          if (op === "startswith") return arg1.startsWith(arg2);
+          if (op === "endswith") return arg1.endsWith(arg2);
+        };
+
+        // console.log('v: ', v);
+        const values = column.calculateCellValue(data);
+        return (
+          values &&
+          !!values.find((v: string) => applyOperation(v, filterValue, selectedFilterOperation ?? '='))
+        );
+      };
+      return [selector, "=", true];
+    }
+    return column.defaultCalculateFilterExpression.apply(this, arguments);
+  }
+
 
   return (
     <>
@@ -80,7 +104,12 @@ export default function RolYetkiDataGrid() {
         dataSource={rolYetki}
         showRowLines={true}
         showBorders={true}
-        onRowClick={handleRowClick}
+        onRowClick={(e) => {
+          // console.log('e: ', e.data);
+
+          modalContext.setId(e.data.id);
+          modalContext.toggle();
+        }}
       >
 
         <FilterRow visible={true} />
@@ -91,20 +120,23 @@ export default function RolYetkiDataGrid() {
           dataField="rolAdi"
           caption="Rol"
           dataType="string"
-
-          allowEditing={true}
           headerFilter={rolesHeaderFilter}
-        />
+          calculateFilterExpression={calculateFilterExpression}
+          filterOperations={rolesFilterOperations}
+          allowEditing={true}
+        >
+          <HeaderFilter dataSource={roles} />
+        </Column>
 
         {/* Yetkiler sütunu */}
         <Column
           dataField="yetkiler"
           caption="Yetki"
-          allowHeaderFiltering={true}
           allowEditing={true}
+          calculateFilterExpression={calculateFilterExpression}
+          filterOperations={rolesFilterOperations}
           headerFilter={yetkilerHeaderFilter}
-
-        />
+        ><HeaderFilter dataSource={yetkilerAdi} /></Column>
 
 
         {/* Popup düzenleme ayarları */}
