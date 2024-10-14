@@ -22,7 +22,7 @@ export const rolyetkiDataGridConfig: IDataGridOptions = {
     {
       dataField: "yetkiAdi",
       caption: "Yetki",
-      // allowEditing: false,
+      //allowEditing: true,
       lookup: {
         dataSource: yetkiler,
         valueExpr: "yetkiAdi",

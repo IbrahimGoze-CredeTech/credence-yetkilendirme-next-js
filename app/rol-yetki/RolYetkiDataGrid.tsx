@@ -1,16 +1,19 @@
 "use client";
 
-import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
+import DataGrid, { Column, FilterRow, HeaderFilter, Editing, Popup, Form } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
-import { RolYetkiOzet } from "../../types"; // KisiOzet tipi güncellenmeli
-import { yetkilerAdi } from "../../modals/yetkiler";
+import { RolYetkiOzet } from "../../types";
+import { yetkiler, yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
 import { useModalContext } from "../../context";
 import { RowClickEvent } from "devextreme/ui/data_grid";
-import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
+import { Item } from "devextreme-react/form"; // Form item'larını eklemek için kullanacağız
+import { TagBox } from "devextreme-react";
+import { roles, rollerAdi } from "@/modals/roller";
 
 export default function RolYetkiDataGrid() {
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
   const modalContext = useModalContext();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,41 +21,52 @@ export default function RolYetkiDataGrid() {
         if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       });
-      // console.log('rol-yetki: ', response);
       setRolYetki(response);
     };
     fetchData();
   }, []);
 
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
+
   function rolesToFilterItem(item: string) {
     // console.log('item: ', item);
-
     return {
       text: item,
       value: item
     };
   }
+  function yetkilerToFilterItem(item: string) {
 
-  const yetkilerHeaderFilter = {
+    return {
+      text: item, // rollerin adını döndürüyoruz
+      value: item     // rollerin id'sini döndürüyoruz
+    };
+  }
+
+  const rolesHeaderFilter = {
     dataSource: {
       store: {
         type: "array",
-        // data: yetkilerAdi
-        data: yetkilerAdi
+        data: rollerAdi
       },
       map: rolesToFilterItem
     }
   };
-
-  const handleRowClick = (e: RowClickEvent<RolYetkiOzet>) => {
-
-    modalContext.setId(e.data.id); // Seçilen satırın rol adını ayarlayın
-    modalContext.toggle(); // Modalı aç
-    console.log("e data: ", e.data);
-
+  const yetkilerHeaderFilter = {
+    dataSource: {
+      store: {
+        type: "array",
+        data: yetkilerAdi
+      },
+      map: yetkilerToFilterItem
+    }
+  };
+  // Yetki hücresini formatlama fonksiyonu
+  const formatYetkiler = (yetkilerArray: string[]) => {
+    return yetkilerArray.join(', '); // Dizi elemanlarını virgülle birleştirir
   };
 
+  // TagBox için yetki listesi (çoklu seçim)
   function calculateFilterExpression(filterValue: string, selectedFilterOperation: string | null = '=') {
     const column = this;
 
@@ -82,47 +96,74 @@ export default function RolYetkiDataGrid() {
     <>
       <DataGrid
         id="rolYetki"
-        keyExpr="rolAdi" // Anahtar olarak rolAdını kullan
-        dataSource={rolYetki} // Formatlanmış veriyi kullan
+        keyExpr="rolAdi"
+        dataSource={rolYetki}
         showRowLines={true}
         showBorders={true}
-        onRowClick={handleRowClick} // Satıra tıklandığında bilgileri al
-        editing={{
-          allowAdding: true,
-          allowUpdating: true,
-          allowDeleting: true,
-          mode: "row",
-          useIcons: true
+        onRowClick={(e) => {
+          // console.log('e: ', e.data);
+
+          modalContext.setId(e.data.id);
+          modalContext.toggle();
         }}
       >
+
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
 
-        <Column dataField="rolAdi" caption="Rol" dataType="string"
-          // headerFilter={rolesHeaderFilter}
-          // filterOperations={rolesFilterOperations}
+        {/* Rol sütunu */}
+        <Column
+          dataField="rolAdi"
+          caption="Rol"
+          dataType="string"
+          headerFilter={rolesHeaderFilter}
+          calculateFilterExpression={calculateFilterExpression}
+          filterOperations={rolesFilterOperations}
+          allowEditing={true}
+        >
+          <HeaderFilter dataSource={roles} />
+        </Column>
 
-          allowHeaderFiltering={false}
-        />
+        {/* Yetkiler sütunu */}
         <Column
           dataField="yetkiler"
           caption="Yetki"
           dataType="string"
+          allowEditing={true}
+          calculateFilterExpression={calculateFilterExpression}
           filterOperations={rolesFilterOperations}
           headerFilter={yetkilerHeaderFilter}
-          calculateFilterExpression={calculateFilterExpression}
-          allowEditing={false}
-        />
-        {/* <Column
-          dataField="eylemlerTuruId"
-          caption="Eylem Türü"
-          dataType="string"
-        /> */}
-      </DataGrid>
+        ><HeaderFilter dataSource={yetkilerAdi} /></Column>
 
-      {/* Detayların gösterileceği modal burada açılacak */}
-      {/* Modal içeriğini burada ayarlayın */}
-      {/* Örnek bir modal yapısını entegre edebilirsiniz */}
+
+        {/* Popup düzenleme ayarları */}
+        <Editing
+          mode="popup"
+          allowAdding={true}
+          allowUpdating={true}
+          allowDeleting={true}
+          useIcons={true}
+        >
+          <Popup title="Rol ve Yetki Düzenle" showTitle={true} width={800} height={500} />
+          <Form>
+            {/* Rol alanı */}
+            <Item dataField="rolAdi" editorType="dxTextBox" />
+
+            {/* Yetkiler alanı */}
+            <Item
+              dataField="yetkiler"
+              editorType="dxTagBox"
+              editorOptions={{
+                items: yetkiler, // Yetki listesini buraya ekliyoruz
+                displayExpr: "yetkiAdi",
+                valueExpr: "yetkiAdi",
+                selectAllMode: "allPages",
+                showSelectionControls: true,
+              }}
+            />
+          </Form>
+        </Editing>
+      </DataGrid>
     </>
   );
 }
