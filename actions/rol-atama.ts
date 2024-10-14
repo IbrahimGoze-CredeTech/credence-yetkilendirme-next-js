@@ -30,8 +30,8 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
   );
 
   const talep: Talep = {
-    talepEdenKisiId: 1,
-    talepId: 0,
+    // talepEdenKisiId: 1,
+    // talepId: 0,
     olusturulmaTarihi: "2024-10-14T09:13:38.191Z",
     durum: "",
     durumTarihi: "2024-10-14T09:13:38.191Z",
@@ -43,8 +43,8 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
     rolAdi,
     rolBaslangicTarihi: rolBaslamaTarihi.toISOString(),
     rolBitisTarihi: rolBitisTarihi.toISOString(),
-    rolId: 0,
-    kisiId: 0,
+    // rolId: 0,
+    // kisiId: 0,
   };
 
   const rolAtamaRequest: RolAtamaRequest = {
