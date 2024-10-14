@@ -1,5 +1,5 @@
 "use client";
-import { Kisi, KisiOzet, Rol, RolYetki } from "@/types";
+import { Kisi, Rol } from "@/types";
 import { createContext, useContext, useEffect, useState } from "react";
 
 //#region ModalContext

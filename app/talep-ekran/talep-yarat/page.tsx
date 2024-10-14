@@ -7,19 +7,18 @@ import React, { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { rollerAdi } from '@/modals/roller';
 import { useStaticTablesContext } from '@/context';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { cn } from '@/lib/utils';
 import { tr } from 'date-fns/locale';
-import { format, set } from "date-fns"
+import { format } from "date-fns"
 import { Switch } from '@/components/ui/switch';
 import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
+import { rolAtama } from '@/actions/rol-atama';
 
 
 export default function TalepYaratPage() {
@@ -44,6 +43,7 @@ export default function TalepYaratPage() {
       rolBaslamaTarihi: new Date(),
       rolBitisTarihi: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
       ciftImza: false,
+      ekstraImza: [],
     },
   });
 
@@ -53,6 +53,17 @@ export default function TalepYaratPage() {
     console.log('values: ', values);
 
     startTransition(() => {
+      rolAtama(values).then((data) => {
+        if (data?.error) {
+          form.reset();
+          setError(data.error);
+        }
+        if (data.success) {
+          form.reset();
+          setSuccess(data.success)
+        }
+
+      }).catch(() => setError('Something went wrong!'));
 
       // TODO: Implement action that sends the form data to the server
 
@@ -114,7 +125,7 @@ export default function TalepYaratPage() {
                     <SelectGroup>
                       <SelectLabel>Kişiler</SelectLabel>
                       {staticTablesContext.kisiler.map((kisi) => (
-                        <SelectItem key={kisi.kisiSoyadi} value={kisi.kisiAdi + kisi.kisiSoyadi}>{kisi.kisiAdi + " " + kisi.kisiSoyadi}</SelectItem>
+                        <SelectItem key={kisi.kisiSoyadi} value={kisi.kisiAdi + " " + kisi.kisiSoyadi}>{kisi.kisiAdi + " " + kisi.kisiSoyadi}</SelectItem>
                       ))}
                     </SelectGroup>
                   </SelectContent>
@@ -219,28 +230,15 @@ export default function TalepYaratPage() {
               )}
             />
 
-            <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
+            <FormField control={form.control} name={'ekstraImza'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {OPTIONS.length > 0 ? (
-                  <MultipleSelector defaultOptions={OPTIONS} placeholder="Imza atacak kişileri seçin" />
+                  <MultipleSelector defaultOptions={OPTIONS} onChange={(e) => {
+                    console.log("onChange", e);
+                    form.setValue('ekstraImza', e);
+                  }} placeholder="Imza atacak kişileri seçin" />
                 ) : (<span>Yükleniyor...</span>)}
-                {/* <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Kişi Seç" />
-                    </SelectTrigger>
-                  </FormControl>
-
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Kişiler</SelectLabel>
-                      {staticTablesContext.kisiler.map((kisi) => (
-                        <SelectItem key={kisi.kisiSoyadi} value={kisi.kisiAdi + kisi.kisiSoyadi}>{kisi.kisiAdi + " " + kisi.kisiSoyadi}</SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select> */}
               </FormItem>
             )} />
             <Button type='submit' className='w-full' disabled={isPending}>Rol Atama Talebi Olustur</Button>
