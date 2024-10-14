@@ -8,7 +8,7 @@ import { useModalContext } from "../../context";
 import { RowClickEvent } from "devextreme/ui/data_grid";
 import { Item } from "devextreme-react/form"; // Form item'larını eklemek için kullanacağız
 import { TagBox } from "devextreme-react";
-import { roles } from "@/modals/roller";
+import { roles, rollerAdi } from "@/modals/roller";
 
 export default function RolYetkiDataGrid() {
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
@@ -27,23 +27,18 @@ export default function RolYetkiDataGrid() {
 
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
 
-  const handleRowClick = (e: RowClickEvent<RolYetkiOzet>) => {
-    modalContext.setId(e.data.id);
-    modalContext.toggle();
-    console.log('Seçili Rol:', e.data);
-  };
-  function rolesToFilterItem(item: { id: number; rolAdi: string }) {
-
+  function rolesToFilterItem(item: string) {
+    // console.log('item: ', item);
     return {
-      text: item.rolAdi, // rollerin adını döndürüyoruz
-      value: item.id     // rollerin id'sini döndürüyoruz
+      text: item,
+      value: item
     };
   }
-  function yetkilerToFilterItem(item: { id: number; yetkiAdi: string }) {
+  function yetkilerToFilterItem(item: string) {
 
     return {
-      text: item.yetkiAdi, // rollerin adını döndürüyoruz
-      value: item.id     // rollerin id'sini döndürüyoruz
+      text: item, // rollerin adını döndürüyoruz
+      value: item     // rollerin id'sini döndürüyoruz
     };
   }
 
@@ -51,7 +46,7 @@ export default function RolYetkiDataGrid() {
     dataSource: {
       store: {
         type: "array",
-        data: roles
+        data: rollerAdi
       },
       map: rolesToFilterItem
     }
@@ -60,7 +55,7 @@ export default function RolYetkiDataGrid() {
     dataSource: {
       store: {
         type: "array",
-        data: yetkiler
+        data: yetkilerAdi
       },
       map: yetkilerToFilterItem
     }
@@ -132,6 +127,7 @@ export default function RolYetkiDataGrid() {
         <Column
           dataField="yetkiler"
           caption="Yetki"
+          dataType="string"
           allowEditing={true}
           calculateFilterExpression={calculateFilterExpression}
           filterOperations={rolesFilterOperations}

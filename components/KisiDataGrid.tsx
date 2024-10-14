@@ -2,7 +2,7 @@
 import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { KisiOzet } from "../types";
-import { roles } from "../modals/roller";
+import { roles, rollerAdi } from "../modals/roller";
 import { yetkilerAdi } from "../modals/yetkiler";
 import { useModalContext } from "../context";
 
@@ -37,7 +37,7 @@ export default function KisiDataGrid() {
     dataSource: {
       store: {
         type: "array",
-        data: roles
+        data: rollerAdi
       },
       map: rolesToFilterItem
     }
