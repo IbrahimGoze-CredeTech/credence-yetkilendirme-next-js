@@ -21,7 +21,7 @@ export default function RootLayout({
   const userRole = "Admin";
   return (
     <html lang="en">
-      <body className="3xl:overflow-x-clip bg-gray-100">
+      <body className="3xl:overflow-x-clip bg-gray-100 dx-device-desktop dx-device-generic">
         <ModalContextWrapper>
           <div className="w-full">
             <NavBar userName={userName} userSurname={userSurname} userRole={userRole} />

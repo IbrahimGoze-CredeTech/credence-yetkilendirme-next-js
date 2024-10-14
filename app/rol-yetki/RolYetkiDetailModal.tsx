@@ -92,11 +92,12 @@ export default function RolYetkiDetailModal() {
             mode="row"
             allowUpdating={true}
             allowDeleting={true}
-            allowAdding={true}
+            allowAdding={false}
             useIcons={true} // Simge kullanmayı etkinleştir
           />
 
-          <Column dataField="yetkiAdi" caption="Yetki" />
+          <Column dataField="yetkiAdi" caption="Yetki"
+            allowEditing={false} />
           <Column dataField="eylemlerTuruId" caption="Eylem Türü" />
 
           {/* Edit ve Delete simgeleri için özel simgeler ekleyin */}
