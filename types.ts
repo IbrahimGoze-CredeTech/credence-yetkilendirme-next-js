@@ -73,6 +73,7 @@ export type Talep = {
   talepEdenKisiAdi: string;
   rolAtama?: RolAtama;
   rolCikarma?: RolCikarma;
+  imzalar?: Imza[];
 };
 
 export type RolAtama = {
@@ -90,4 +91,11 @@ export type RolCikarma = {
   rolId: number;
   rolAdi: string;
   rolCikarmaTarihi: string;
+};
+
+export type Imza = {
+  kisiAdi: string;
+  talepId: number;
+  durumTarihi: string;
+  durum: string;
 };

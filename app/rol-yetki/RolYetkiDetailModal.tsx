@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { useModalContext } from '../../context';
+import { useModalContext, useStaticTablesContext } from '../../context';
 import { Rol, RolYetki } from '../../types';
 import DataGrid, {
   Column,
@@ -13,6 +13,8 @@ import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config
 
 export default function RolYetkiDetailModal() {
   const modalContext = useModalContext();
+  const staticTablesContext = useStaticTablesContext();
+
   const [employees, setEmployees] = useState<RolYetki[]>([]);
   const [selectedRowData, setSelectedRowData] = useState<Rol | null>(null);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -25,11 +27,12 @@ export default function RolYetkiDetailModal() {
       // console.log("id in detail: ", modalContext.id);
 
       try {
-        const response = await fetch(`http://192.168.30.90:98/api/Rol/yetkiler/${modalContext.id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/yetkiler/${modalContext.id}`);
         if (!response.ok) throw new Error("Network response was not ok");
         const bilgilerData = await response.json();
         setEmployees(bilgilerData);
-        console.log('rol-yetki: ', bilgilerData);
+        // staticTablesContext.setRoller(bilgilerData);
+        // console.log('rol-yetki: ', bilgilerData);
 
 
         // Gelen verilerden ilk rol'ün adını alıyoruz (örnek olarak)

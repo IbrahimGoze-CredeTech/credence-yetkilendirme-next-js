@@ -4,21 +4,24 @@ import { useEffect, useState } from "react";
 import { KisiOzet } from "../types";
 import { roles } from "../modals/roller";
 import { yetkilerAdi } from "../modals/yetkiler";
-import { useModalContext } from "../context";
+import { useModalContext, useStaticTablesContext } from "../context";
 
 export default function KisiDataGrid() {
-  const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([])
+  const staticTablesContext = useStaticTablesContext();
   const modalContext = useModalContext();
+
+  const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://192.168.30.90:98/api/Kisi/ozet-bilgi").then((response) => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Kisi/ozet-bilgi`).then((response) => {
         if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       })
       // const data = response;
-      console.log('kisiOzet: ', response);
+      // console.log('kisiOzet: ', response);
       setKisiOzet(response)
+      // staticTablesContext.setKisiler(response);
     }
     fetchData();
   }, [])
