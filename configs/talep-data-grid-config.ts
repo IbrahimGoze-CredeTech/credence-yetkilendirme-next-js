@@ -17,8 +17,8 @@ export const talepDataGridConfig: IDataGridOptions = {
   showRowLines: true,
 
   columns: [
-    { dataField: "talepId", visible: false, allowEditing: false },
-    { dataField: "talepEdenKisiId", visible: false, allowEditing: false },
+    // { dataField: "talepId", visible: false, allowEditing: false },
+    // { dataField: "talepEdenKisiId", visible: false, allowEditing: false },
     {
       dataField: "talepEdenKisiAdi",
       caption: "Talep Eden Kişi",

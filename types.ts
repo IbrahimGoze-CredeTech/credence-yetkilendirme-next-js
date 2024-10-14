@@ -65,8 +65,8 @@ export type RolYetkiOzet = {
 };
 
 export type Talep = {
-  talepId: number;
-  talepEdenKisiId: number;
+  // talepId: number;
+  // talepEdenKisiId: number;
   olusturulmaTarihi: string;
   durum: string;
   durumTarihi: string;
@@ -77,9 +77,9 @@ export type Talep = {
 };
 
 export type RolAtama = {
-  kisiId: number;
+  // kisiId: number;
   kisiAdi: string;
-  rolId: number;
+  // rolId: number;
   rolAdi: string;
   rolBaslangicTarihi: string;
   rolBitisTarihi: string;

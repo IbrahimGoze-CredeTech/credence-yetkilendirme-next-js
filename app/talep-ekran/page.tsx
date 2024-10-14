@@ -16,12 +16,12 @@ export default function TalepEkranPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const talepler = await fetch('https://localhost:7210/api/Talep').then((response) => {
+      const talepler = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Talep`).then((response) => {
         if (!response.ok) throw new Error('Network response was not ok')
         return response.json()
       });
+      console.log("talepler: ", talepler);
       setTalepler(talepler);
-      // console.log("talepler: ", talepler);
 
     }
 
