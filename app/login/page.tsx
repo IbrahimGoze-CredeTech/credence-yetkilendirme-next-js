@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import * as z from "zod";
 import {
@@ -14,7 +14,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-
 const loginSchema = z.object({
   username: z.string().email("Geçerli bir e-posta adresi giriniz"),
   password: z.string().min(8, "Şifre en az 8 karakter olmalıdır"),
@@ -24,11 +23,22 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [email, setEmail] = useState("");
-  const [showTerms, setShowTerms] = useState(false); // Kullanıcı sözleşmesi pop-up durumu
-  const [showPrivacy, setShowPrivacy] = useState(false); // Gizlilik politikası pop-up durumu
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const savedUsername = localStorage.getItem("username");
+    const savedPassword = localStorage.getItem("password");
+    if (savedUsername && savedPassword) {
+      setUsername(savedUsername);
+      setPassword(savedPassword);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +57,13 @@ export default function LoginPage() {
     if (res?.error) {
       setError(res.error);
     } else {
+      if (rememberMe) {
+        localStorage.setItem("username", username);
+        localStorage.setItem("password", password);
+      } else {
+        localStorage.removeItem("username");
+        localStorage.removeItem("password");
+      }
       router.push("/");
     }
   };
@@ -96,6 +113,18 @@ export default function LoginPage() {
                   className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
                 />
               </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
+                  className="mr-2"
+                />
+                <label htmlFor="rememberMe" className="text-sm font-medium text-gray-700">
+                  Beni Hatırla
+                </label>
+              </div>
               <CardFooter className="flex flex-col items-center">
                 <Button
                   type="submit"
@@ -105,13 +134,14 @@ export default function LoginPage() {
                 </Button>
                 <a
                   href="#"
-                  onClick={() => setShowResetPassword(!showResetPassword)} // Sıfırlama formunu göster
+                  onClick={() => setShowResetPassword(!showResetPassword)}
                   className="text-blue-600 text-sm mt-2 hover:underline"
                 >
                   Şifremi Unuttum?
                 </a>
               </CardFooter>
             </form>
+
             {showResetPassword && (
               <form onSubmit={handleResetPassword} className="mt-4 space-y-4">
                 <h2 className="text-lg font-semibold mb-2">Şifreyi Sıfırla</h2>
@@ -145,6 +175,7 @@ export default function LoginPage() {
                 </div>
               </form>
             )}
+
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-600">
                 <a href="#" onClick={() => setShowTerms(true)} className="text-blue-600 hover:underline">Kullanıcı Sözleşmesi</a>
@@ -156,18 +187,16 @@ export default function LoginPage() {
         </Card>
       </div>
 
-      {/* Kullanıcı Sözleşmesi Pop-up */}
       {showTerms && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg w-96">
             <h2 className="text-lg font-bold mb-2">Kullanıcı Sözleşmesi</h2>
             <p>
-              Bu kullanıcı sözleşmesi, Credence ile kullanıcı  arasında, Credence Yetkilendirme Paneli kullanımına ilişkin şartları belirlemektedir.
+              Bu kullanıcı sözleşmesi, Credence ile kullanıcı arasında, Credence Yetkilendirme Paneli kullanımına ilişkin şartları belirlemektedir.
             </p>
             <p>
               Kullanıcı, uygulamayı kullanmaya başlamadan önce bu sözleşmeyi okuduğunu ve kabul ettiğini beyan eder.
             </p>
-          
             <Button onClick={() => setShowTerms(false)} className="mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">
               Kapat
             </Button>
@@ -175,7 +204,6 @@ export default function LoginPage() {
         </div>
       )}
 
-      {/* Gizlilik Politikası Pop-up */}
       {showPrivacy && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg w-96">
@@ -186,7 +214,6 @@ export default function LoginPage() {
             <p>
               Kullanıcı, uygulamayı kullanarak bu gizlilik politikasını kabul etmiş sayılır.
             </p>
-          
             <Button onClick={() => setShowPrivacy(false)} className="mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">
               Kapat
             </Button>
