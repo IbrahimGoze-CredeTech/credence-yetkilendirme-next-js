@@ -1,5 +1,10 @@
 import * as z from "zod";
 
+export const LoginSchema = z.object({
+  name: z.string().min(1, { message: "email is required" }),
+  password: z.string().min(1, { message: "Password is required" }),
+});
+
 // Define a Zod schema for the Option interface
 const OptionSchema = z.object({
   value: z.string().min(1, { message: "Value cannot be empty" }),

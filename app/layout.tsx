@@ -5,32 +5,39 @@ import { ModalContextWrapper, StaticTablesContextWrapper } from "../context";
 import "devextreme/dist/css/dx.light.css";
 import { ReactNode } from "react";
 import NavBar from "@/components/NavBar";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
+
 
 export const metadata: Metadata = {
   title: "Credence Yetkilendirme Paneli", // Uygulamanız için uygun bir başlık belirleyin
   description: "A brief description of your app.", // Uygulamanız için bir açıklama girin
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const userName = "Alper";
-  const userSurname = "Özpınar";
-  const userRole = "Admin";
+  // const userName = "Alper";
+  // const userSurname = "Özpınar";
+  // const userRole = "Admin";
+  const session = await auth();
+
   return (
-    <html lang="en">
-      <body className="3xl:overflow-x-clip bg-gray-100 dx-device-desktop dx-device-generic">
-        <ModalContextWrapper>
-          <StaticTablesContextWrapper>
-            <div className="w-full">
-              <NavBar userName={userName} userSurname={userSurname} userRole={userRole} />
-            </div>
-            {children}
-          </StaticTablesContextWrapper>
-        </ModalContextWrapper>
-      </body>
-    </html>
+    <SessionProvider session={session}>
+      <html lang="en">
+        <body className="3xl:overflow-x-clip bg-gray-100 dx-device-desktop dx-device-generic">
+          <ModalContextWrapper>
+            <StaticTablesContextWrapper>
+              <div className="w-full">
+                <NavBar />
+              </div>
+              {children}
+            </StaticTablesContextWrapper>
+          </ModalContextWrapper>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
