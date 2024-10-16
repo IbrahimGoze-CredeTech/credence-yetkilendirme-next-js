@@ -11,9 +11,16 @@ import DataGrid, {
 import { Button, Popup } from 'devextreme-react'; // Buton bileşenini içe aktar
 import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
 
+type RolYetkiInsertType = {
+  rolAdi: string,
+  yetiAdi: string,
+  eylemlerTuruId: number
+}
+
 export default function RolYetkiDetailModal() {
   const modalContext = useModalContext();
   const staticTablesContext = useStaticTablesContext();
+  const [insertedRolYetki, setInsertedRolYetki] = useState<RolYetkiInsertType[]>([]);
 
   const [employees, setEmployees] = useState<RolYetki[]>([]);
   const [selectedRowData, setSelectedRowData] = useState<Rol | null>(null);
@@ -38,6 +45,9 @@ export default function RolYetkiDetailModal() {
         // Gelen verilerden ilk rol'ün adını alıyoruz (örnek olarak)
         if (bilgilerData.length > 0) {
           setRolAdi(bilgilerData[0].rolAdi); // İlk kaydın rol adını al
+        }
+        else if (!Array.isArray(bilgilerData)) {
+          setRolAdi(bilgilerData.rolAdi);
         }
       } catch (error) {
         console.error("There was a problem with your fetch operation:", error);
@@ -70,6 +80,44 @@ export default function RolYetkiDetailModal() {
     setIsPopupVisible(false);
   };
 
+  const handleInsertRow = (e: { yetkiAdi: string; eylemlerTuruId: number }) => {
+    setInsertedRolYetki(prevState => [
+      ...prevState,
+      {
+        rolAdi: rolAdi!,
+        yetiAdi: e.yetkiAdi,
+        eylemlerTuruId: e.eylemlerTuruId
+      }
+    ]);
+  }
+
+  const handleSaveChanges = async () => {
+    console.log(JSON.stringify(insertedRolYetki));
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/rol-yetki`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // JSON formatında veri gönderiyoruz
+        },
+        body: JSON.stringify(insertedRolYetki), // `insertedRolYetki`'yi API'ye gönderiyoruz
+      });
+
+      if (!response.ok) {
+        throw new Error('Verileri kaydetme işlemi sırasında bir hata oluştu.');
+      }
+
+      const result = await response.json();
+      console.log('Kaydedilen veri: ', result);
+
+      // Veriler kaydedildikten sonra modal'ı kapatma veya ek bir işlem yapabilirsiniz
+      modalContext.toggle();
+
+    } catch (error) {
+      console.error('Kaydetme işlemi başarısız oldu: ', error);
+    }
+  };
+
   return (
     <div style={{ position: 'fixed', zIndex: 2 }} className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm min-h-[100vh] h-full overflow-auto ${modalContext?.isOpen ? "visible" : "hidden"}`} onPointerDown={(e) => {
       e.stopPropagation();
@@ -87,6 +135,12 @@ export default function RolYetkiDetailModal() {
           allowColumnReordering={true}
           showBorders={true}
           onRowClick={handleRowClick}
+          onRowInserted={(e) => {
+            handleInsertRow(e.data);
+          }}
+          // onRowUpdated={(e) => {
+          //   handleInsertRow(e.data);
+          // }}
           {...rolyetkiDataGridConfig}
         >
           <FilterRow visible={true} />
@@ -95,7 +149,7 @@ export default function RolYetkiDetailModal() {
             mode="row"
             allowUpdating={true}
             allowDeleting={true}
-            allowAdding={false}
+            allowAdding={true}
             useIcons={true} // Simge kullanmayı etkinleştir
           />
 
@@ -126,6 +180,7 @@ export default function RolYetkiDetailModal() {
           </Column>
         </DataGrid>
 
+        <Button onClick={handleSaveChanges}>Kaydet</Button>
 
       </div>
     </div>

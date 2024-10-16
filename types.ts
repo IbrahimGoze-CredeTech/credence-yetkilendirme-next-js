@@ -12,7 +12,7 @@ export type Kisi = {
   kisiSoyadi: string;
   roller: Rol[];
   departman: string;
-  yetkiler: Yetki[];
+  yetkiler: YetkiRol[];
   ekstraYetkiler: EkstraYetki[]; // Depending on what `ekstraYetkiler` contains, you can refine this type further
 };
 
@@ -29,7 +29,7 @@ export type Rol = {
   onaylanmaTarihi: string; // Same here for `Date`
 };
 
-export type Yetki = {
+export type YetkiRol = {
   rolId: number;
   rolAdi: string;
   yetkiId: number;
@@ -98,4 +98,10 @@ export type Imza = {
   talepId: number;
   durumTarihi: string;
   durum: string;
+};
+
+export type Yetki = {
+  yetkiId: number;
+  yetkiAdi: string;
+  siniflandirma: string;
 };

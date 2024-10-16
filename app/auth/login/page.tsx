@@ -1,8 +1,8 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+// import { signIn } from "next-auth/react";
+import { useState, useEffect, useTransition } from "react";
+// import { useRouter } from "next/navigation";
 import * as z from "zod";
 import {
   Card,
@@ -13,60 +13,65 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
-const loginSchema = z.object({
-  username: z.string().email("Geçerli bir e-posta adresi giriniz"),
-  password: z.string().min(8, "Şifre en az 8 karakter olmalıdır"),
-});
+import { LoginSchema } from "@/schemas";
+import { login } from "@/actions/login";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [showTerms, setShowTerms] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
-  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
     const savedPassword = localStorage.getItem("password");
     if (savedUsername && savedPassword) {
-      setUsername(savedUsername);
-      setPassword(savedPassword);
+      // setUsername(savedUsername);
+      // setPassword(savedPassword);
       setRememberMe(true);
     }
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = loginSchema.safeParse({ username, password });
-    if (!result.success) {
-      setError(result.error.errors[0].message);
-      return;
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      name: '',
+      password: '',
     }
+  });
 
-    const res = await signIn("credentials", {
-      username,
-      password,
-      redirect: false,
-    });
+  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    setError('');
+    setSuccess('');
 
-    if (res?.error) {
-      setError(res.error);
-    } else {
-      if (rememberMe) {
-        localStorage.setItem("username", username);
-        localStorage.setItem("password", password);
-      } else {
-        localStorage.removeItem("username");
-        localStorage.removeItem("password");
-      }
-      router.push("/");
-    }
-  };
+    startTransition(() => {
+      login(values).then((data) => {
+        // console.log('data: ', data);
+        if (!data) {
+          setError("Something went wrong! Please try again.");
+          return;
+        }
+        if (data.error) {
+          form.reset();
+          setError(data.error);
+        } else if (data.success) {
+          form.reset();
+          setSuccess(data.success);
+          window.location.replace('/');
+        }
+      }).catch((e) => {
+        console.log('error: ', e);
+        setError('Something went wrong!')
+      });
+    })
+  }
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,62 +90,71 @@ export default function LoginPage() {
             <p className="text-center text-gray-600 mt-1">Hesabınıza erişim sağlamak için giriş yapın</p>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && <p className="text-red-500 text-center">{error}</p>}
-              <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                  Kullanıcı Adı
-                </label>
-                <Input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                  className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                {error && <p className="text-red-500 text-center">{error}</p>}
+                {success && <p className="text-green-400-500 text-center">{success}</p>}
+                <FormField control={form.control} name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Kullanıcı Adı</FormLabel>
+                      <FormControl>
+                        <Input {...field}
+                          disabled={isPending}
+                          className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Şifre
-                </label>
-                <Input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
+                <FormField control={form.control} name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Şifre</FormLabel>
+                      <FormControl>
+                        <Input {...field}
+                          type="password"
+                          // id="username"
+                          // value={username}
+                          disabled={isPending}
+                          // onChange={(e) => setUsername(e.target.value)}
+                          // required
+                          className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="rememberMe"
-                  checked={rememberMe}
-                  onChange={() => setRememberMe(!rememberMe)}
-                  className="mr-2"
-                />
-                <label htmlFor="rememberMe" className="text-sm font-medium text-gray-700">
-                  Beni Hatırla
-                </label>
-              </div>
-              <CardFooter className="flex flex-col items-center">
-                <Button
-                  type="submit"
-                  className="bg-blue-600 text-white w-full rounded-md hover:bg-blue-700 transition duration-200"
-                >
-                  Giriş Yap
-                </Button>
-                <a
-                  href="#"
-                  onClick={() => setShowResetPassword(!showResetPassword)}
-                  className="text-blue-600 text-sm mt-2 hover:underline"
-                >
-                  Şifremi Unuttum?
-                </a>
-              </CardFooter>
-            </form>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="rememberMe"
+                    checked={rememberMe}
+                    onChange={() => setRememberMe(!rememberMe)}
+                    className="mr-2"
+                  />
+                  <label htmlFor="rememberMe" className="text-sm font-medium text-gray-700">
+                    Beni Hatırla
+                  </label>
+                </div>
+                <CardFooter className="flex flex-col items-center">
+                  <Button
+                    type="submit"
+                    disabled={isPending}
+                    className="bg-blue-600 text-white w-full rounded-md hover:bg-blue-700 transition duration-200"
+                  >
+                    Giriş Yap
+                  </Button>
+                  <a
+                    href="#"
+                    onClick={() => setShowResetPassword(!showResetPassword)}
+                    className="text-blue-600 text-sm mt-2 hover:underline"
+                  >
+                    Şifremi Unuttum?
+                  </a>
+                </CardFooter>
+              </form>
+            </Form>
 
             {showResetPassword && (
               <form onSubmit={handleResetPassword} className="mt-4 space-y-4">

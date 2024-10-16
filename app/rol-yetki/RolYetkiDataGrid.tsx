@@ -4,19 +4,24 @@ import DataGrid, { Column, FilterRow, HeaderFilter, Editing, Popup, Form } from 
 import { useEffect, useState } from "react";
 import { RolYetkiOzet } from "../../types";
 import { yetkiler, yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
-import { useModalContext } from "../../context";
-import { RowClickEvent } from "devextreme/ui/data_grid";
+import { useModalContext, useStaticTablesContext } from "../../context";
+
 import { Item } from "devextreme-react/form"; // Form item'larını eklemek için kullanacağız
-import { TagBox } from "devextreme-react";
-import { roles, rollerAdi } from "@/modals/roller";
+
+import { roles } from "@/modals/roller";
 
 export default function RolYetkiDataGrid() {
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
   const modalContext = useModalContext();
+  const staticTablesContext = useStaticTablesContext();
+
+  const rolNames = staticTablesContext.roller.map(rol => rol.rolAdi);
+  const yetkiNames = staticTablesContext.yetkiler.map(yetki => yetki.yetkiAdi);
+
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://192.168.30.90:98/api/Rol/ozet-rol-yetki").then((response) => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/ozet-rol-yetki`).then((response) => {
         if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       });
@@ -28,7 +33,7 @@ export default function RolYetkiDataGrid() {
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
 
   function rolesToFilterItem(item: string) {
-    // console.log('item: ', item);
+    //console.log('item: ', item);
     return {
       text: item,
       value: item
@@ -46,7 +51,7 @@ export default function RolYetkiDataGrid() {
     dataSource: {
       store: {
         type: "array",
-        data: rollerAdi
+        data: rolNames
       },
       map: rolesToFilterItem
     }
@@ -55,15 +60,13 @@ export default function RolYetkiDataGrid() {
     dataSource: {
       store: {
         type: "array",
-        data: yetkilerAdi
+        data: yetkiNames
       },
       map: yetkilerToFilterItem
     }
   };
   // Yetki hücresini formatlama fonksiyonu
-  const formatYetkiler = (yetkilerArray: string[]) => {
-    return yetkilerArray.join(', '); // Dizi elemanlarını virgülle birleştirir
-  };
+
 
   // TagBox için yetki listesi (çoklu seçim)
   function calculateFilterExpression(filterValue: string, selectedFilterOperation: string | null = '=') {
@@ -78,8 +81,12 @@ export default function RolYetkiDataGrid() {
           if (op === "endswith") return arg1.endsWith(arg2);
         };
 
-        // console.log('v: ', v);
+        // values'i kontrol ederek, dizi değilse bir diziye çeviriyoruz
         const values = column.calculateCellValue(data);
+        if (!Array.isArray(values)) {
+          return applyOperation(values, filterValue, selectedFilterOperation ?? '=');
+        }
+
         return (
           values &&
           !!values.find((v: string) => applyOperation(v, filterValue, selectedFilterOperation ?? '='))
@@ -91,6 +98,7 @@ export default function RolYetkiDataGrid() {
   }
 
 
+
   return (
     <>
       <DataGrid
@@ -100,7 +108,7 @@ export default function RolYetkiDataGrid() {
         showRowLines={true}
         showBorders={true}
         onRowClick={(e) => {
-          // console.log('e: ', e.data);
+          console.log('e: ', e.data);
 
           modalContext.setId(e.data.id);
           modalContext.toggle();
