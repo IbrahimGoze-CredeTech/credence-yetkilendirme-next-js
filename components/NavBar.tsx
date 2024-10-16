@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { logout } from "@/actions/logout";
 import { ExtendedUser } from "@/next-auth";
+import { RoleGate } from "./role-gate";
 
 export default function Navbar() {
   const userHook = useCurrentUser();
@@ -16,7 +17,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
-    console.log('Client Page User: ', userHook);
+    // console.log('Client Page User: ', userHook);
     setUser(userHook);
   }, [userHook])
 
@@ -43,6 +44,9 @@ export default function Navbar() {
       <div className="text-white text-lg">
         {user?.name} ({user?.role})
       </div>
+      <RoleGate allowedRole="admin">
+        <div className="text-white text-lg">Admin</div>
+      </RoleGate>
     </nav>
   );
 };

@@ -48,7 +48,7 @@ export default {
           const parsedResponse = await res.text();
           // const parsedResponse = await res.json();
           // console.log("parsed response: ", parsedResponse);
-          console.log("User created successfully");
+          // console.log("User created successfully");
 
           return {
             id: "1",
