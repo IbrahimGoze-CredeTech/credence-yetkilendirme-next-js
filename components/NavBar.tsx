@@ -15,6 +15,7 @@ const Navbar: React.FC<NavbarProps> = ({ userName, userSurname, userRole }) => {
         <Link href={"/rol-yetki"} className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Rol-Yetki</Link>
         <Link href="/" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Anasayfaya</Link>
         <Link href="/talep-ekran" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Talepler</Link>
+        <Link href="/rol" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Rol</Link>
         <Link href="/login" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Çıkış Yap</Link>
       </div>
 
