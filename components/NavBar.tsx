@@ -35,7 +35,9 @@ export default function Navbar() {
         <Link href={"/rol-yetki"} className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Rol-Yetki</Link>
         <Link href="/" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Anasayfaya</Link>
         <Link href="/talep-ekran" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Talepler</Link>
-        <Link href="/rol" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Rol</Link>
+        <RoleGate allowedRole={"admin"} showError={false}>
+          <Link href="/rol" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Rol</Link>
+        </RoleGate>
         <button onClick={onClick} className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Çıkış Yap</button>
       </div>
 
@@ -51,5 +53,3 @@ export default function Navbar() {
     </nav>
   );
 };
-
-// export default Navbar;

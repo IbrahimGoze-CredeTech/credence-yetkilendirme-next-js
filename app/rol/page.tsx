@@ -16,7 +16,7 @@ const RoleDataTable = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
-    fetch('http://192.168.30.90:98/api/Rol')
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol`)
       .then((response) => response.json())
       .then((data) => {
         setRoles(data);
@@ -40,9 +40,9 @@ const RoleDataTable = () => {
     <div className="p-6 max-w-8xl mx-auto bg-white rounded-lg shadow-md">
       <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">Rol Bilgileri</h1>
       <div className="mb-4">
-        <input 
-          type="text" 
-          placeholder="Rol adı ile ara..." 
+        <input
+          type="text"
+          placeholder="Rol adı ile ara..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
