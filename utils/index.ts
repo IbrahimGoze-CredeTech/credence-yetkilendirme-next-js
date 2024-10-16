@@ -1,7 +1,7 @@
-import { Yetki } from "../types";
+import { YetkiRol } from "../types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const isYetkiArray = (data: any): data is Yetki[] => {
+export const isYetkiArray = (data: any): data is YetkiRol[] => {
   return (
     Array.isArray(data) &&
     data.every(

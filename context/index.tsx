@@ -1,5 +1,5 @@
 "use client";
-import { Kisi, Rol } from "@/types";
+import { Kisi, Rol, Yetki } from "@/types";
 import { createContext, useContext, useEffect, useState } from "react";
 
 //#region ModalContext
@@ -51,6 +51,9 @@ type StaticTablesContextType = {
 
   roller: Rol[];
   setRoller: (roller: Rol[]) => void;
+
+  yetkiler: Yetki[];
+  setYetkiler: (yetkiler: Yetki[]) => void;
 }
 
 const StaticTablesContext = createContext<StaticTablesContextType | undefined>(undefined);
@@ -60,30 +63,33 @@ export function StaticTablesContextWrapper({ children }: {
 }) {
   const [kisiler, setKisiler] = useState<Kisi[]>([]);
   const [roller, setRoller] = useState<Rol[]>([]);
-
+  const [yetkiler, setYetkiler] = useState<Yetki[]>([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Use Promise.all to fetch both resources in parallel
-        const [rolResponse, kisiResponse] = await Promise.all([
+        const [rolResponse, kisiResponse, yetkiResponse] = await Promise.all([
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/Kisi`)
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/Kisi`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/yetki`)
         ]);
 
         // Check for response errors
-        if (!rolResponse.ok || !kisiResponse.ok) {
+        if (!rolResponse.ok || !kisiResponse.ok || !yetkiResponse.ok) {
           throw new Error("Network response was not ok");
         }
 
         // Parse the JSON responses
-        const [rolData, kisiData] = await Promise.all([
+        const [rolData, kisiData, yetkiData] = await Promise.all([
           rolResponse.json(),
-          kisiResponse.json()
+          kisiResponse.json(),
+          yetkiResponse.json()
         ]);
 
         // Set state with the data
         setRoller(rolData);
         setKisiler(kisiData);
+        setYetkiler(yetkiData)
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -96,6 +102,7 @@ export function StaticTablesContextWrapper({ children }: {
   const value: StaticTablesContextType = {
     kisiler, setKisiler,
     roller, setRoller,
+    yetkiler, setYetkiler,
   }
   return (
     <StaticTablesContext.Provider value={value}>
