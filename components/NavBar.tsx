@@ -6,12 +6,6 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { logout } from "@/actions/logout";
 import { ExtendedUser } from "@/next-auth";
 
-// interface NavbarProps {
-//   userName: string;
-//   userSurname: string;
-//   userRole: string;
-// }
-
 export default function Navbar() {
   const userHook = useCurrentUser();
   const [user, setUser] = useState<ExtendedUser>()
@@ -26,6 +20,13 @@ export default function Navbar() {
     setUser(userHook);
   }, [userHook])
 
+  if (!user) return (
+    <nav className="bg-gradient-to-bl from-blue-900 to-green-500 p-5 h-full flex items-center justify-between">
+      <h1 className="text-white text-2xl font-bold flex-grow text-center">
+        CREDENCE YETKİLENDİRME PANELİ
+      </h1>
+    </nav>
+  )
 
   return (
     <nav className="bg-gradient-to-bl from-blue-900 to-green-500 p-5 h-full flex items-center justify-between">

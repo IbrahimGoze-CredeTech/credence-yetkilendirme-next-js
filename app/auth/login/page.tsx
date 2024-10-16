@@ -20,8 +20,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 export default function LoginPage() {
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -30,8 +28,6 @@ export default function LoginPage() {
   const [showTerms, setShowTerms] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [isPending, startTransition] = useTransition();
-
-  // const router = useRouter();
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
@@ -68,47 +64,14 @@ export default function LoginPage() {
         } else if (data.success) {
           form.reset();
           setSuccess(data.success);
-          // router.push('/',);
           window.location.replace('/');
-
         }
-
-        // if (data.twoFactor) {
-        //   setShowTwoFactor(true);
-        // }
       }).catch((e) => {
         console.log('error: ', e);
         setError('Something went wrong!')
       });
     })
   }
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const result = loginSchema.safeParse({ username, password });
-  //   if (!result.success) {
-  //     setError(result.error.errors[0].message);
-  //     return;
-  //   }
-
-  //   const res = await signIn("credentials", {
-  //     username,
-  //     password,
-  //     redirect: false,
-  //   });
-
-  //   if (res?.error) {
-  //     setError(res.error);
-  //   } else {
-  //     if (rememberMe) {
-  //       localStorage.setItem("username", username);
-  //       localStorage.setItem("password", password);
-  //     } else {
-  //       localStorage.removeItem("username");
-  //       localStorage.removeItem("password");
-  //     }
-  //     router.push("/");
-  //   }
-  // };
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,12 +100,7 @@ export default function LoginPage() {
                       <FormLabel>Kullanıcı Adı</FormLabel>
                       <FormControl>
                         <Input {...field}
-                          // type="text"
-                          // id="username"
-                          // value={username}
                           disabled={isPending}
-                          // onChange={(e) => setUsername(e.target.value)}
-                          // required
                           className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
                         />
                       </FormControl>
@@ -167,32 +125,6 @@ export default function LoginPage() {
                     </FormItem>
                   )}
                 />
-                {/* <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                  Kullanıcı Adı
-                </label>
-                <Input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                  className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
-                />
-              </div> */}
-                {/* <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                    Şifre
-                  </label>
-                  <Input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
-                  />
-                </div> */}
                 <div className="flex items-center">
                   <input
                     type="checkbox"
@@ -208,6 +140,7 @@ export default function LoginPage() {
                 <CardFooter className="flex flex-col items-center">
                   <Button
                     type="submit"
+                    disabled={isPending}
                     className="bg-blue-600 text-white w-full rounded-md hover:bg-blue-700 transition duration-200"
                   >
                     Giriş Yap

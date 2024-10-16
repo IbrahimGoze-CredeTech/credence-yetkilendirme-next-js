@@ -16,8 +16,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user, account }) {
-      console.log("user: ", user);
-      console.log("account: ", account);
+      // console.log("user: ", user);
+      // console.log("account: ", account);
       // TODO: Verify user
       return true;
     },

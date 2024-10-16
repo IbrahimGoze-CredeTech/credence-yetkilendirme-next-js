@@ -3,9 +3,9 @@
 import { z } from "zod";
 import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+// import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { signIn } from "@/auth";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 
 export async function login(values: z.infer<typeof LoginSchema>) {
   const validatedFields = LoginSchema.safeParse(values);
@@ -14,7 +14,8 @@ export async function login(values: z.infer<typeof LoginSchema>) {
   }
 
   const { name, password } = validatedFields.data;
-
+  //dummy wait 2 seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   try {
     const res = await signIn("credentials", {
       name,

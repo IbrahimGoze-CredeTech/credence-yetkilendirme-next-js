@@ -32,8 +32,7 @@ export default auth((req) => {
   }
 
   if (!isLoggedIn) {
-    console.log("----NOT LOGGED INN: ", isLoggedIn);
-
+    // console.log("----NOT LOGGED INN: ", isLoggedIn);
     return NextResponse.redirect(new URL("/auth/login", nextUrl));
   }
   return;
