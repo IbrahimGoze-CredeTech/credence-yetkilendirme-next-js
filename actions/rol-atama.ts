@@ -55,13 +55,16 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
   };
   console.log("rolAtamaRequest: ", rolAtamaRequest);
 
-  const response = await fetch(`https://localhost:7210/api/Talep/rol-atama`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(rolAtamaRequest),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/Talep/rol-atama`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rolAtamaRequest),
+    }
+  );
   if (!response.ok) throw new Error("Network response was not ok");
   return await response.json();
 }

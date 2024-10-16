@@ -21,7 +21,7 @@ export default function RolYetkiDataGrid() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://192.168.30.90:98/api/Rol/ozet-rol-yetki").then((response) => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/ozet-rol-yetki`).then((response) => {
         if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       });

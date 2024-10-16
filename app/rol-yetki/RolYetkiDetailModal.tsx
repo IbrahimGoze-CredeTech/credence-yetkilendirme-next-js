@@ -114,6 +114,9 @@ export default function RolYetkiDetailModal() {
           onRowInserted={(e) => {
             handleInsertRow(e.data);
           }}
+          // onRowUpdated={(e) => {
+          //   handleInsertRow(e.data);
+          // }}
           {...rolyetkiDataGridConfig}
         >
           <FilterRow visible={true} />

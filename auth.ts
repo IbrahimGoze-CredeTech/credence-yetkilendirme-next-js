@@ -27,12 +27,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
       if (token.role && session.user) {
         session.user.role = token.role;
-        console.log("session.user.role: ", session.user.role);
+        // console.log("session.user.role: ", session.user.role);
       }
       if (session.user) {
         // session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
       }
-      console.log("session in auth: ", session);
+      // console.log("session in auth: ", session);
 
       return session;
     },
