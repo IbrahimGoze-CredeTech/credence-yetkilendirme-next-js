@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 import NavBar from "@/components/NavBar";
 
 export const metadata: Metadata = {
-  title: "My Next.js App", // Uygulamanız için uygun bir başlık belirleyin
+  title: "Credence Yetkilendirme Paneli", // Uygulamanız için uygun bir başlık belirleyin
   description: "A brief description of your app.", // Uygulamanız için bir açıklama girin
 };
 
