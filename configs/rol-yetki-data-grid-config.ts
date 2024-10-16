@@ -10,7 +10,7 @@ const eylemTuruLookup = Object.keys(EylemTuruEnum)
     eylemAdi: key,
   }));
 
-export const rolyetkiDataGridConfig: IDataGridOptions = {
+export const rolYetkiDataGridConfig: IDataGridOptions = {
   id: "rolyetkidatagrid",
   allowColumnReordering: true,
   allowColumnResizing: true,

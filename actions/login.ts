@@ -15,7 +15,7 @@ export async function login(values: z.infer<typeof LoginSchema>) {
 
   const { name, password } = validatedFields.data;
   //dummy wait 2 seconds
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
   try {
     const res = await signIn("credentials", {
       name,

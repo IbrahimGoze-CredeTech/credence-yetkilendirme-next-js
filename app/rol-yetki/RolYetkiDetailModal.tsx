@@ -1,15 +1,16 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { useModalContext, useStaticTablesContext } from '../../context';
-import { Rol, RolYetki } from '../../types';
+import { useModalContext } from '../../context';
+import { RolYetki } from '../../types';
 import DataGrid, {
   Column,
   Editing,
   Paging,
   FilterRow,
 } from "devextreme-react/data-grid";
-import { Button, Popup } from 'devextreme-react'; // Buton bileşenini içe aktar
-import { rolyetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
+import { Button } from 'devextreme-react'; // Buton bileşenini içe aktar
+import { rolYetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
+// import { RowClickEvent } from 'devextreme/ui/data_grid';
 
 type RolYetkiInsertType = {
   rolAdi: string,
@@ -19,12 +20,12 @@ type RolYetkiInsertType = {
 
 export default function RolYetkiDetailModal() {
   const modalContext = useModalContext();
-  const staticTablesContext = useStaticTablesContext();
+  // const staticTablesContext = useStaticTablesContext();
   const [insertedRolYetki, setInsertedRolYetki] = useState<RolYetkiInsertType[]>([]);
 
   const [employees, setEmployees] = useState<RolYetki[]>([]);
-  const [selectedRowData, setSelectedRowData] = useState<Rol | null>(null);
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  // const [selectedRowData, setSelectedRowData] = useState<Rol | null>(null);
+  // const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [rolAdi, setRolAdi] = useState<string | null>(null); // Rol Adını tutacak state
 
   useEffect(() => {
@@ -62,8 +63,8 @@ export default function RolYetkiDetailModal() {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-      setSelectedRowData(null);
-      setIsPopupVisible(false);
+      // setSelectedRowData(null);
+      // setIsPopupVisible(false);
     }
 
     return () => {
@@ -71,14 +72,14 @@ export default function RolYetkiDetailModal() {
     };
   }, [modalContext?.isOpen]);
 
-  const handleRowClick = (e) => {
-    setSelectedRowData(e.data);
-    setIsPopupVisible(true);
-  };
+  // const handleRowClick = (e: RowClickEvent) => {
+  // setSelectedRowData(e.data);
+  // setIsPopupVisible(true);
+  // };
 
-  const handleClosePopup = () => {
-    setIsPopupVisible(false);
-  };
+  // const handleClosePopup = () => {
+  //   setIsPopupVisible(false);
+  // };
 
   const handleInsertRow = (e: { yetkiAdi: string; eylemlerTuruId: number }) => {
     setInsertedRolYetki(prevState => [
@@ -134,14 +135,14 @@ export default function RolYetkiDetailModal() {
           keyExpr="yetkiAdi"
           allowColumnReordering={true}
           showBorders={true}
-          onRowClick={handleRowClick}
+          // onRowClick={handleRowClick}
           onRowInserted={(e) => {
             handleInsertRow(e.data);
           }}
           // onRowUpdated={(e) => {
           //   handleInsertRow(e.data);
           // }}
-          {...rolyetkiDataGridConfig}
+          {...rolYetkiDataGridConfig}
         >
           <FilterRow visible={true} />
           <Paging enabled={true} />
@@ -165,17 +166,17 @@ export default function RolYetkiDetailModal() {
           >
             <Button
               icon="edit" // Edit simgesi
-              onClick={(e) => {
-                // Düzenleme işlemini burada yönetebilirsiniz
-                e.event.stopPropagation(); // Satır tıklamasını durdur
-              }}
+            // onClick={(e) => {
+            // Düzenleme işlemini burada yönetebilirsiniz
+            // e.event.stopPropagation(); // Satır tıklamasını durdur
+            // }}
             />
             <Button
               icon="trash" // Silme simgesi
-              onClick={(e) => {
-                // Silme işlemini burada yönetebilirsiniz
-                e.event.stopPropagation(); // Satır tıklamasını durdur
-              }}
+            // onClick={(e) => {
+            // Silme işlemini burada yönetebilirsiniz
+            //   e.event.stopPropagation(); // Satır tıklamasını durdur
+            // }}
             />
           </Column>
         </DataGrid>

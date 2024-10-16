@@ -28,6 +28,7 @@ export default function TalepEkranPage() {
     fetchData();
   }, [])
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function onFieldDataChanged(e: any) {
     // console.log('called');
     console.log(e.value);
@@ -52,6 +53,7 @@ export default function TalepEkranPage() {
           <Form >
             <Item dataField="talepTipiId" editorType="dxSelectBox"
               editorOptions={{
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onValueChanged: (e: any) => onFieldDataChanged(e)
               }}
             />

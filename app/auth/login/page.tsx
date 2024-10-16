@@ -18,6 +18,8 @@ import { login } from "@/actions/login";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import FormError from "@/components/form-error";
+import FormSuccess from "@/components/form-success";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
@@ -92,8 +94,8 @@ export default function LoginPage() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                {error && <p className="text-red-500 text-center">{error}</p>}
-                {success && <p className="text-green-400-500 text-center">{success}</p>}
+                {/* {error && <p className="text-red-500 text-center">{error}</p>}
+                {success && <p className="text-green-400-500 text-center">{success}</p>} */}
                 <FormField control={form.control} name="name"
                   render={({ field }) => (
                     <FormItem>
@@ -138,6 +140,8 @@ export default function LoginPage() {
                   </label>
                 </div>
                 <CardFooter className="flex flex-col items-center">
+                  <FormError message={error} />
+                  <FormSuccess message={success} />
                   <Button
                     type="submit"
                     disabled={isPending}

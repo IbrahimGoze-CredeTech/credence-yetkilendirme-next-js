@@ -15,6 +15,7 @@ import DataGrid, {
 import { rolDataGridConfig } from '../configs/rol-data-grid-config';
 import { yetkiDataGridConfig } from '../configs/yetki-data-grid-config';
 import { ekstraYetkilerDataGridConfig } from '../configs/ekstra-yetkiler-data-grid-config';
+import { RowClickEvent } from 'devextreme/ui/data_grid';
 
 export default function KisiDetailModal() {
   const modalContext = useModalContext();
@@ -44,6 +45,7 @@ export default function KisiDetailModal() {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalContext?.isOpen]);
 
   useEffect(() => {
@@ -59,7 +61,7 @@ export default function KisiDetailModal() {
     };
   }, [modalContext?.isOpen]);
 
-  const handleRowClick = (e) => {
+  const handleRowClick = (e: RowClickEvent) => {
     setSelectedRowData(e.data); // Seçilen satır verisini sakla
     setIsPopupVisible(true); // Popup'ı aç
   };
