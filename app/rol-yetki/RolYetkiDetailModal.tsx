@@ -91,9 +91,33 @@ export default function RolYetkiDetailModal() {
     ]);
   }
 
-  // const handleSaveChanges = async () => {
-  //     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/yetkiler/${modalContext.id}`);
-  // }
+  const handleSaveChanges = async () => {
+    console.log(JSON.stringify(insertedRolYetki));
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/rol-yetki`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // JSON formatında veri gönderiyoruz
+        },
+        body: JSON.stringify(insertedRolYetki), // `insertedRolYetki`'yi API'ye gönderiyoruz
+      });
+
+      if (!response.ok) {
+        throw new Error('Verileri kaydetme işlemi sırasında bir hata oluştu.');
+      }
+
+      const result = await response.json();
+      console.log('Kaydedilen veri: ', result);
+
+      // Veriler kaydedildikten sonra modal'ı kapatma veya ek bir işlem yapabilirsiniz
+      modalContext.toggle();
+
+    } catch (error) {
+      console.error('Kaydetme işlemi başarısız oldu: ', error);
+    }
+  };
+
   return (
     <div style={{ position: 'fixed', zIndex: 2 }} className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm min-h-[100vh] h-full overflow-auto ${modalContext?.isOpen ? "visible" : "hidden"}`} onPointerDown={(e) => {
       e.stopPropagation();
@@ -153,9 +177,7 @@ export default function RolYetkiDetailModal() {
           </Column>
         </DataGrid>
 
-        <Button onClick={() => {
-          console.log('insertedRolYetki: ', insertedRolYetki);
-        }}>Kaydet</Button>
+        <Button onClick={handleSaveChanges}>Kaydet</Button>
 
       </div>
     </div>
