@@ -1,6 +1,9 @@
 import NextAuth from "next-auth";
 import authConfig from "./auth.config";
-import { ExtendedUser } from "./next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+
+import { getUserById, getUserRole } from "./data/user";
+import { db } from "./lib/db";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -15,9 +18,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     // },
   },
   callbacks: {
-    async signIn({ user, account }) {
-      console.log("user: ", user);
-      console.log("account: ", account);
+    async signIn({ user }) {
+      // console.log("user: ", user);
+      // console.log("account: ", account);
+      const existingUser = await getUserById(user.id);
+      if (!existingUser) return false;
       // TODO: Verify user
       return true;
     },
@@ -29,28 +34,23 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.role = token.role;
         // console.log("session.user.role: ", session.user.role);
       }
-      if (session.user) {
-        // session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
-      }
       // console.log("session in auth: ", session);
 
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token }) {
       if (!token.sub) return token;
 
-      if (user) token.role = user?.role;
+      const existingUser = await getUserById(token.sub);
 
-      // const existingUser = await getUserById(token.sub);
+      if (!existingUser) return token;
 
-      // if (!existingUser) return token;
-
-      // token.role = existingUser.role;
+      token.role = await getUserRole(existingUser.KisiId);
       // token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       return token;
     },
   },
-  // adapter: PrismaAdapter(db),
+  adapter: PrismaAdapter(db),
   secret: process.env.AUTH_SECRET,
   session: { strategy: "jwt" },
   ...authConfig,

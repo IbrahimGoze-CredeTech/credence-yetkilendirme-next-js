@@ -10,6 +10,17 @@ export async function getUserByUserName(KullaniciAdi: string) {
   }
 }
 
+export async function getUserById(id: string | undefined) {
+  if (!id) return null;
+  try {
+    const kisi = db.kisi.findUnique({ where: { KisiId: +id } });
+    return kisi;
+  } catch (error) {
+    console.error(error); // Log the error if necessary
+    return null; // Return null or handle it as needed
+  }
+}
+
 export async function getUserRole(KisiId: number): Promise<string | null> {
   try {
     // get the role of the user from the kisiRol table
