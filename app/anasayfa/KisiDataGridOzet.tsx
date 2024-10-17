@@ -5,11 +5,11 @@ import { KisiOzet } from "../../types";
 import { roles, rollerAdi } from "../../modals/roller";
 import { yetkilerAdi } from "../../modals/yetkiler";
 import { useModalContext, useStaticTablesContext } from "../../context";
-
+import { useRouter } from 'next/navigation';
 export default function KisiDataGrid() {
   const staticTablesContext = useStaticTablesContext();
   const modalContext = useModalContext();
-
+  const router = useRouter();
   const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([])
 
   useEffect(() => {
@@ -80,7 +80,11 @@ export default function KisiDataGrid() {
 
   return (
     <>
-      <h1 className="text-3xl font-medium my-4">Kişi Bilgileri</h1>
+      <h1
+        className="text-3xl font-medium my-4 cursor-pointer"
+        onClick={() => router.push("/kisi-bilgileri")}> {/* Başlığa tıklanınca yönlendirme */}
+        Kişi Bilgileri
+      </h1>
       <DataGrid
         id="kisiOzet"
         keyExpr="id"
@@ -96,19 +100,16 @@ export default function KisiDataGrid() {
       >
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
-
         <Column
-          dataField="ad"
-          caption="Ad"
-          allowHeaderFiltering={false} />
-        <Column
-          dataField="soyad"
-          caption="Soyad"
+          caption="Ad Soyad"
+          calculateCellValue={(rowData) => `${rowData.ad} ${rowData.soyad}`}
+          allowFiltering={true}
           allowHeaderFiltering={false} />
         <Column
           dataField="departman"
           caption="Departman"
           allowHeaderFiltering={false}
+          allowFiltering={false}
         />
         <Column
           dataField="roller"
@@ -121,14 +122,14 @@ export default function KisiDataGrid() {
           <HeaderFilter dataSource={roles} />
         </Column>
 
-        <Column
+        {/* <Column
           dataField="yetkiler"
           caption="Yetki"
           dataType="string"
           calculateFilterExpression={calculateFilterExpression}
           filterOperations={rolesFilterOperations}
           headerFilter={yetkilerHeaderFilter}
-        ><HeaderFilter dataSource={yetkilerAdi} /></Column>
+        ><HeaderFilter dataSource={yetkilerAdi} /></Column> */}
 
       </DataGrid>
     </>

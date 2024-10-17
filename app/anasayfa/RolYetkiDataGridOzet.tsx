@@ -101,7 +101,7 @@ export default function RolYetkiDataGrid() {
 
   return (
     <>
-      <h1 className="text-3xl font-medium my-4">Rol Ve Yetki Atama</h1>
+      <h1 className="text-3xl font-medium my-4">Rol Ve Yetki Bilgileri</h1>
       <DataGrid
         id="rolYetki"
         keyExpr="rolAdi"
