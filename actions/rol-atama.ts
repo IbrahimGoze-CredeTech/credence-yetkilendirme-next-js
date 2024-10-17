@@ -57,6 +57,7 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/Talep/rol-atama`,
+    // "https://localhost:7210/api/Talep/rol-atama",
     {
       method: "POST",
       headers: {

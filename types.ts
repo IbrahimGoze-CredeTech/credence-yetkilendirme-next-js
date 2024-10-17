@@ -105,3 +105,10 @@ export type Yetki = {
   yetkiAdi: string;
   siniflandirma: string;
 };
+
+export type RolAtamaGridType = {
+  rolAdi: string | undefined;
+  kisiAdi: string;
+  rolBaslangicTarihi: Date | null;
+  rolBitisTarihi: Date | null;
+};

@@ -20,7 +20,7 @@ export default function TalepEkranPage() {
         if (!response.ok) throw new Error('Network response was not ok')
         return response.json()
       });
-      console.log("talepler: ", talepler);
+      // console.log("talepler: ", talepler);
       setTalepler(talepler);
 
     }

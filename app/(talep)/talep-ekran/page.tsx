@@ -2,16 +2,13 @@
 
 import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
 import { Talep } from '@/types';
-// import { DataGrid } from 'devextreme-react';
 import DataGrid, { Column, Editing, MasterDetail, Form, Popup } from 'devextreme-react/cjs/data-grid';
 import { Item } from 'devextreme-react/form';
 import Link from 'next/link';
-
 import React, { useEffect, useState } from 'react'
 
 export default function TalepEkranPage() {
   const [isRolAtama, setIsRolAtama] = useState<boolean>(false);
-
   const [talepler, setTalepler] = useState<Talep[]>()
 
   useEffect(() => {
@@ -40,7 +37,8 @@ export default function TalepEkranPage() {
   return (
     <div className='p-4'>
       <h1 className="text-3xl font-medium my-4">Talepler</h1>
-      <Link href="/talep-ekran/talep-yarat">Talep Yarat</Link>
+      <Link href="/talep-yarat">Talep Yarat</Link>
+      <Link href="/talep-onay">Talep Onay</Link>
       <DataGrid dataSource={talepler}
         {...talepDataGridConfig}
       >
