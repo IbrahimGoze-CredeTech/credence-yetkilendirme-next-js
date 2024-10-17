@@ -107,6 +107,7 @@ export type Yetki = {
 };
 
 export type RolAtamaGridType = {
+  rolAtamaId: number;
   rolAdi: string | undefined;
   kisiAdi: string;
   rolBaslangicTarihi: Date | null;

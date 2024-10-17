@@ -99,6 +99,7 @@ export async function bekleyenRolAtamalar(): Promise<RolAtamaGridType[]> {
         },
       });
       return {
+        rolAtamaId: rolAtama.RolAtamaId,
         rolAdi: rol?.RolAdi,
         kisiAdi: kisi?.Ad + " " + kisi?.Soyad,
         rolBaslangicTarihi: rolAtama.RolBaslangicTarihi,
