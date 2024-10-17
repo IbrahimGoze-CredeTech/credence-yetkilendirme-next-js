@@ -23,7 +23,7 @@ export default function Navbar() {
   }, [userHook])
 
   if (!user) return (
-    <nav className="bg-gradient-to-bl from-[#3B82F6] to-[#F9FAFB] p-5 h-full flex items-center justify-center">
+    <nav className="bg-azure-radiance-500 p-5 h-full flex items-center justify-center">
       <h1 className="text-white text-2xl font-bold">
         CREDENCE YETKİLENDİRME PANELİ
       </h1>
@@ -31,38 +31,38 @@ export default function Navbar() {
   )
 
   return (
-    <nav className="bg-gradient-to-bl from-[#3B82F6] to-[#F9FAFB] p-5 h-full flex items-center justify-between">
+    <nav className="bg-azure-radiance-500 p-5 h-full flex items-center justify-between">
       <div id="Buttons" className="flex items-center space-x-4">
-        <Link href="/" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold transition-colors duration-150 hover:bg-blue-700">Anasayfa</Link>
-        <Link href="/rol-yetki" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold transition-colors duration-150 hover:bg-blue-700">Rol Ve Yetki Atama</Link>
-        <Link href="/kisi-bilgileri" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold transition-colors duration-150 hover:bg-blue-700">Kişi Bilgileri</Link>
+        <Link href="/" className="text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded">Anasayfa</Link>
+        <Link href="/rol-yetki" className="text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded">Rol Ve Yetki Atama</Link>
+        <Link href="/kisi-bilgileri" className="text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded">Kişi Bilgileri</Link>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold flex items-center transition-colors duration-150 hover:bg-blue-700">
+          <DropdownMenuTrigger className="text-white font-bold flex items-center transition-colors duration-150 hover:underline">
             Talepler <ChevronDownIcon className="w-4 h-4 ml-2" />
           </DropdownMenuTrigger>
 
           <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-2 transition-transform duration-150 ease-in-out">
-          <DropdownMenuItem asChild>
-              <Link href="/talep-ekran" className="block px-4 py-2 hover:bg-blue-500 hover:text-white transition-colors duration-150">Talepler</Link>
+            <DropdownMenuItem asChild>
+              <Link href="/talep-ekran" className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150">Talepler</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/talep-ekran/talep-yarat" className="block px-4 py-2 hover:bg-blue-500 hover:text-white transition-colors duration-150">Talep Yarat</Link>
+              <Link href="/talep-ekran/talep-yarat" className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150">Talep Yarat</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/talep/onaylanan" className="block px-4 py-2 hover:bg-blue-500 hover:text-white transition-colors duration-150">Onaylanan Talepler</Link>
+              <Link href="/talep/onaylanan" className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150">Onaylanan Talepler</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/talep/onay-bekleyen" className="block px-4 py-2 hover:bg-blue-500 hover:text-white transition-colors duration-150">Onay Bekleyen Talepler</Link>
+              <Link href="/talep/onay-bekleyen" className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150">Onay Bekleyen Talepler</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/talep/onaylanmayan" className="block px-4 py-2 hover:bg-blue-500 hover:text-white transition-colors duration-150">Onaylanmayan Talepler</Link>
+              <Link href="/talep/onaylanmayan" className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150">Onaylanmayan Talepler</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
         <RoleGate allowedRole={"admin"} showError={false}>
-          <Link href="/rol" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold transition-colors duration-150 hover:bg-blue-700">Rol</Link>
+          <Link href="/rol" className="text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded">Rol</Link>
         </RoleGate>
       </div>
 
