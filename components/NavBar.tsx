@@ -46,7 +46,7 @@ export default function Navbar() {
         </Link>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded">
+          <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded ">
             <Image src="/demand.png" alt="Talepler" width={24} height={24} className="mr-2" />
             Talepler <ChevronDownIcon className="w-4 h-4 ml-2" />
           </DropdownMenuTrigger>
