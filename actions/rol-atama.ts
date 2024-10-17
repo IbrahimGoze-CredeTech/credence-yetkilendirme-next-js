@@ -13,7 +13,7 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
   const validateFields = TalepRolAtamaSchema.safeParse(values);
 
   if (!validateFields.success) {
-    throw new Error(validateFields.error.errors[0].message);
+    return { success: "", error: validateFields.error.errors[0].message };
   }
 
   const {
@@ -53,7 +53,7 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
-  console.log("rolAtamaRequest: ", rolAtamaRequest);
+  // console.log("rolAtamaRequest: ", rolAtamaRequest);
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/Talep/rol-atama`,
@@ -66,6 +66,7 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
       body: JSON.stringify(rolAtamaRequest),
     }
   );
-  if (!response.ok) throw new Error("Network response was not ok");
-  return await response.json();
+  if (!response.ok)
+    return { success: "", error: "Network Response was not Ok" };
+  return { success: "Talep Yaratıldı", error: "" };
 }

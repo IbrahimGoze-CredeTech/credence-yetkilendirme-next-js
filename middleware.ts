@@ -13,26 +13,21 @@ export default auth((req) => {
   const { nextUrl } = req;
 
   const isLoggedIn = !!req.auth;
-  // console.log("isLoggedIn: ", isLoggedIn);
 
   const isAPiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  // const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   if (isAPiAuthRoute) {
     return;
   }
-  // console.log("isAuthRoute: ", isAuthRoute);
 
   if (isAuthRoute) {
     if (isLoggedIn) {
       return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-    // console.log("in Middleware \n");
     return;
   }
 
   if (!isLoggedIn) {
-    // console.log("----NOT LOGGED INN: ", isLoggedIn);
     return NextResponse.redirect(new URL("/auth/login", nextUrl));
   }
   return;

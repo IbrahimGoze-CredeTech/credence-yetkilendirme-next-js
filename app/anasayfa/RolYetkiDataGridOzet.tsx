@@ -1,12 +1,11 @@
 "use client";
 
-import DataGrid, { Column, FilterRow, HeaderFilter, Editing, Popup, Form } from "devextreme-react/data-grid";
+import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { RolYetkiOzet } from "../../types";
-import { yetkiler, yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
+import { yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
 import { useModalContext, useStaticTablesContext } from "../../context";
 import { useRouter } from 'next/navigation';
-import { Item } from "devextreme-react/form"; // Form item'larını eklemek için kullanacağız
 
 import { roles } from "@/modals/roller";
 

@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import NavBar from "@/components/NavBar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 
 export const metadata: Metadata = {
@@ -30,10 +31,13 @@ export default async function RootLayout({
         <body className="3xl:overflow-x-clip bg-gray-100 dx-device-desktop dx-device-generic">
           <ModalContextWrapper>
             <StaticTablesContextWrapper>
-              <div className="w-full">
-                <NavBar />
-              </div>
-              {children}
+              <main>
+                <div className="w-full">
+                  <NavBar />
+                </div>
+                {children}
+              </main>
+              <Toaster />
             </StaticTablesContextWrapper>
           </ModalContextWrapper>
         </body>

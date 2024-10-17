@@ -17,10 +17,13 @@ import { cn } from '@/lib/utils';
 import { tr } from 'date-fns/locale';
 import { format } from "date-fns"
 import { Switch } from '@/components/ui/switch';
+import { ToastAction } from "@/components/ui/toast"
+
 import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
 import { rolAtama } from '@/actions/rol-atama';
 import FormSuccess from '@/components/form-success';
 import FormError from '@/components/form-error';
+import { useToast } from '@/hooks/use-toast';
 
 
 export default function TalepYaratPage() {
@@ -35,6 +38,9 @@ export default function TalepYaratPage() {
   const [isBitisOpen, setIsBitisOpen] = useState(false);
   const [error, setError] = useState<string | undefined>("")
   const [success, setSuccess] = useState<string | undefined>("");
+
+  const { toast } = useToast();
+
 
 
   const form = useForm<z.infer<typeof TalepRolAtamaSchema>>({
@@ -52,7 +58,7 @@ export default function TalepYaratPage() {
   const onSubmit = (values: z.infer<typeof TalepRolAtamaSchema>) => {
     setError('');
     setSuccess('');
-    console.log('values: ', values);
+    // console.log('values: ', values);
 
     startTransition(() => {
       rolAtama(values).then((data) => {
@@ -63,6 +69,15 @@ export default function TalepYaratPage() {
         if (data.success) {
           form.reset();
           setSuccess(data.success)
+          toast({
+            title: "Talep başarıyla oluşturuldu",
+            description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
+            action: (
+              <ToastAction altText="Goto schedule to undo" onClick={() => {
+                console.log("undo clicked");
+              }}>Iptal</ToastAction>
+            )
+          });
         }
 
       }).catch(() => setError('Something went wrong!'));

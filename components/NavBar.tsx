@@ -31,7 +31,7 @@ export default function Navbar() {
     return (
       <nav className="bg-azure-radiance-500 p-5 h-full flex items-center justify-center">
         <h1 className="text-white text-2xl font-bold">
-          CREDENCE YETKİLENDİRME PANELİ
+          YETKİLENDİRME PANELİ
         </h1>
       </nav>
     );
@@ -102,7 +102,7 @@ export default function Navbar() {
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link
-                href="/talep-ekran/talep-yarat"
+                href="/talep-yarat"
                 className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
               >
                 Talep Yarat
@@ -118,7 +118,7 @@ export default function Navbar() {
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link
-                href="/talep/onay-bekleyen"
+                href="/talep-onay"
                 className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
               >
                 Onay Bekleyen Talepler
@@ -151,7 +151,7 @@ export default function Navbar() {
       </div>
 
       <h1 className="text-white text-2xl font-bold flex-grow text-center">
-        CREDENCE YETKİLENDİRME PANELİ
+        YETKİLENDİRME PANELİ
       </h1>
 
       <DropdownMenu>
