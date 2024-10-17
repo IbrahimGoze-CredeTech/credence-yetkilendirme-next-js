@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model DurumEnum {
+  DurumId Int     @id(map: "PK_Durum.Enum") @default(autoincrement())
+  DurumAd String  @db.VarChar(10)
+  Imza    Imza[]
+  Talep   Talep[]
+}
+
+model EylemTuru {
+  EylemTuruId Int         @id(map: "PK__EylemTur__EEFC6562DD6EDF70") @default(autoincrement())
+  EylemAdi    String      @db.NVarChar(50)
+  KisiYetki   KisiYetki[]
+  RolYetki    RolYetki[]
+}
+
+model Imza {
+  ImzaId      Int        @id(map: "PK_Imza") @default(autoincrement())
+  KisiId      Int
+  TalepId     Int
+  DurumTarihi DateTime?  @db.DateTime
+  DurumId     Int?       @default(1, map: "DF_Imza_DurumId")
+  DurumEnum   DurumEnum? @relation(fields: [DurumId], references: [DurumId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Imza_Durum.Enum")
+  Kisi        Kisi       @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_Imza_Kisi")
+  Talep       Talep      @relation(fields: [TalepId], references: [TalepId], onUpdate: NoAction, map: "FK_Imza_Talep")
+}
+
+model Kisi {
+  KisiId       Int          @id(map: "PK__Kisi__110EDCE9FCC2459D") @default(autoincrement())
+  Ad           String       @db.NVarChar(100)
+  Soyad        String       @db.NVarChar(200)
+  Departman    String?      @db.NVarChar(100)
+  KullaniciAdi String?      @unique(map: "IX_Kisi") @db.NVarChar(50)
+  Sifre        String?      @db.NChar(100)
+  Imza         Imza[]
+  KisiRol      KisiRol[]
+  KisiYetki    KisiYetki[]
+  RolAtama     RolAtama[]
+  RolCikarma   RolCikarma[]
+  Talep        Talep[]
+}
+
+model KisiRol {
+  KisiRolId       Int       @id(map: "PK__KisiRol__82C09C5FFBC42EDD") @default(autoincrement())
+  KisiId          Int
+  RolId           Int
+  BaslangicTarihi DateTime  @db.Date
+  BitisTarihi     DateTime? @db.Date
+  TalepEden       String    @db.NVarChar(50)
+  Onaylayan       String    @db.NVarChar(50)
+  OnaylanmaTarihi DateTime  @db.Date
+  Kisi            Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK__KisiRol__KisiId__5629CD9C")
+  Rol             Rol       @relation(fields: [RolId], references: [RolId], onUpdate: NoAction, map: "FK__KisiRol__RolId__5535A963")
+}
+
+model KisiYetki {
+  KisiYetkiId     Int       @id(map: "PK__KisiYetk__58E710E269632ACE") @default(autoincrement())
+  KisiId          Int
+  YetkiId         Int
+  EylemTuruId     Int       @default(3, map: "DF_KisiYetki_EylemTuruId")
+  BaslangicTarihi DateTime? @db.Date
+  BitisTarihi     DateTime? @db.Date
+  TalepEden       String?   @db.NVarChar(50)
+  Onaylayan       String?   @db.NVarChar(50)
+  OnaylanmaTarihi DateTime? @db.Date
+  EylemTuru       EylemTuru @relation(fields: [EylemTuruId], references: [EylemTuruId], onUpdate: NoAction, map: "FK__KisiYetki__Eylem__59FA5E80")
+  Kisi            Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK__KisiYetki__KisiI__5812160E")
+  Yetki           Yetki     @relation(fields: [YetkiId], references: [YetkiId], onUpdate: NoAction, map: "FK__KisiYetki__Yetki__59063A47")
+}
+
+model Rol {
+  RolId           Int          @id(map: "PK__Rol__F92302F1AB02E21D") @default(autoincrement())
+  RolAdi          String       @unique(map: "IX_Rol") @db.NVarChar(100)
+  SupervizorRolId Int?
+  KisiRol         KisiRol[]
+  Rol             Rol?         @relation("RolToRol", fields: [SupervizorRolId], references: [RolId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Rol_Rol")
+  other_Rol       Rol[]        @relation("RolToRol")
+  RolAtama        RolAtama[]
+  RolCikarma      RolCikarma[]
+  RolYetki        RolYetki[]
+}
+
+model RolAtama {
+  RolAtamaId         Int       @id(map: "PK__RolEkle__AF6511A3545F4FA1")
+  KisiId             Int
+  RolId              Int
+  RolBaslangicTarihi DateTime? @db.DateTime
+  RolBitisTarihi     DateTime? @db.DateTime
+  Kisi               Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK__RolEkle__KisiId__08B54D69")
+  Rol                Rol       @relation(fields: [RolId], references: [RolId], onUpdate: NoAction, map: "FK__RolEkle__RolId__07C12930")
+  Talep              Talep     @relation(fields: [RolAtamaId], references: [TalepId], onUpdate: NoAction, map: "FK__RolEkle__TalepId__06CD04F7")
+}
+
+model RolCikarma {
+  RolCikarmaId     Int       @id(map: "PK_RolCikarma")
+  KisiId           Int
+  RolId            Int
+  RolCikarmaTarihi DateTime? @db.Date
+  Kisi             Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_RolCikarma_Kisi")
+  Rol              Rol       @relation(fields: [RolId], references: [RolId], onUpdate: NoAction, map: "FK_RolCikarma_Rol")
+  Talep            Talep     @relation(fields: [RolCikarmaId], references: [TalepId], onUpdate: NoAction, map: "FK_RolCikarma_Talep")
+}
+
+model RolYetki {
+  RolYetkiId     Int       @id(map: "PK__RolYetki__913EE4BFDE7E8D34") @default(autoincrement())
+  RolId          Int
+  YetkiId        Int
+  EylemlerTuruId Int       @default(3, map: "DF__RolYetki__Eyleml__5165187F")
+  Rol            Rol       @relation(fields: [RolId], references: [RolId], onUpdate: NoAction, map: "FK__RolYetki__RolId__5812160E")
+  Yetki          Yetki     @relation(fields: [YetkiId], references: [YetkiId], onUpdate: NoAction, map: "FK__RolYetki__YetkiI__619B8048")
+  EylemTuru      EylemTuru @relation(fields: [EylemlerTuruId], references: [EylemTuruId], onUpdate: NoAction, map: "FK_RolYetki_EylemTuru")
+}
+
+model Talep {
+  TalepId           Int            @id(map: "PK__Talep__AF6511A35397F4B7") @default(autoincrement())
+  OlusturulmaTarihi DateTime?      @db.DateTime
+  DurumTarihi       DateTime?      @db.DateTime
+  TalepEdenKisiId   Int?
+  DurumId           Int            @default(1, map: "DF_Talep_DurumId")
+  TalepTipiId       Int?
+  Imza              Imza[]
+  RolAtama          RolAtama?
+  RolCikarma        RolCikarma?
+  Kisi              Kisi?          @relation(fields: [TalepEdenKisiId], references: [KisiId], onDelete: NoAction, onUpdate: NoAction, map: "FK__Talep__TalepEden__00200768")
+  DurumEnum         DurumEnum      @relation(fields: [DurumId], references: [DurumId], onUpdate: NoAction, map: "FK_Talep_Durum.Enum")
+  TalepTipiEnum     TalepTipiEnum? @relation(fields: [TalepTipiId], references: [TalepTipiId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Talep_TalepTipiEnum")
+}
+
+model TalepTipiEnum {
+  TalepTipiId Int     @id(map: "PK_TalepTipiEnum") @default(autoincrement())
+  TalepTipi   String  @db.NVarChar(100)
+  Talep       Talep[]
+}
+
+model Yetki {
+  YetkiId   Int         @id(map: "PK__Yetki__3496142604F36FF5") @default(autoincrement())
+  YetkiAdi  String      @db.NVarChar(100)
+  KisiYetki KisiYetki[]
+  RolYetki  RolYetki[]
+}
