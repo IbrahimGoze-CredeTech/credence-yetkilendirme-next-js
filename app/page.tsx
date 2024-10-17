@@ -7,16 +7,16 @@ import "devextreme/dist/css/dx.light.css";
 export default function Home() {
   return (
     <div className="h-screen w-full grid grid-cols-2 grid-rows-2 gap-4 p-4">
-      <div className="border p-4"> {/* İlk alan */}
+      <div className="border rounded-xl  p-4 shadow-lg"> {/* İlk alan */}
         <KisiDataGridOzet />
       </div>
-      <div className="border p-4"> {/* İkinci alan */}
+      <div className="border  rounded-xl  p-4 shadow-lg"> {/* İkinci alan */}
         <RolYetkiDataGridOzet />
       </div>
-      <div className="border p-4"> {/* Üçüncü alan */}
+      <div className="border  rounded-xl  p-4 shadow-lg"> {/* Üçüncü alan */}
         <TalepOzet />
       </div>
-      <div className="border p-4"> {/* Dördüncü alan */}
+      <div className="border rounded-xl  p-4 shadow-lg"> {/* Dördüncü alan */}
         {/* Buraya başka bir component koyabilirsin */}
       </div>
     </div>
