@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { RolYetkiOzet } from "../../types";
 import { yetkiler, yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
 import { useModalContext, useStaticTablesContext } from "../../context";
-
+import { useRouter } from 'next/navigation';
 import { Item } from "devextreme-react/form"; // Form item'larını eklemek için kullanacağız
 
 import { roles } from "@/modals/roller";
@@ -14,7 +14,7 @@ export default function RolYetkiDataGrid() {
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
   const modalContext = useModalContext();
   const staticTablesContext = useStaticTablesContext();
-
+  const router = useRouter();
   const rolNames = staticTablesContext.roller.map(rol => rol.rolAdi);
   const yetkiNames = staticTablesContext.yetkiler.map(yetki => yetki.yetkiAdi);
 
@@ -101,7 +101,11 @@ export default function RolYetkiDataGrid() {
 
   return (
     <>
-      <h1 className="text-3xl font-medium my-4">Rol Ve Yetki Atama</h1>
+      <h1
+        className="text-3xl font-medium my-4 cursor-pointer"
+        onClick={() => router.push("/rol-yetki")}> {/* Başlığa tıklanınca yönlendirme */}
+        Rol Ve Yetki Bilgileri
+      </h1>
       <DataGrid
         id="rolYetki"
         keyExpr="rolAdi"
