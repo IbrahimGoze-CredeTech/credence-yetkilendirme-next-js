@@ -21,7 +21,7 @@ export default {
         const { name, password } = validatedFields.data;
 
         const kisi = await getUserByUserName(name);
-        // console.log("Config kisi: ", kisi);
+        console.log("Config kisi: ", kisi);
 
         // We need to check if they have a password cause they might login using google
         // And Credentials provider can't handle that
@@ -32,6 +32,7 @@ export default {
         }
 
         const passwordMatch = await bcrypt.compare(password, kisi.Sifre);
+        console.log("passwordMatch: ", passwordMatch);
         if (passwordMatch) {
           const rolAdi = await getUserRole(kisi.KisiId);
           return {

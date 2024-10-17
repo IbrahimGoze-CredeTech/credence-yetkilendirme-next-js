@@ -1,7 +1,6 @@
 "use server";
 
 import { z } from "zod";
-import bcrypt from "bcryptjs";
 import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
 // import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
@@ -13,9 +12,6 @@ export async function login(values: z.infer<typeof LoginSchema>) {
   if (!validatedFields.success) {
     return { success: "", error: "Invalid Credentials!" };
   }
-
-  // const hashedPassword = await bcrypt.hash("b123", 10);
-  // console.log("hashedPassword", hashedPassword);
 
   const { name, password } = validatedFields.data;
   //dummy wait 2 seconds
