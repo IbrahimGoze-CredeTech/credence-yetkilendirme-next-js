@@ -40,31 +40,12 @@ export default function TalepEkranPage() {
   return (
     <div className='p-4'>
       <h1 className="text-3xl font-medium my-4">Talepler</h1>
-      <Link href="/talep-ekran/talep-yarat">Talep Yarat</Link>
+
       <DataGrid dataSource={talepler}
         {...talepDataGridConfig}
       >
-        <Editing
-          mode="popup"
-          allowAdding={true}
-          // allowUpdating={true}
-          allowDeleting={true}>
-          <Popup title="Talep Yarat" showTitle={true} width={700} height={525} />
-          <Form >
-            <Item dataField="talepTipiId" editorType="dxSelectBox"
-              editorOptions={{
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onValueChanged: (e: any) => onFieldDataChanged(e)
-              }}
-            />
-            {isRolAtama && (
-              <Item dataField="rolAtama"
-              />
-            )
-            }
-          </Form>
-        </Editing>
-        <MasterDetail enabled={true}
+
+        <MasterDetail enabled={false}
           component={({ data }) => {
             console.log("MasterDetail Data: ", data); // Add this line to inspect the data
             const detailData = data.data;
