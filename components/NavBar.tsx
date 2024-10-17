@@ -32,8 +32,9 @@ export default function Navbar() {
   return (
     <nav className="bg-gradient-to-bl from-blue-900 to-green-500 p-5 h-full flex items-center justify-between">
       <div id="Buttons" className="space-x-4">
-        <Link href={"/rol-yetki"} className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Rol-Yetki</Link>
-        <Link href="/" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Anasayfaya</Link>
+        <Link href="/" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Anasayfa</Link>
+        <Link href={"/rol-yetki"} className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Rol Ve Yetki Atama</Link>
+        <Link href="/kisi-bilgileri" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">kişi Bilgileri</Link>
         <Link href="/talep-ekran" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Talepler</Link>
         <RoleGate allowedRole={"admin"} showError={false}>
           <Link href="/rol" className="text-white bg-blue-500 px-4 py-2 rounded-md font-bold">Rol</Link>
