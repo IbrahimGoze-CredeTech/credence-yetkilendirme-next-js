@@ -126,7 +126,7 @@ export default function RolYetkiDataGrid() {
           headerFilter={rolesHeaderFilter}
           calculateFilterExpression={calculateFilterExpression}
           filterOperations={rolesFilterOperations}
-          allowEditing={true}
+          allowEditing={false}
         >
           <HeaderFilter dataSource={roles} />
         </Column>
@@ -146,7 +146,7 @@ export default function RolYetkiDataGrid() {
         {/* Popup düzenleme ayarları */}
         <Editing
           mode="popup"
-          allowAdding={true}
+          allowAdding={false}
           allowUpdating={true}
           allowDeleting={true}
           useIcons={true}
