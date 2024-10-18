@@ -143,7 +143,7 @@ export default function RolYetkiDataGrid() {
         ><HeaderFilter dataSource={yetkilerAdi} /></Column>
 
 
-        {/* Popup düzenleme ayarları */}
+        {/* Popup düzenleme ayarları 
         <Editing
           mode="popup"
           allowAdding={false}
@@ -153,24 +153,27 @@ export default function RolYetkiDataGrid() {
         >
           <Popup title="Rol ve Yetki Düzenle" showTitle={true} width={800} height={500} />
           <Form>
-            {/* Rol alanı */}
-            <Item dataField="rolAdi" editorType="dxTextBox" />
+            */}
+        {/* Rol alanı
+        <Item dataField="rolAdi" editorType="dxTextBox" />
 
-            {/* Yetkiler alanı */}
-            <Item
-              dataField="yetkiler"
-              editorType="dxTagBox"
-              editorOptions={{
-                items: yetkiler, // Yetki listesini buraya ekliyoruz
-                displayExpr: "yetkiAdi",
-                valueExpr: "yetkiAdi",
-                selectAllMode: "allPages",
-                showSelectionControls: true,
-              }}
-            />
-          </Form>
-        </Editing>
-      </DataGrid>
+          */}
+        {/* Yetkiler alanı
+        <Item
+          dataField="yetkiler"
+          editorType="dxTagBox"
+          editorOptions={{
+            items: yetkiler, // Yetki listesini buraya ekliyoruz
+            displayExpr: "yetkiAdi",
+            valueExpr: "yetkiAdi",
+            selectAllMode: "allPages",
+            showSelectionControls: true,
+          }}
+        />
+      </Form>
+    </Editing >
+            */}
+      </DataGrid >
     </>
   );
 }
