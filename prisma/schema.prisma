@@ -38,7 +38,7 @@ model Kisi {
   Soyad        String       @db.NVarChar(200)
   Departman    String?      @db.NVarChar(100)
   KullaniciAdi String?      @unique(map: "IX_Kisi") @db.NVarChar(50)
-  Sifre        String?      @db.NChar(100)
+  Sifre        String?      @db.NVarChar(100)
   Imza         Imza[]
   KisiRol      KisiRol[]
   KisiYetki    KisiYetki[]

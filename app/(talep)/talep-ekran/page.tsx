@@ -1,24 +1,47 @@
 'use client';
 
+import { logout } from '@/actions/logout';
 import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
 import { Talep } from '@/types';
+import { fetcher } from '@/utils';
 import DataGrid, { Column, Editing, MasterDetail, Form, Popup } from 'devextreme-react/cjs/data-grid';
 import { Item } from 'devextreme-react/form';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 
+
+
 export default function TalepEkranPage() {
+  const session = useSession();
   const [isRolAtama, setIsRolAtama] = useState<boolean>(false);
   const [talepler, setTalepler] = useState<Talep[]>()
 
   useEffect(() => {
+
     const fetchData = async () => {
-      const talepler = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Talep`).then((response) => {
-        if (!response.ok) throw new Error('Network response was not ok')
-        return response.json()
-      });
-      console.log("talepler: ", talepler);
-      setTalepler(talepler);
+      // const talepler = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Talep`).then((response) => {
+      // const talepler = await fetch(`https://localhost:7210/api/Talep`, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${session.data?.token}`,
+      //   }
+      // }).then(async (response) => {
+      //   if (!response.ok) {
+      //     if (response.status === 401) {
+      //       await logout();
+      //       return;
+      //       // window.location.replace('/auth/login');
+      //     }
+      //     throw new Error('Network response was not ok')
+      //   }
+      //   return response.json()
+      // });
+      const taleplerResponse = await fetcher('/Talep', session.data?.token);
+
+      console.log("talepler: ", taleplerResponse);
+      setTalepler(taleplerResponse);
 
     }
 
