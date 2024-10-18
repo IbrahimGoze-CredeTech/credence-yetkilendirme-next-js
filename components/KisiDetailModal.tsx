@@ -16,8 +16,11 @@ import { rolDataGridConfig } from '../configs/rol-data-grid-config';
 import { yetkiDataGridConfig } from '../configs/yetki-data-grid-config';
 import { ekstraYetkilerDataGridConfig } from '../configs/ekstra-yetkiler-data-grid-config';
 import { RowClickEvent } from 'devextreme/ui/data_grid';
+import { fetcherGet } from '@/utils';
+import { useSession } from 'next-auth/react';
 
 export default function KisiDetailModal() {
+  const session = useSession();
   const modalContext = useModalContext();
 
   const [employees, setEmployees] = useState<Kisi[]>([]); // API'den gelecek roller için state
@@ -28,11 +31,7 @@ export default function KisiDetailModal() {
     if (!modalContext?.isOpen) return;
 
     const fetchData = async () => {
-      const bilgilerFetch = fetch(`${process.env.NEXT_PUBLIC_API_URL}/Kisi/butun-bilgiler/${modalContext.id}`)
-        .then((response) => {
-          if (!response.ok) throw new Error("Network response was not ok");
-          return response.json();
-        });
+      const bilgilerFetch = await fetcherGet(`/Kisi/butun-bilgiler/${modalContext.id}`, session.data?.token);
 
       try {
         const [bilgilerData] = await Promise.all([bilgilerFetch]);

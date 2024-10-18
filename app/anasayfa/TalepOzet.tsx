@@ -2,40 +2,38 @@
 
 import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
 import { Talep } from '@/types';
+import { fetcherGet } from '@/utils';
 // import { DataGrid } from 'devextreme-react';
-import DataGrid, { Column, Editing, MasterDetail, Form, Popup } from 'devextreme-react/cjs/data-grid';
-import { Item } from 'devextreme-react/form';
-import Link from 'next/link';
+import DataGrid, { Column, MasterDetail } from 'devextreme-react/cjs/data-grid';
+import { useSession } from 'next-auth/react';
 
 import React, { useEffect, useState } from 'react'
 
 export default function TalepEkranPage() {
-  const [isRolAtama, setIsRolAtama] = useState<boolean>(false);
+  const session = useSession();
+  // const [isRolAtama, setIsRolAtama] = useState<boolean>(false);
 
   const [talepler, setTalepler] = useState<Talep[]>()
 
   useEffect(() => {
     const fetchData = async () => {
-      const talepler = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Talep`).then((response) => {
-        if (!response.ok) throw new Error('Network response was not ok')
-        return response.json()
-      });
+      const talepler = await fetcherGet('/Talep', session.data?.token);
       // console.log("talepler: ", talepler);
       setTalepler(talepler);
-
     }
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function onFieldDataChanged(e: any) {
-    // console.log('called');
-    console.log(e.value);
-    if (e.value === 1) {
-      setIsRolAtama(true);
-    }
-  }
+  // function onFieldDataChanged(e: any) {
+  //   // console.log('called');
+  //   console.log(e.value);
+  //   if (e.value === 1) {
+  //     // setIsRolAtama(true);
+  //   }
+  // }
 
   return (
     <div className='p-4'>

@@ -36,7 +36,7 @@ export const createToken = (userId: string) => {
   return token;
 };
 
-export const fetcher = async (url: string, token: string | undefined) => {
+export const fetcherGet = async (url: string, token: string | undefined) => {
   if (!token) {
     throw new Error("Token is not defined");
   }
@@ -48,6 +48,40 @@ export const fetcher = async (url: string, token: string | undefined) => {
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
+  }
+
+  return response.json();
+};
+
+export const fetcherPost = async (
+  url: string,
+  token: string | undefined,
+  jsonBody: string
+) => {
+  if (!token) {
+    throw new Error("Token is not defined");
+  }
+
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: jsonBody,
+  });
+
+  if (!response.ok) {
+    switch (response.status) {
+      case 401:
+        throw new Error("Unauthorized");
+      case 403:
+        throw new Error("Forbidden");
+      default:
+        throw new Error(
+          `Network response was not ok, status: ${response.status}`
+        );
+    }
   }
 
   return response.json();

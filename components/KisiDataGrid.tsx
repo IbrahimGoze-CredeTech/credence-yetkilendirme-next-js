@@ -5,25 +5,22 @@ import { KisiOzet } from "../types";
 import { roles, rollerAdi } from "../modals/roller";
 import { yetkilerAdi } from "../modals/yetkiler";
 import { useModalContext, useStaticTablesContext } from "../context";
+import { fetcherGet } from "@/utils";
+import { useSession } from "next-auth/react";
 
 export default function KisiDataGrid() {
-  const staticTablesContext = useStaticTablesContext();
+  const session = useSession();
   const modalContext = useModalContext();
 
   const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Kisi/ozet-bilgi`).then((response) => {
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.json();
-      })
-      // const data = response;
-      // console.log('kisiOzet: ', response);
+      const response = await fetcherGet('/Kisi/ozet-bilgi', session.data?.token);
       setKisiOzet(response)
-      // staticTablesContext.setKisiler(response);
     }
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   ///-----

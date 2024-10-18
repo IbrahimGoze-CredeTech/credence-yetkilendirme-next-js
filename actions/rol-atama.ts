@@ -1,5 +1,9 @@
+"use server";
+
+import { auth } from "@/auth";
 import { TalepRolAtamaSchema } from "@/schemas";
 import { RolAtama, Talep } from "@/types";
+import { fetcherPost } from "@/utils";
 import { z } from "zod";
 
 type RolAtamaRequest = {
@@ -10,6 +14,8 @@ type RolAtamaRequest = {
 };
 
 export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
+  const session = await auth();
+
   const validateFields = TalepRolAtamaSchema.safeParse(values);
 
   if (!validateFields.success) {
@@ -53,20 +59,13 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
-  // console.log("rolAtamaRequest: ", rolAtamaRequest);
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/Talep/rol-atama`,
-    // "https://localhost:7210/api/Talep/rol-atama",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(rolAtamaRequest),
-    }
+  console.log("session?.token: ", session?.token);
+
+  await fetcherPost(
+    "/Talep/rol-atama",
+    session?.token,
+    JSON.stringify(rolAtamaRequest)
   );
-  if (!response.ok)
-    return { success: "", error: "Network Response was not Ok" };
   return { success: "Talep Yaratıldı", error: "" };
 }

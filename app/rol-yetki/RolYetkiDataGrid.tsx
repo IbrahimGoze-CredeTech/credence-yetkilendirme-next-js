@@ -1,16 +1,18 @@
 "use client";
 
-import DataGrid, { Column, FilterRow, HeaderFilter, Editing, Popup, Form } from "devextreme-react/data-grid";
+import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { RolYetkiOzet } from "../../types";
-import { yetkiler, yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
+import { yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
 import { useModalContext, useStaticTablesContext } from "../../context";
 
-import { Item } from "devextreme-react/form"; // Form item'larını eklemek için kullanacağız
 
 import { roles } from "@/modals/roller";
+import { fetcherGet } from "@/utils";
+import { useSession } from "next-auth/react";
 
 export default function RolYetkiDataGrid() {
+  const session = useSession();
   const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
   const modalContext = useModalContext();
   const staticTablesContext = useStaticTablesContext();
@@ -21,13 +23,11 @@ export default function RolYetkiDataGrid() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/ozet-rol-yetki`).then((response) => {
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.json();
-      });
+      const response = await fetcherGet('/Rol/ozet-rol-yetki', session.data?.token);
       setRolYetki(response);
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
