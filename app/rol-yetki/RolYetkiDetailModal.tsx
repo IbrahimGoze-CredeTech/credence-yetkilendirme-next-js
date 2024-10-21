@@ -10,7 +10,8 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import { Button } from 'devextreme-react'; // Buton bileşenini içe aktar
 import { rolYetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
-// import { RowClickEvent } from 'devextreme/ui/data_grid';
+import { fetcherGet, fetcherPost } from '@/utils';
+import { useSession } from 'next-auth/react';
 
 type RolYetkiInsertType = {
   rolAdi: string,
@@ -19,29 +20,21 @@ type RolYetkiInsertType = {
 }
 
 export default function RolYetkiDetailModal() {
+  const session = useSession();
   const modalContext = useModalContext();
-  // const staticTablesContext = useStaticTablesContext();
+
   const [insertedRolYetki, setInsertedRolYetki] = useState<RolYetkiInsertType[]>([]);
 
   const [employees, setEmployees] = useState<RolYetki[]>([]);
-  // const [selectedRowData, setSelectedRowData] = useState<Rol | null>(null);
-  // const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [rolAdi, setRolAdi] = useState<string | null>(null); // Rol Adını tutacak state
 
   useEffect(() => {
     if (!modalContext?.isOpen) return;
 
     const fetchData = async () => {
-      // console.log("id in detail: ", modalContext.id);
-
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/yetkiler/${modalContext.id}`);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const bilgilerData = await response.json();
+        const bilgilerData = await fetcherGet(`/Rol/yetkiler/${modalContext.id}`, session.data?.token);
         setEmployees(bilgilerData);
-        // staticTablesContext.setRoller(bilgilerData);
-        // console.log('rol-yetki: ', bilgilerData);
-
 
         // Gelen verilerden ilk rol'ün adını alıyoruz (örnek olarak)
         if (bilgilerData.length > 0) {
@@ -63,23 +56,12 @@ export default function RolYetkiDetailModal() {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-      // setSelectedRowData(null);
-      // setIsPopupVisible(false);
     }
 
     return () => {
       document.body.style.overflow = '';
     };
   }, [modalContext?.isOpen]);
-
-  // const handleRowClick = (e: RowClickEvent) => {
-  // setSelectedRowData(e.data);
-  // setIsPopupVisible(true);
-  // };
-
-  // const handleClosePopup = () => {
-  //   setIsPopupVisible(false);
-  // };
 
   const handleInsertRow = (e: { yetkiAdi: string; eylemlerTuruId: number }) => {
     setInsertedRolYetki(prevState => [
@@ -96,19 +78,20 @@ export default function RolYetkiDetailModal() {
     console.log(JSON.stringify(insertedRolYetki));
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/rol-yetki`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // JSON formatında veri gönderiyoruz
-        },
-        body: JSON.stringify(insertedRolYetki), // `insertedRolYetki`'yi API'ye gönderiyoruz
-      });
+      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/rol-yetki`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json', // JSON formatında veri gönderiyoruz
+      //   },
+      //   body: JSON.stringify(insertedRolYetki), // `insertedRolYetki`'yi API'ye gönderiyoruz
+      // });
 
-      if (!response.ok) {
-        throw new Error('Verileri kaydetme işlemi sırasında bir hata oluştu.');
-      }
+      // if (!response.ok) {
+      //   throw new Error('Verileri kaydetme işlemi sırasında bir hata oluştu.');
+      // }
 
-      const result = await response.json();
+      // const result = await response.json();
+      const result = await fetcherPost('/Rol/rol-yetki', session.data?.token, JSON.stringify(insertedRolYetki));
       console.log('Kaydedilen veri: ', result);
 
       // Veriler kaydedildikten sonra modal'ı kapatma veya ek bir işlem yapabilirsiniz
@@ -135,13 +118,9 @@ export default function RolYetkiDetailModal() {
           keyExpr="yetkiAdi"
           allowColumnReordering={true}
           showBorders={true}
-          // onRowClick={handleRowClick}
           onRowInserted={(e) => {
             handleInsertRow(e.data);
           }}
-          // onRowUpdated={(e) => {
-          //   handleInsertRow(e.data);
-          // }}
           {...rolYetkiDataGridConfig}
         >
           <FilterRow visible={true} />
@@ -166,23 +145,13 @@ export default function RolYetkiDetailModal() {
           >
             <Button
               icon="edit" // Edit simgesi
-            // onClick={(e) => {
-            // Düzenleme işlemini burada yönetebilirsiniz
-            // e.event.stopPropagation(); // Satır tıklamasını durdur
-            // }}
             />
             <Button
               icon="trash" // Silme simgesi
-            // onClick={(e) => {
-            // Silme işlemini burada yönetebilirsiniz
-            //   e.event.stopPropagation(); // Satır tıklamasını durdur
-            // }}
             />
           </Column>
         </DataGrid>
-
         <Button onClick={handleSaveChanges}>Kaydet</Button>
-
       </div>
     </div>
   );

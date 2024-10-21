@@ -1,5 +1,7 @@
 "use client";
 import { Kisi, Rol, Yetki } from "@/types";
+import { fetcherGet } from "@/utils";
+import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useState } from "react";
 
 //#region ModalContext
@@ -61,6 +63,7 @@ const StaticTablesContext = createContext<StaticTablesContextType | undefined>(u
 export function StaticTablesContextWrapper({ children }: {
   children: React.ReactNode;
 }) {
+  const session = useSession();
   const [kisiler, setKisiler] = useState<Kisi[]>([]);
   const [roller, setRoller] = useState<Rol[]>([]);
   const [yetkiler, setYetkiler] = useState<Yetki[]>([]);
@@ -68,22 +71,10 @@ export function StaticTablesContextWrapper({ children }: {
     const fetchData = async () => {
       try {
         // Use Promise.all to fetch both resources in parallel
-        const [rolResponse, kisiResponse, yetkiResponse] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/Kisi`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/yetki`)
-        ]);
-
-        // Check for response errors
-        if (!rolResponse.ok || !kisiResponse.ok || !yetkiResponse.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        // Parse the JSON responses
         const [rolData, kisiData, yetkiData] = await Promise.all([
-          rolResponse.json(),
-          kisiResponse.json(),
-          yetkiResponse.json()
+          fetcherGet(`/Rol`, session.data?.token),
+          fetcherGet(`/Kisi`, session.data?.token),
+          fetcherGet(`/yetki`, session.data?.token)
         ]);
 
         // Set state with the data
@@ -96,7 +87,7 @@ export function StaticTablesContextWrapper({ children }: {
     };
 
     fetchData();
-  }, []);
+  }, [session.data?.token]);
 
 
   const value: StaticTablesContextType = {

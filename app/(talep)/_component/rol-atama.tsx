@@ -1,44 +1,65 @@
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ToastAction } from '@/components/ui/toast';
+import { toast } from '@/hooks/use-toast';
 import { RolAtamaGridType } from '@/types';
-import React from 'react'
+import DataGrid, {
+  Button, Column, Editing,
+  SearchPanel
+} from 'devextreme-react/data-grid';
+import { ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
+import React from 'react';
 
 interface Props {
   data: RolAtamaGridType[];
 }
 
 export default function RolAtamaGrid({ data }: Props) {
-  function onClick(approved: boolean, item: RolAtamaGridType) {
+
+  function onClick(approved: boolean, item: ColumnButtonClickEvent) {
+    if (item.row === undefined) return;
     if (approved) {
-      console.log('Onaylandı: ', item);
+      console.log('Onaylandı: ', item.row.data);
+      toast({
+        variant: "success",
+        title: "Onaylandı",
+        description: "Talebiniz başarıyla onaylandı",
+        action: (
+          <ToastAction altText="Goto schedule to undo" onClick={() => {
+            console.log("undo clicked");
+          }}>Iptal</ToastAction>
+        )
+      });
+    }
+    else {
+      console.log('Reddedildi: ', item.row.data);
+      toast({
+        variant: "destructive",
+        title: "Reddedildi",
+        description: "Talebiniz başarıyla reddedildi ve supervisor onayı beklemektedir.",
+        action: (
+          <ToastAction altText="Goto schedule to undo" onClick={() => {
+            console.log("undo clicked");
+          }}>Iptal</ToastAction>
+        )
+      });
     }
   }
+
   return (
-    <Table className='border rounded-md'>
-      <TableHeader className='rounded-md'>
-        <TableRow>
-          <TableHead className="w-[100px]">Rol Adı</TableHead>
-          <TableHead>Kişi Ad</TableHead>
-          <TableHead>Rol Başlangıç Tarihi</TableHead>
-          <TableHead className="text-right">Rol Bitiş Tarihi</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((item, index) => (
-          <TableRow key={index}>
-            <TableCell>{item.rolAdi}</TableCell>
-            <TableCell>{item.kisiAdi}</TableCell>
-            <TableCell>{item.rolBaslangicTarihi?.toLocaleDateString('tr-TR')}</TableCell>
-            <TableCell className="text-right">{item.rolBitisTarihi?.toLocaleDateString('tr-TR')}</TableCell>
-            <TableCell className="space-x-4">
-              <Button onClick={() => onClick(true, item)}>Onay</Button>
-              <Button onClick={() => onClick(false, item)}>Ret</Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-      <TableCaption>Onay Bekleyen Talepler</TableCaption>
-    </Table>
-    // <DataGrid dataSource={data}></DataGrid>
+    <DataGrid dataSource={data}>
+      <SearchPanel visible={true} placeholder='Arama Yapın...' />
+      <Editing
+        mode="row"
+        useIcons={true}
+      />
+      <Column dataField="rolAdi" caption="Rol Adı" />
+      <Column dataField="kisiAdi" caption="Kişi Ad" />
+      <Column dataField="rolBaslangicTarihi" caption="Rol Başlangıç Tarihi" />
+      <Column dataField="rolBitisTarihi" caption="Rol Bitiş Tarihi" />
+      <Column type='buttons' width={120}>
+        <Button hint='Onay' visible={true} onClick={(e) => onClick(true, e)} text='Onay' />
+        <Button hint='Ret' visible={true} onClick={(e) => onClick(false, e)} text='Ret' />
+
+      </Column>
+    </DataGrid>
   )
 }

@@ -2,8 +2,10 @@
 
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/components/ui/table";
+import { fetcherGet } from "@/utils";
+import { useSession } from "next-auth/react";
 
 interface Role {
   rolId: number;
@@ -11,24 +13,21 @@ interface Role {
 }
 
 const RoleDataTable = () => {
+  const session = useSession();
   const [roles, setRoles] = useState<Role[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol`)
-      .then((response) => response.json())
-      .then((data) => {
-        setRoles(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Veri çekme hatası:", error);
-        setLoading(false);
-      });
+    startTransition(async () => {
+      const data = await fetcherGet('/Rol', session.data?.token);
+      setRoles(data);
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) {
+  if (isPending) {
     return <div>Veriler yükleniyor...</div>;
   }
 
