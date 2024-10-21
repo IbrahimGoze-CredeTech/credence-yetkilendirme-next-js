@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useModalContext } from '../../context';
-import { RolYetki } from '../../types';
+import { RolYetkiOld } from '../../types';
 import DataGrid, {
   Column,
   Editing,
@@ -25,7 +25,7 @@ export default function RolYetkiDetailModal() {
 
   const [insertedRolYetki, setInsertedRolYetki] = useState<RolYetkiInsertType[]>([]);
 
-  const [employees, setEmployees] = useState<RolYetki[]>([]);
+  const [employees, setEmployees] = useState<RolYetkiOld[]>([]);
   const [rolAdi, setRolAdi] = useState<string | null>(null); // Rol Adını tutacak state
 
   useEffect(() => {

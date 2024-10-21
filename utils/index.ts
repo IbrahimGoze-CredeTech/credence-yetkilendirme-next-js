@@ -1,8 +1,8 @@
-import { YetkiRol } from "../types";
+import { YetkiRolOld } from "../types";
 import jwt from "jsonwebtoken";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const isYetkiArray = (data: any): data is YetkiRol[] => {
+export const isYetkiArray = (data: any): data is YetkiRolOld[] => {
   return (
     Array.isArray(data) &&
     data.every(
@@ -41,6 +41,7 @@ export const fetcherGet = async (url: string, token: string | undefined) => {
     throw new Error("Token is not defined");
   }
   const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
+    // const response = await fetch("https:/localhost:7210/api" + url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

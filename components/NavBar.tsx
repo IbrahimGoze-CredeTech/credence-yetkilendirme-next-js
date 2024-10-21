@@ -13,9 +13,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useStaticTablesContext } from "@/context";
 
 export default function Navbar() {
+  const session = useSession();
   const userHook = useCurrentUser();
+  const StaticTablesContext = useStaticTablesContext();
   const [user, setUser] = useState<ExtendedUser | undefined>(undefined);
 
   const onClick = async () => {
@@ -26,6 +30,10 @@ export default function Navbar() {
   useEffect(() => {
     setUser(userHook);
   }, [userHook]);
+
+  const onClickToken = async () => {
+    console.log(session.data?.token);
+  }
 
   if (!user)
     return (
@@ -111,7 +119,7 @@ export default function Navbar() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-2 transition-transform duration-150 ease-in-out">
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild className="cursor-pointer">
                 <Link
                   href="/talep-ekran"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
@@ -119,7 +127,7 @@ export default function Navbar() {
                   Talepler
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild className="cursor-pointer">
                 <Link
                   href="/talep-yarat"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
@@ -128,7 +136,7 @@ export default function Navbar() {
                 </Link>
               </DropdownMenuItem>
 
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild className="cursor-pointer">
                 <Link
                   href="/talep/onaylanan"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
@@ -136,7 +144,7 @@ export default function Navbar() {
                   Onaylanan Talepler
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild className="cursor-pointer">
                 <Link
                   href="/talep/onaylanmayan"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
@@ -147,29 +155,24 @@ export default function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded ">
-              <Image
-                src="/notifications.png"
-                alt="Talepler"
-                width={24}
-                height={24}
-                className="mr-2"
-              />
-              Bildirimler <ChevronDownIcon className="w-4 h-4 ml-2" />
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-2 transition-transform duration-150 ease-in-out">
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/talep-onay"
-                  className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
-                >
-                  Onay Bekleyen Talepler
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Link
+            href="/talep-onay"
+            className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+          >
+            <Image
+              src="/notifications.png"
+              alt="Talepler"
+              width={24}
+              height={24}
+              className="mr-2 h-6"
+            />
+            {
+              StaticTablesContext?.anyBekleyenTalep &&
+              <Image src={"/bildirim-circle.png"} width={18}
+                height={18} alt={""} className="absolute top-0 left-0" />
+            }
+            Onay Bekleyen Talepler
+          </Link>
         </div>
 
         <DropdownMenu>
@@ -207,6 +210,7 @@ export default function Navbar() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <button onClick={onClickToken}>Token</button>
       </div>
     </nav>
   );

@@ -12,56 +12,28 @@ export type ExpendedTalep = {
   rolCikarma?: RolCikarma[];
 };
 
-export async function bekleyenTalepler(): Promise<ExpendedTalep[] | null> {
+export async function bekleyenTalepler(): Promise<boolean> {
   // let talepler:Talep[];
   const kisi = await currentUser();
 
   if (!kisi) {
-    return null;
+    return false;
   }
   // console.log("kisi: ", kisi);
 
   // Get All the imza with the KisiId Only if imza has a DurumId of 1
-  const imzalar = await db.imza.findMany({
+  const imzalar = await db.imza.findFirst({
     where: {
-      KisiId: kisi.KisiId,
+      KisiId: +kisi.id,
       DurumId: 1,
     },
   });
+  // console.log("imzalar: ", imzalar);
 
-  const expendedTalepler = await Promise.all(
-    imzalar.map(async (imza) => {
-      // Find the talep related to the imza
-      const talep = await db.talep.findFirstOrThrow({
-        where: { TalepId: imza.TalepId },
-      });
-
-      // Get all imzalar related to this talep
-      const relatedImzalar = await db.imza.findMany({
-        where: { TalepId: talep.TalepId },
-      });
-
-      // Find associated RolAtama (if any) for this talep
-      const rolAtama = await db.rolAtama.findMany({
-        where: { RolAtamaId: talep.TalepId },
-      });
-
-      // Find associated RolCikarma (if any) for this talep
-      const rolCikarma = await db.rolCikarma.findMany({
-        where: { RolCikarmaId: talep.TalepId },
-      });
-
-      // Build and return the ExpendedTalep object
-      return {
-        talep,
-        imzalar: relatedImzalar,
-        rolAtama: rolAtama.length > 0 ? rolAtama : undefined,
-        rolCikarma: rolCikarma.length > 0 ? rolCikarma : undefined,
-      } as ExpendedTalep;
-    })
-  );
-
-  return expendedTalepler;
+  if (!imzalar) {
+    return false;
+  }
+  return true;
 }
 
 export async function bekleyenRolAtamalar(): Promise<RolAtamaGridType[]> {
@@ -71,7 +43,7 @@ export async function bekleyenRolAtamalar(): Promise<RolAtamaGridType[]> {
     return [];
   }
 
-  console.log("kisi in  bekleyenRolAtamalar: ", kisi);
+  // console.log("kisi in  bekleyenRolAtamalar: ", kisi);
 
   // Get All the imza with the KisiId Only if imza has a DurumId of 1
   const imzalar = await db.imza.findMany({

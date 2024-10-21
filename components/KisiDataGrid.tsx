@@ -7,10 +7,13 @@ import { yetkilerAdi } from "../modals/yetkiler";
 import { useModalContext, useStaticTablesContext } from "../context";
 import { fetcherGet } from "@/utils";
 import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+
 
 export default function KisiDataGrid() {
   const session = useSession();
   const modalContext = useModalContext();
+  const router = useRouter();
 
   const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([])
 
@@ -88,7 +91,8 @@ export default function KisiDataGrid() {
           // console.log('e: ', e.data);
 
           modalContext.setId(e.data.id);
-          modalContext.toggle();
+          // modalContext.toggle();
+          router.push("/kisi-bilgileri/kisi");
         }}
       >
         <FilterRow visible={true} />

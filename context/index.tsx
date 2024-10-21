@@ -1,6 +1,8 @@
 "use client";
-import { Kisi, Rol, Yetki } from "@/types";
+import { bekleyenTalepler } from "@/actions/bekleyen-talepler";
+import { Kisi, RolOld, Yetki } from "@/types";
 import { fetcherGet } from "@/utils";
+// import { set } from "date-fns";
 import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -51,11 +53,14 @@ type StaticTablesContextType = {
   kisiler: Kisi[];
   setKisiler: (kisiler: Kisi[]) => void;
 
-  roller: Rol[];
-  setRoller: (roller: Rol[]) => void;
+  roller: RolOld[];
+  setRoller: (roller: RolOld[]) => void;
 
   yetkiler: Yetki[];
   setYetkiler: (yetkiler: Yetki[]) => void;
+
+  anyBekleyenTalep: boolean;
+  setAnyBekleyenTalep: (anyBekleyenTalep: boolean) => void;
 }
 
 const StaticTablesContext = createContext<StaticTablesContextType | undefined>(undefined);
@@ -64,23 +69,29 @@ export function StaticTablesContextWrapper({ children }: {
   children: React.ReactNode;
 }) {
   const session = useSession();
+
   const [kisiler, setKisiler] = useState<Kisi[]>([]);
-  const [roller, setRoller] = useState<Rol[]>([]);
+  const [roller, setRoller] = useState<RolOld[]>([]);
   const [yetkiler, setYetkiler] = useState<Yetki[]>([]);
+  const [anyBekleyenTalep, setAnyBekleyenTalep] = useState<boolean>(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Use Promise.all to fetch both resources in parallel
-        const [rolData, kisiData, yetkiData] = await Promise.all([
+        const [rolData, kisiData, yetkiData, anyBekleyenTalep] = await Promise.all([
           fetcherGet(`/Rol`, session.data?.token),
           fetcherGet(`/Kisi`, session.data?.token),
-          fetcherGet(`/yetki`, session.data?.token)
+          fetcherGet(`/yetki`, session.data?.token),
+          bekleyenTalepler()
         ]);
+
+        console.log("anyBekleyenTalep: ", anyBekleyenTalep);
 
         // Set state with the data
         setRoller(rolData);
         setKisiler(kisiData);
         setYetkiler(yetkiData)
+        setAnyBekleyenTalep(anyBekleyenTalep);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -94,6 +105,7 @@ export function StaticTablesContextWrapper({ children }: {
     kisiler, setKisiler,
     roller, setRoller,
     yetkiler, setYetkiler,
+    anyBekleyenTalep, setAnyBekleyenTalep
   }
   return (
     <StaticTablesContext.Provider value={value}>

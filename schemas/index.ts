@@ -1,3 +1,4 @@
+import { eylemTuru, EylemTuruEnum } from "@/modals/eylemTuru";
 import * as z from "zod";
 
 export const LoginSchema = z.object({
@@ -24,4 +25,19 @@ export const TalepRolAtamaSchema = z.object({
   }),
   ciftImza: z.boolean().default(false),
   ekstraImza: z.array(OptionSchema),
+});
+
+export const YetkiEditSchema = z.object({
+  kisiAdi: z.string().min(1, { message: "Kisi adı boş olamaz" }),
+  yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
+  yetkiBaslamaTarihi: z.date({
+    required_error: "Yetki Baslangic tarihi girilmesi zorunludur.",
+  }),
+  yetkiBitisTarihi: z.date({
+    required_error: "Yetki Bitis tarihi girilmesi zorunludur.",
+  }),
+  // eylemTuru: z.nativeEnum(EylemTuruEnum),
+  eylemTuru: z.string().min(1, { message: "Eylem türü boş olamaz" }),
+  ciftImza: z.boolean().default(false),
+  ekstraImza: z.array(OptionSchema).optional(),
 });

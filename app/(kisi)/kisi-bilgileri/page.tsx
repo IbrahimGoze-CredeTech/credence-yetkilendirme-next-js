@@ -1,6 +1,6 @@
 // pages/index.tsx
-import KisiDataGrid from "../../components/KisiDataGrid";
-import KisiDetailModal from "../../components/KisiDetailModal";
+import KisiDataGrid from "../../../components/KisiDataGrid";
+import KisiDetailModal from "../../../components/KisiDetailModal";
 import "devextreme/dist/css/dx.light.css";
 
 export default function Home() {

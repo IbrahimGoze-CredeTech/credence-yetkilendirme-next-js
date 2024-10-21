@@ -1,3 +1,5 @@
+import { KisiYetki, Rol, RolYetki } from "@prisma/client";
+
 export type KisiOzet = {
   id: number;
   ad: string;
@@ -12,11 +14,11 @@ export type Kisi = {
   kisiSoyadi: string;
   roller: Rol[];
   departman: string;
-  yetkiler: YetkiRol[];
-  ekstraYetkiler: EkstraYetki[]; // Depending on what `ekstraYetkiler` contains, you can refine this type further
+  yetkiler: RolYetki[];
+  ekstraYetkiler: KisiYetki[]; // Depending on what `ekstraYetkiler` contains, you can refine this type further
 };
 
-export type Rol = {
+export type RolOld = {
   kisiId: number;
   kisiAdi: string;
   kisiSoyadi: string;
@@ -29,7 +31,7 @@ export type Rol = {
   onaylanmaTarihi: string; // Same here for `Date`
 };
 
-export type YetkiRol = {
+export type YetkiRolOld = {
   rolId: number;
   rolAdi: string;
   yetkiId: number;
@@ -37,7 +39,7 @@ export type YetkiRol = {
   eylemlerTuruId: number;
 };
 
-export type EkstraYetki = {
+export type EkstraYetkiOld = {
   kisiId: number;
   kisiAdi: string;
   kisiSoyadi: string;
@@ -50,7 +52,7 @@ export type EkstraYetki = {
   ekstraYetkiOnaylayan: string;
   ekstraYetkiOnaylanmaTarihi: string; // Can be changed to `Date` if necessary
 };
-export type RolYetki = {
+export type RolYetkiOld = {
   rolId: number; // Rol ID
   rolAdi: string; // Rol Adı
   yetkiId: number; // Yetki ID
