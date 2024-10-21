@@ -52,7 +52,15 @@ export const fetcherGet = async (url: string, token: string | undefined) => {
 
   return response.json();
 };
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
+/**
+ * Sends a POST request to the given URL with the provided JSON body and token.
+ *
+ * @param {string} url - The URL to which the request will be sent.
+ * @param {string} jsonBody - The JSON string to be sent as the body of the request.
+ * @returns {Promise<Response>} The response from the server.
+ */
 export const fetcherPost = async (
   url: string,
   token: string | undefined,
@@ -63,6 +71,7 @@ export const fetcherPost = async (
   }
 
   const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
+    // const response = await fetch("https://localhost:7210/api" + url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

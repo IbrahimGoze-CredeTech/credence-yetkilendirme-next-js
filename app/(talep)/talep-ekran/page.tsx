@@ -1,17 +1,12 @@
 'use client';
 
-import { logout } from '@/actions/logout';
 import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
 import { Talep } from '@/types';
 import { fetcherGet } from '@/utils';
 import DataGrid, { Column, Editing, MasterDetail, Form, Popup } from 'devextreme-react/cjs/data-grid';
 import { Item } from 'devextreme-react/form';
-<<<<<<< HEAD
 
-=======
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
->>>>>>> master
 import React, { useEffect, useState } from 'react'
 
 
@@ -46,8 +41,8 @@ export default function TalepEkranPage() {
   return (
     <div className='p-4'>
       <h1 className="text-3xl font-medium my-4">Talepler</h1>
-      
-     
+
+
       <DataGrid dataSource={talepler}
         {...talepDataGridConfig}
       >

@@ -7,6 +7,7 @@ import { fetcherPost } from "@/utils";
 import { z } from "zod";
 
 type RolAtamaRequest = {
+  talepEdenKisiId: number;
   talep: Talep;
   rolAtama: RolAtama;
   ciftImza: boolean;
@@ -54,13 +55,14 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
   };
 
   const rolAtamaRequest: RolAtamaRequest = {
+    talepEdenKisiId: session?.user.id,
     talep,
     rolAtama,
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  console.log("session?.token: ", session?.token);
+  // console.log("session?.token: ", session?.user.id);
 
   await fetcherPost(
     "/Talep/rol-atama",
