@@ -116,8 +116,8 @@ export const fetcherPUT = async (
     throw new Error("Token is not defined");
   }
 
-  // const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-  const response = await fetch("https://localhost:7210/api" + url, {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
+    // const response = await fetch("https://localhost:7210/api" + url, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
