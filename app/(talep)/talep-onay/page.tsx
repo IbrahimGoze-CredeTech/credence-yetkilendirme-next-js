@@ -3,7 +3,7 @@
 import { bekleyenRolAtamalar, bekleyenRolCikarmalar } from '@/actions/bekleyen-talepler'
 import React, { useEffect, useState, useTransition } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import RolAtamaGrid from '../_component/rol-atama';
+import RolAtamaGrid from '../_component/rol-atama-onay';
 import { RolAtamaGridType, RolCikarmaGridType } from '@/types';
 import RolCikarmaGrid from '../_component/rol-cikarma-onay';
 

@@ -1,3 +1,4 @@
+import { talepOnayla } from '@/actions/talep-onaylama';
 import { ToastAction } from '@/components/ui/toast';
 import { toast } from '@/hooks/use-toast';
 import { RolCikarmaGridType } from '@/types';
@@ -17,7 +18,8 @@ export default function RolCikarmaGrid({ data }: Props) {
   function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
-      console.log('Onaylandı: ', item.row.data);
+      // console.log('Onaylandı: ', item.row.data);
+      talepOnayla(true, item.row.data.rolCikarmaId);
       toast({
         variant: "success",
         title: "Onaylandı",
@@ -30,7 +32,8 @@ export default function RolCikarmaGrid({ data }: Props) {
       });
     }
     else {
-      console.log('Reddedildi: ', item.row.data);
+      // console.log('Reddedildi: ', item.row.data);
+      talepOnayla(false, item.row.data.rolCikarmaId);
       toast({
         variant: "destructive",
         title: "Reddedildi",
