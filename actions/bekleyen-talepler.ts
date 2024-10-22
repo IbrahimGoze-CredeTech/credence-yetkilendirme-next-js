@@ -2,7 +2,11 @@
 
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { RolAtamaGridType, RolCikarmaGridType } from "@/types";
+import {
+  KisiYetkiEditGridType,
+  RolAtamaGridType,
+  RolCikarmaGridType,
+} from "@/types";
 import { Imza, RolAtama, RolCikarma, Talep } from "@prisma/client";
 
 export type ExpendedTalep = {
@@ -133,5 +137,58 @@ export async function bekleyenRolCikarmalar(): Promise<RolCikarmaGridType[]> {
 
   return rolCikarmalar.filter(
     (rolCikarma): rolCikarma is RolCikarmaGridType => rolCikarma !== undefined
+  );
+}
+
+export async function bekleyenKisiYetkiEdit(): Promise<
+  KisiYetkiEditGridType[]
+> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  const imzalar = await db.imza.findMany({
+    where: {
+      KisiId: +kisi.id,
+      DurumId: 1,
+    },
+  });
+
+  const kisiYetkiEdits = await Promise.all(
+    imzalar.map(async (imza) => {
+      const kisiYetki = await db.kisiYetkiEdit.findFirst({
+        where: {
+          KisiYetkiEditId: imza.TalepId,
+        },
+      });
+      if (!kisiYetki) return;
+      const kisi = await db.kisi.findFirst({
+        where: {
+          KisiId: kisiYetki.KisiId,
+        },
+      });
+      const yetki = await db.yetki.findFirst({
+        where: {
+          YetkiId: kisiYetki.YetkiId,
+        },
+      });
+      return {
+        kisiYetkiEditId: kisiYetki.KisiYetkiEditId,
+        yetkiAdi: yetki?.YetkiAdi,
+        kisiAdi: kisi?.Ad + " " + kisi?.Soyad,
+        eylemTuruId: kisiYetki.EylemTuruId,
+        yetkiBaslamaTarihi: kisiYetki.YetkiBaslnagicTarihi,
+        yetkiBitisTarihi: kisiYetki.YetkiBitisTarihi,
+      };
+    })
+  );
+
+  if (kisiYetkiEdits.length === 0) return [];
+
+  return kisiYetkiEdits.filter(
+    (kisiYetkiEdit): kisiYetkiEdit is KisiYetkiEditGridType =>
+      kisiYetkiEdit !== undefined
   );
 }

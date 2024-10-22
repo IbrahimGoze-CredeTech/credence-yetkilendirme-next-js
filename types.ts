@@ -122,3 +122,12 @@ export type RolCikarmaGridType = {
   kisiAdi: string;
   rolCikarmaTarihi: Date | null;
 };
+
+export type KisiYetkiEditGridType = {
+  kisiYetkiEditId: number;
+  yetkiAdi: string;
+  eylemTuruId: number;
+  kisiAdi: string;
+  yetkiBaslamaTarihi: Date | null;
+  yetkiBitisTarihi: Date | null;
+};

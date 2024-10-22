@@ -33,29 +33,30 @@ model Imza {
 }
 
 model Kisi {
-  KisiId       Int          @id(map: "PK__Kisi__110EDCE9FCC2459D") @default(autoincrement())
-  Ad           String       @db.NVarChar(100)
-  Soyad        String       @db.NVarChar(200)
-  Departman    String?      @db.NVarChar(100)
-  KullaniciAdi String?      @unique(map: "IX_Kisi") @db.NVarChar(50)
-  Sifre        String?      @db.NVarChar(100)
-  Imza         Imza[]
-  KisiRol      KisiRol[]
-  KisiYetki    KisiYetki[]
-  RolAtama     RolAtama[]
-  RolCikarma   RolCikarma[]
-  Talep        Talep[]
+  KisiId        Int             @id(map: "PK__Kisi__110EDCE9FCC2459D") @default(autoincrement())
+  Ad            String          @db.NVarChar(100)
+  Soyad         String          @db.NVarChar(200)
+  Departman     String?         @db.NVarChar(100)
+  KullaniciAdi  String?         @unique(map: "IX_Kisi") @db.NVarChar(50)
+  Sifre         String?         @db.NVarChar(100)
+  Imza          Imza[]
+  KisiRol       KisiRol[]
+  KisiYetki     KisiYetki[]
+  KisiYetkiEdit KisiYetkiEdit[]
+  RolAtama      RolAtama[]
+  RolCikarma    RolCikarma[]
+  Talep         Talep[]
 }
 
 model KisiRol {
   KisiRolId       Int       @id(map: "PK__KisiRol__82C09C5FFBC42EDD") @default(autoincrement())
   KisiId          Int
   RolId           Int
-  BaslangicTarihi DateTime  @db.Date
-  BitisTarihi     DateTime? @db.Date
+  BaslangicTarihi DateTime  @db.DateTime
+  BitisTarihi     DateTime? @db.DateTime
   TalepEden       String    @db.NVarChar(50)
   Onaylayan       String    @db.NVarChar(50)
-  OnaylanmaTarihi DateTime  @db.Date
+  OnaylanmaTarihi DateTime  @db.DateTime
   Kisi            Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK__KisiRol__KisiId__5629CD9C")
   Rol             Rol       @relation(fields: [RolId], references: [RolId], onUpdate: NoAction, map: "FK__KisiRol__RolId__5535A963")
 }
@@ -102,7 +103,7 @@ model RolCikarma {
   RolCikarmaId     Int       @id(map: "PK_RolCikarma")
   KisiId           Int
   RolId            Int
-  RolCikarmaTarihi DateTime? @db.Date
+  RolCikarmaTarihi DateTime? @db.DateTime
   Kisi             Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_RolCikarma_Kisi")
   Rol              Rol       @relation(fields: [RolId], references: [RolId], onUpdate: NoAction, map: "FK_RolCikarma_Rol")
   Talep            Talep     @relation(fields: [RolCikarmaId], references: [TalepId], onUpdate: NoAction, map: "FK_RolCikarma_Talep")
@@ -126,6 +127,7 @@ model Talep {
   DurumId           Int            @default(1, map: "DF_Talep_DurumId")
   TalepTipiId       Int?
   Imza              Imza[]
+  KisiYetkiEdit     KisiYetkiEdit?
   RolAtama          RolAtama?
   RolCikarma        RolCikarma?
   Kisi              Kisi?          @relation(fields: [TalepEdenKisiId], references: [KisiId], onDelete: NoAction, onUpdate: NoAction, map: "FK__Talep__TalepEden__00200768")
@@ -140,8 +142,21 @@ model TalepTipiEnum {
 }
 
 model Yetki {
-  YetkiId   Int         @id(map: "PK__Yetki__3496142604F36FF5") @default(autoincrement())
-  YetkiAdi  String      @db.NVarChar(100)
-  KisiYetki KisiYetki[]
-  RolYetki  RolYetki[]
+  YetkiId       Int             @id(map: "PK__Yetki__3496142604F36FF5") @default(autoincrement())
+  YetkiAdi      String          @db.NVarChar(100)
+  KisiYetki     KisiYetki[]
+  KisiYetkiEdit KisiYetkiEdit[]
+  RolYetki      RolYetki[]
+}
+
+model KisiYetkiEdit {
+  KisiYetkiEditId      Int       @id(map: "PK_YetkiEdit")
+  KisiId               Int
+  YetkiId              Int
+  EylemTuruId          Int
+  YetkiBaslnagicTarihi DateTime? @db.DateTime
+  YetkiBitisTarihi     DateTime? @db.DateTime
+  Kisi                 Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_YetkiEdit_Kisi")
+  Talep                Talep     @relation(fields: [KisiYetkiEditId], references: [TalepId], onUpdate: NoAction, map: "FK_YetkiEdit_Talep")
+  Yetki                Yetki     @relation(fields: [YetkiId], references: [YetkiId], onUpdate: NoAction, map: "FK_YetkiEdit_Yetki")
 }
