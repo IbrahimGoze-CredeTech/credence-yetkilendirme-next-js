@@ -10,6 +10,7 @@ import OzetTab from '../../_components/ozet-tab';
 import { useRouter } from 'next/navigation';
 import RolTab from '../../_components/rol-tab';
 import YetkilerTab from '../../_components/yetkiler-tab';
+import EkstraYetkilerTab from '../../_components/ekstra-yetkiler-tab';
 
 export default function KisiPage() {
   const session = useSession();
@@ -53,7 +54,7 @@ export default function KisiPage() {
         <TabsContent value="ozet"><OzetTab roller={employee?.roller} yetkiler={employee?.yetkiler} ekstraYetkiler={employee?.ekstraYetkiler} /></TabsContent>
         <TabsContent value="rol"><RolTab roller={employee?.roller} /></TabsContent>
         <TabsContent value="yetkiler"><YetkilerTab yetkiler={employee?.yetkiler} /></TabsContent>
-        <TabsContent value="ekstra-yetkiler">Ekstra Yetkiler</TabsContent>
+        <TabsContent value="ekstra-yetkiler"><EkstraYetkilerTab ekstraYetkiler={employee?.ekstraYetkiler} /></TabsContent>
       </Tabs>
     </div>
   )

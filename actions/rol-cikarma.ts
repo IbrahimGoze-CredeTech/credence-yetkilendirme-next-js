@@ -1,30 +1,31 @@
 "use server";
 
 import { auth } from "@/auth";
-import { TalepRolAtamaSchema } from "@/schemas";
-import { RolAtamaClient } from "@/types";
+import { TalepRolCikarmaSchema } from "@/schemas";
+import { RolCikarmaClient, Talep } from "@/types";
 import { fetcherPost } from "@/utils";
 import { z } from "zod";
 
-type RolAtamaRequest = {
-  // talepEdenKisiId: number;
+type RolCikarmaRequest = {
+  talepEdenKisiId: number;
   // talep: Talep;
-  rolAtama: RolAtamaClient;
+  rolCikarma: RolCikarmaClient;
   ciftImza: boolean;
   ekstraImza: string[];
 };
 
-export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
+export async function rolCikarma(
+  values: z.infer<typeof TalepRolCikarmaSchema>
+) {
   const session = await auth();
 
-  const validateFields = TalepRolAtamaSchema.safeParse(values);
+  const validateFields = TalepRolCikarmaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
   }
 
-  const { kisiAdi, rolAdi, baslamaTarihi, bitisTarihi, ciftImza, ekstraImza } =
-    values;
+  const { kisiAdi, rolAdi, bitisTarihi, ciftImza, ekstraImza } = values;
 
   let ekstraImzaArray: string[] = [];
   if (ekstraImza === undefined) {
@@ -42,29 +43,28 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
   //   talepEdenKisiAdi: "",
   // };
 
-  const rolAtama: RolAtamaClient = {
+  const rolCikarma: RolCikarmaClient = {
     kisiAdi,
     rolAdi,
-    rolBaslangicTarihi: baslamaTarihi.toISOString(),
-    rolBitisTarihi: bitisTarihi.toISOString(),
+    rolCikarmaTarihi: bitisTarihi.toISOString(),
     // rolId: 0,
     // kisiId: 0,
   };
 
-  const rolAtamaRequest: RolAtamaRequest = {
-    // talepEdenKisiId: session?.user.id,
+  const rolCikarmaRequest: RolCikarmaRequest = {
+    talepEdenKisiId: session?.user.id,
     // talep,
-    rolAtama,
+    rolCikarma: rolCikarma,
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  // console.log("session?.token: ", session?.user.id);
+  console.log("rolCikarmaRequest: ", JSON.stringify(rolCikarmaRequest));
 
   await fetcherPost(
-    "/Talep/rol-atama",
+    "/Talep/rol-cikarma",
     session?.token,
-    JSON.stringify(rolAtamaRequest)
+    JSON.stringify(rolCikarmaRequest)
   );
   return { success: "Talep Yaratıldı", error: "" };
 }

@@ -73,12 +73,12 @@ export type Talep = {
   durum: string;
   durumTarihi: string;
   talepEdenKisiAdi: string;
-  rolAtama?: RolAtama;
-  rolCikarma?: RolCikarma;
+  rolAtama?: RolAtamaClient;
+  rolCikarma?: RolCikarmaClient;
   imzalar?: Imza[];
 };
 
-export type RolAtama = {
+export type RolAtamaClient = {
   // kisiId: number;
   kisiAdi: string;
   // rolId: number;
@@ -87,10 +87,10 @@ export type RolAtama = {
   rolBitisTarihi: string;
 };
 
-export type RolCikarma = {
-  kisiId: number;
+export type RolCikarmaClient = {
+  // kisiId: number;
   kisiAdi: string;
-  rolId: number;
+  // rolId: number;
   rolAdi: string;
   rolCikarmaTarihi: string;
 };
@@ -114,4 +114,11 @@ export type RolAtamaGridType = {
   kisiAdi: string;
   rolBaslangicTarihi: Date | null;
   rolBitisTarihi: Date | null;
+};
+
+export type RolCikarmaGridType = {
+  rolCikarmaId: number;
+  rolAdi: string | undefined;
+  kisiAdi: string;
+  rolCikarmaTarihi: Date | null;
 };

@@ -74,6 +74,11 @@ export const yetkiler = [
     yetkiAdi: "R-DOC",
     // siniflandirma: null,
   },
+  {
+    yetkiId: 16,
+    yetkiAdi: "Debugging",
+    // siniflandirma: null,
+  },
 ];
 
 export const yetkilerAdi = yetkiler.map((yetki) => yetki.yetkiAdi);

@@ -2,12 +2,11 @@ import { IDataGridOptions } from "devextreme-react/data-grid";
 import { yetkiler } from "../modals/yetkiler";
 import { EylemTuruEnum } from "../modals/eylemTuru";
 
-const eylemTuruLookup = Object.keys(EylemTuruEnum)
-  .filter((key) => isNaN(Number(key))) // Get only string keys (names)
-  .map((key) => ({
-    eylemTuruId: EylemTuruEnum[key as keyof typeof EylemTuruEnum],
-    eylemTuruAdi: key,
-  }));
+const eylemTuruLookup = [
+  { eylemTuruId: EylemTuruEnum.Oku, eylemAdi: "Oku" },
+  { eylemTuruId: EylemTuruEnum.Yaz, eylemAdi: "Yaz" },
+  { eylemTuruId: EylemTuruEnum.Engel, eylemAdi: "Engelle" },
+];
 
 export const ekstraYetkilerDataGridConfig: IDataGridOptions = {
   id: "ekstraYetkilerdatagrid",
@@ -44,6 +43,12 @@ export const ekstraYetkilerDataGridConfig: IDataGridOptions = {
     {
       dataField: "ekstraYetkiBitisTarihi",
       caption: "Bitiş Tarihi",
+      dataType: "date",
+      format: "dd.MM.yyyy",
+    },
+    {
+      dataField: "ekstraYetkiOnaylanmaTarihi",
+      caption: "Onaylanma Tarihi",
       dataType: "date",
       format: "dd.MM.yyyy",
     },

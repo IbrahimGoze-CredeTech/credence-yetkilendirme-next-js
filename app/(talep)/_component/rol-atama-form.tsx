@@ -41,8 +41,8 @@ export default function RolAtamaForm() {
     defaultValues: {
       rolAdi: '',
       kisiAdi: '',
-      rolBaslamaTarihi: new Date(),
-      rolBitisTarihi: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+      baslamaTarihi: new Date(),
+      bitisTarihi: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
       ciftImza: false,
       ekstraImza: [],
     },
@@ -126,7 +126,7 @@ export default function RolAtamaForm() {
               </FormItem>
             )} />
 
-            <FormField control={form.control} name={'rolBaslamaTarihi'} render={({ field }) => (
+            <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol Başlangıç Tarihi</FormLabel>
                 <Popover open={isBaslangicOpen} onOpenChange={setIsBaslangicOpen}>
@@ -164,7 +164,7 @@ export default function RolAtamaForm() {
               </FormItem>
             )} />
 
-            <FormField control={form.control} name={'rolBitisTarihi'} render={({ field }) => (
+            <FormField control={form.control} name={'bitisTarihi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol Bitiş Tarihi</FormLabel>
                 <Popover open={isBitisOpen} onOpenChange={setIsBitisOpen}>

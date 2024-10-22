@@ -27,8 +27,8 @@ export async function yetkiEdit(values: z.infer<typeof YetkiEditSchema>) {
     yetkiAdi,
     kisiAdi,
     eylemTuru,
-    yetkiBaslamaTarihi,
-    yetkiBitisTarihi,
+    baslamaTarihi,
+    bitisTarihi,
     ciftImza,
     ekstraImza,
   } = values;
@@ -44,8 +44,8 @@ export async function yetkiEdit(values: z.infer<typeof YetkiEditSchema>) {
     yetkiAdi,
     kisiAdi,
     eylemTuru,
-    yetkiBaslamaTarihi: yetkiBaslamaTarihi.toISOString(),
-    yetkiBitisTarihi: yetkiBitisTarihi.toISOString(),
+    yetkiBaslamaTarihi: baslamaTarihi.toISOString(),
+    yetkiBitisTarihi: bitisTarihi.toISOString(),
     ciftImza,
     ekstraImza: ekstraImzaArray,
   };

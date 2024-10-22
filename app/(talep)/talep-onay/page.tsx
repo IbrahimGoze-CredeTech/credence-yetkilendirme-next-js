@@ -1,25 +1,28 @@
 'use client';
 
-import { bekleyenRolAtamalar } from '@/actions/bekleyen-talepler'
+import { bekleyenRolAtamalar, bekleyenRolCikarmalar } from '@/actions/bekleyen-talepler'
 import React, { useEffect, useState, useTransition } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import RolAtamaGrid from '../_component/rol-atama';
-import { RolAtamaGridType } from '@/types';
+import { RolAtamaGridType, RolCikarmaGridType } from '@/types';
+import RolCikarmaGrid from '../_component/rol-cikarma-onay';
 
 
 export default function TalepOnayPage() {
   // const [talepler, setTalepler] = useState<ExpendedTalep[]>([])
   const [rolAtamalar, setRolAtamalar] = useState<RolAtamaGridType[]>([])
+  const [rolCikarmalar, setRolCikarmalar] = useState<RolCikarmaGridType[]>([])
   // const [Imzalar, setImzalar] = useState<Imza[]>([])
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    startTransition(() => {
-
-      bekleyenRolAtamalar().then((data) => {
-        // console.log('data: ', data);
-        setRolAtamalar(data);
-      });
+    startTransition(async () => {
+      const [rolAtamalar, rolCikarmalar] = await Promise.all([
+        bekleyenRolAtamalar(),
+        bekleyenRolCikarmalar()
+      ]);
+      setRolAtamalar(rolAtamalar);
+      setRolCikarmalar(rolCikarmalar);
     });
   }, [])
 
@@ -33,7 +36,7 @@ export default function TalepOnayPage() {
             <TabsTrigger className='text-xl' value="rol-cikarma" disabled={isPending}>Rol Çıkarma</TabsTrigger>
           </TabsList>
           <TabsContent value="rol-atama"><RolAtamaGrid data={rolAtamalar} /></TabsContent>
-          <TabsContent value="rol-cikarma">Change your password here.</TabsContent>
+          <TabsContent value="rol-cikarma"><RolCikarmaGrid data={rolCikarmalar} /></TabsContent>
         </Tabs>
         <div>
 

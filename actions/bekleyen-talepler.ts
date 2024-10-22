@@ -2,7 +2,7 @@
 
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { RolAtamaGridType } from "@/types";
+import { RolAtamaGridType, RolCikarmaGridType } from "@/types";
 import { Imza, RolAtama, RolCikarma, Talep } from "@prisma/client";
 
 export type ExpendedTalep = {
@@ -55,11 +55,12 @@ export async function bekleyenRolAtamalar(): Promise<RolAtamaGridType[]> {
 
   const rolAtamalar = await Promise.all(
     imzalar.map(async (imza) => {
-      const rolAtama = await db.rolAtama.findFirstOrThrow({
+      const rolAtama = await db.rolAtama.findFirst({
         where: {
           RolAtamaId: imza.TalepId,
         },
       });
+      if (!rolAtama) return;
       const kisi = await db.kisi.findFirst({
         where: {
           KisiId: rolAtama.KisiId,
@@ -79,6 +80,58 @@ export async function bekleyenRolAtamalar(): Promise<RolAtamaGridType[]> {
       };
     })
   );
+  return rolAtamalar.filter(
+    (rolAtama): rolAtama is RolAtamaGridType => rolAtama !== undefined
+  );
+}
 
-  return rolAtamalar;
+export async function bekleyenRolCikarmalar(): Promise<RolCikarmaGridType[]> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  // console.log("kisi in  bekleyenRolAtamalar: ", kisi);
+
+  // Get All the imza with the KisiId Only if imza has a DurumId of 1
+  const imzalar = await db.imza.findMany({
+    where: {
+      KisiId: +kisi.id,
+      DurumId: 1,
+    },
+  });
+
+  const rolCikarmalar = await Promise.all(
+    imzalar.map(async (imza) => {
+      const rolCikarma = await db.rolCikarma.findFirst({
+        where: {
+          RolCikarmaId: imza.TalepId,
+        },
+      });
+      if (!rolCikarma) return;
+      const kisi = await db.kisi.findFirst({
+        where: {
+          KisiId: rolCikarma.KisiId,
+        },
+      });
+      const rol = await db.rol.findFirst({
+        where: {
+          RolId: rolCikarma.RolId,
+        },
+      });
+      return {
+        rolCikarmaId: rolCikarma.RolCikarmaId,
+        rolAdi: rol?.RolAdi,
+        kisiAdi: kisi?.Ad + " " + kisi?.Soyad,
+        rolCikarmaTarihi: rolCikarma.RolCikarmaTarihi,
+      };
+    })
+  );
+
+  if (rolCikarmalar.length === 0) return [];
+
+  return rolCikarmalar.filter(
+    (rolCikarma): rolCikarma is RolCikarmaGridType => rolCikarma !== undefined
+  );
 }
