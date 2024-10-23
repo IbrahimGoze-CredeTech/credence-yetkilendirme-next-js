@@ -6,7 +6,11 @@ import DataGrid, { Pager, Paging } from 'devextreme-react/data-grid';
 import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 
-export default function OnaylananTaleplerGrid() {
+interface Props {
+  pageSize?: number
+}
+
+export default function OnaylananTaleplerGrid({ pageSize = 10 }: Props) {
   const session = useSession();
   const [onaylananTalepler, setOnaylananTalepler] = useState<TalepKayit[]>([]);
 
@@ -26,7 +30,7 @@ export default function OnaylananTaleplerGrid() {
   }, [session.data?.token])
   return (
     <DataGrid dataSource={onaylananTalepler}>
-      <Paging defaultPageSize={10} />
+      <Paging defaultPageSize={pageSize} />
       <Pager
         visible={true}
         allowedPageSizes={"auto"}

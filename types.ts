@@ -142,3 +142,40 @@ export interface TalepKayit {
   imzaSoyad: string;
   talepTipi: string;
 }
+
+export interface RolAtamaTalepler {
+  rolAdi: string;
+  rolAtananAd: string;
+  rolAtananSoyad: string;
+  rolBaslangicTarihi: string;
+  rolBitisTarihi: string;
+  imzaAd: string;
+  imzaSoyad: string;
+  imzaDurumTarihi: string;
+  durumAd: string;
+}
+
+export interface RolCikarmaTalepler {
+  rolCikarilanAd: string;
+  rolCikarilanSoyad: string;
+  rolAdi: string;
+  rolCikarmaTarihi: string;
+  imzaAd: string;
+  imzaSoyad: string;
+  imzaTarihi: string;
+  imzaDurumu: string;
+}
+
+export interface KisiYetkiEditTalepler {
+  kisiYetkiEditId: number;
+  ad: string;
+  soyad: string;
+  yetkiAdi: string;
+  eylemAdi: string;
+  yetkiBaslangicTarihi: string;
+  yetkiBitisTarihi: string;
+  imzaAd: string;
+  imzaSoyad: string;
+  imzaTarihi: string;
+  imzaDurumu: string;
+}
