@@ -48,18 +48,6 @@ export const TalepRolAtamaSchema = KisiFieldSchema.merge(
   .extend({
     rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
   });
-// export const TalepRolAtamaSchema = z.object({
-//   rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
-//   kisiAdi: z.string().min(1, { message: "Kisi adı boş olamaz" }),
-//   rolBaslamaTarihi: z.date({
-//     required_error: "Rol Baslangic tarihi girilmesi zorunludur.",
-//   }),
-//   rolBitisTarihi: z.date({
-//     required_error: "Rol Bitis tarihi girilmesi zorunludur.",
-//   }),
-//   ciftImza: z.boolean().default(false),
-//   ekstraImza: z.array(OptionSchema),
-// });
 
 export const YetkiEditSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
   .merge(BitisTarihiFieldSchema)
@@ -69,20 +57,6 @@ export const YetkiEditSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
     yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
     eylemTuru: z.string().min(1, { message: "Eylem türü boş olamaz" }),
   });
-// export const YetkiEditSchema = z.object({
-//   kisiAdi: z.string().min(1, { message: "Kisi adı boş olamaz" }),
-//   yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
-//   yetkiBaslamaTarihi: z.date({
-//     required_error: "Yetki Baslangic tarihi girilmesi zorunludur.",
-//   }),
-//   yetkiBitisTarihi: z.date({
-//     required_error: "Yetki Bitis tarihi girilmesi zorunludur.",
-//   }),
-//   // eylemTuru: z.nativeEnum(EylemTuruEnum),
-//   eylemTuru: z.string().min(1, { message: "Eylem türü boş olamaz" }),
-//   ciftImza: z.boolean().default(false),
-//   ekstraImza: z.array(OptionSchema).optional(),
-// });
 
 export const TalepRolCikarmaSchema = KisiFieldSchema.merge(
   BitisTarihiFieldSchema
@@ -92,15 +66,12 @@ export const TalepRolCikarmaSchema = KisiFieldSchema.merge(
   .extend({
     rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
   });
-// export const TalepRolCikarmaSchema = z.object({
-//   rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
-//   kisiAdi: z.string().min(1, { message: "Kisi adı boş olamaz" }),
-//   rolBaslamaTarihi: z.date({
-//     required_error: "Rol Baslangic tarihi girilmesi zorunludur.",
-//   }),
-//   rolBitisTarihi: z.date({
-//     required_error: "Rol Bitis tarihi girilmesi zorunludur.",
-//   }),
-//   ciftImza: z.boolean().default(false),
-//   ekstraImza: z.array(OptionSchema),
-// });
+
+export const KisiSchema = z.object({
+  kisiAdi: z.string().min(1, { message: "Kisi adı boş olamaz" }),
+  kisiSoyadi: z.string().min(1, { message: "Kisi soyadı boş olamaz" }),
+  kullaniciAdi: z
+    .string()
+    .max(20, { message: "Kullanıcı adı 20 karakterden fazla olamaz" }),
+  kisiSifre: z.string().min(1, { message: "Kisi şifresi boş olamaz" }),
+});

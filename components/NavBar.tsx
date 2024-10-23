@@ -15,6 +15,7 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useStaticTablesContext } from "@/context";
+import { RoleGate } from "./role-gate";
 
 export default function Navbar() {
   const session = useSession();
@@ -167,6 +168,13 @@ export default function Navbar() {
           </Link>
         </div>
 
+        <RoleGate allowedRole="sa" showError={false}>
+          <Link
+            href="/kisi-rol-yetki"
+            className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+          >Kisi-Rol-Yetki</Link>
+        </RoleGate>
+
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center cursor-pointer text-white">
             <div className="flex items-center">
@@ -183,6 +191,8 @@ export default function Navbar() {
             </div>
             <ChevronDownIcon className="w-4 h-4 ml-2" />
           </DropdownMenuTrigger>
+
+
 
           <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-1 transition-transform duration-150 ease-in-out">
             <DropdownMenuItem>
@@ -202,6 +212,7 @@ export default function Navbar() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
         {/* <button onClick={onClickToken}>Token</button> */}
       </div>
     </nav>
