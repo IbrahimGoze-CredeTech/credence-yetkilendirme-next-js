@@ -1,15 +1,16 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import RolAtamaForm from '../_component/rol-atama-form';
-import YetkiEditForm from '../_component/yetki-edit-form';
-import RolCikarmaForm from '../_component/rol-cikarma-form';
+import RolAtamaForm from './_components/rol-atama-form';
+import YetkiEditForm from './_components/yetki-edit-form';
+import RolCikarmaForm from './_components/rol-cikarma-form';
 
 
 export default function TalepYaratPage() {
 
   return (
-    <div className='flex items-center justify-center'>
+    <div className='flex flex-col items-center justify-center w-full p-4 space-y-8'>
+      <h1 className='font-bold text-4xl'>Talep Yarat</h1>
       <Tabs defaultValue="rol-atama" className="w-[95vw] flex flex-col items-center justify-center p-2" >
         <TabsList className='bg-gray-200 p-2 py-6'>
           <TabsTrigger className='text-xl' value="rol-atama">Rol Atama</TabsTrigger>

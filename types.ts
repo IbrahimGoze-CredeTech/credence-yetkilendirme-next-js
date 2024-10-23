@@ -131,3 +131,14 @@ export type KisiYetkiEditGridType = {
   yetkiBaslamaTarihi: Date | null;
   yetkiBitisTarihi: Date | null;
 };
+
+export interface TalepKayit {
+  talep_Olusturulma_Tarihi: string;
+  talep_Durum_Tarihi: string;
+  talepEdenAd: string;
+  talepEdenSoyad: string;
+  imzaDurumTarih: string;
+  imzaAd: string;
+  imzaSoyad: string;
+  talepTipi: string;
+}

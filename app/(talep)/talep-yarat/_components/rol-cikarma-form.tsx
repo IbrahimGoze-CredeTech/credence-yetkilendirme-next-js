@@ -77,8 +77,8 @@ export default function RolCikarmaForm() {
   return (
     <CardWrapper headerLabel={'Rol Çıkarma'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className='space-y-4'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
+          <div className='grid grid-cols-2 gap-8'>
             <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol Adi</FormLabel>
@@ -192,8 +192,8 @@ export default function RolCikarmaForm() {
             )} />
             <FormError message={error} />
             <FormSuccess message={success} />
-            <Button type='submit' className='w-full' disabled={isPending}>Rol Çıkarma Talebi Olustur</Button>
           </div>
+          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Rol Çıkarma Talebi Olustur</Button>
         </form>
       </Form>
     </CardWrapper>

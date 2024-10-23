@@ -15,7 +15,7 @@ interface CardWrapperProps {
 
 export default function CardWrapper({ children, headerLabel, backButtonLabel, backButtonHref }: CardWrapperProps) {
   return (
-    <Card className='w-[400px] shadow-md'>
+    <Card className='w-[800px] shadow-md'>
       <CardHeader>
         {/* <Header label={headerLabel}></Header> */}
         <h1 className='text-3xl font-semibold text-center'>{headerLabel}</h1>

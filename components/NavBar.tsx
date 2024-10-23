@@ -119,7 +119,7 @@ export default function Navbar() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-2 transition-transform duration-150 ease-in-out">
-              <DropdownMenuItem asChild className="cursor-pointer">
+              <DropdownMenuItem asChild className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white">
                 <Link
                   href="/talep-ekran"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
@@ -127,7 +127,7 @@ export default function Navbar() {
                   Talepler
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer">
+              <DropdownMenuItem asChild className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white">
                 <Link
                   href="/talep-yarat"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
@@ -136,20 +136,12 @@ export default function Navbar() {
                 </Link>
               </DropdownMenuItem>
 
-              <DropdownMenuItem asChild className="cursor-pointer">
+              <DropdownMenuItem asChild className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white">
                 <Link
-                  href="/talep/onaylanan"
+                  href="/talep-kayitlari"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
                 >
-                  Onaylanan Talepler
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link
-                  href="/talep/onaylanmayan"
-                  className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
-                >
-                  Onaylanmayan Talepler
+                  Talep Kayıtları
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -210,7 +202,7 @@ export default function Navbar() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <button onClick={onClickToken}>Token</button>
+        {/* <button onClick={onClickToken}>Token</button> */}
       </div>
     </nav>
   );

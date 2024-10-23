@@ -1,29 +1,30 @@
-import { yetkiEdit } from '@/actions/yetki-edit';
 import CardWrapper from '@/components/card-wrapper';
 import FormError from '@/components/form-error';
 import FormSuccess from '@/components/form-success';
-import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { CalendarIcon } from "@radix-ui/react-icons"
+import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { ToastAction } from '@/components/ui/toast';
-import { useStaticTablesContext } from '@/context';
-import { toast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
-import { eylemTuruStringArray } from '@/modals/eylemTuru';
-import { YetkiEditSchema } from '@/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon } from '@radix-ui/react-icons';
-import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
 import React, { useState, useTransition } from 'react'
+import { useStaticTablesContext } from '@/context';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { TalepRolAtamaSchema } from '@/schemas';
+import { rolAtama } from '@/actions/rol-atama';
+import { toast } from '@/hooks/use-toast';
+import { ToastAction } from '@/components/ui/toast';
+import { cn } from '@/lib/utils';
+import { tr } from 'date-fns/locale';
+import { format } from "date-fns"
 
-export default function YetkiEditForm() {
+
+
+export default function RolAtamaForm() {
   const staticTablesContext = useStaticTablesContext();
   const OPTIONS: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
@@ -32,25 +33,28 @@ export default function YetkiEditForm() {
 
   const [error, setError] = useState<string | undefined>("")
   const [success, setSuccess] = useState<string | undefined>("");
-
   const [isBaslangicOpen, setIsBaslangicOpen] = useState(false);
   const [isBitisOpen, setIsBitisOpen] = useState(false);
 
-  const form = useForm<z.infer<typeof YetkiEditSchema>>({
-    resolver: zodResolver(YetkiEditSchema),
+  const form = useForm<z.infer<typeof TalepRolAtamaSchema>>({
+    resolver: zodResolver(TalepRolAtamaSchema),
     defaultValues: {
+      rolAdi: '',
+      kisiAdi: '',
       baslamaTarihi: new Date(),
       bitisTarihi: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-    }
+      ciftImza: false,
+      ekstraImza: [],
+    },
   });
 
-  const onSubmit = (values: z.infer<typeof YetkiEditSchema>) => {
+  const onSubmit = (values: z.infer<typeof TalepRolAtamaSchema>) => {
     setError('');
     setSuccess('');
     // console.log('values: ', values);
 
     startTransition(() => {
-      yetkiEdit(values).then((data) => {
+      rolAtama(values).then((data) => {
         if (data?.error) {
           form.reset();
           setError(data.error);
@@ -70,21 +74,39 @@ export default function YetkiEditForm() {
         }
 
       }).catch(() => setError('Something went wrong!'));
-    });
-
-
+    })
   }
 
   return (
-    <CardWrapper headerLabel={'Yetki Değiştirme'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
+    <CardWrapper headerLabel={'Rol Atama'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className='space-y-4'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
+          <div className='grid grid-cols-2 gap-8'>
+            <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Rol Adi</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Rol Seç" />
+                    </SelectTrigger>
+                  </FormControl>
 
-            {/* Kisi Filed */}
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Roller</SelectLabel>
+                      {staticTablesContext.roller.map((rol) => (
+                        <SelectItem key={rol.rolId} value={rol.rolAdi}>{rol.rolAdi}</SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )} />
+
             <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Kisi</FormLabel>
+                <FormLabel>Kisi Adi</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
                   <FormControl>
                     <SelectTrigger>
@@ -104,54 +126,9 @@ export default function YetkiEditForm() {
               </FormItem>
             )} />
 
-            {/* Yetki Field */}
-            <FormField control={form.control} name={'yetkiAdi'} render={({ field }) => (
-              <FormItem>
-                <FormLabel>Yetki</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Yetki Seç" />
-                    </SelectTrigger>
-                  </FormControl>
-
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Yetkiler</SelectLabel>
-                      {staticTablesContext.yetkiler.map((yetki) => (
-                        <SelectItem key={yetki.yetkiId} value={yetki.yetkiAdi}>{yetki.yetkiAdi}</SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )} />
-            <FormField control={form.control} name='eylemTuru' render={({ field }) => (
-              <FormItem>
-                <FormLabel>Eylem Türü</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Eylem Türü Seç" />
-                    </SelectTrigger>
-                  </FormControl>
-
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Eylem Türleri</SelectLabel>
-                      {eylemTuruStringArray.map((eylem) => (
-                        <SelectItem key={eylem} value={eylem}>{eylem}</SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )} />
-
-            {/* Yetki baslama Tarihi */}
             <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Yetki Başlangıç Tarihi</FormLabel>
+                <FormLabel>Rol Başlangıç Tarihi</FormLabel>
                 <Popover open={isBaslangicOpen} onOpenChange={setIsBaslangicOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -187,10 +164,9 @@ export default function YetkiEditForm() {
               </FormItem>
             )} />
 
-            {/* Yetki Bitis Tarihi */}
             <FormField control={form.control} name={'bitisTarihi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Yetki Bitiş Tarihi</FormLabel>
+                <FormLabel>Rol Bitiş Tarihi</FormLabel>
                 <Popover open={isBitisOpen} onOpenChange={setIsBitisOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -257,8 +233,8 @@ export default function YetkiEditForm() {
             )} />
             <FormError message={error} />
             <FormSuccess message={success} />
-            <Button type='submit' className='w-full' disabled={isPending}>Yetki Değiştirme Talebi Olustur</Button>
           </div>
+          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Rol Atama Talebi Olustur</Button>
         </form>
       </Form>
     </CardWrapper>
