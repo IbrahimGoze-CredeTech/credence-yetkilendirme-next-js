@@ -45,6 +45,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-azure-radiance-500 p-5 h-full flex flex-col items-center">
+      <button onClick={onClickToken}>Token</button>
       <h1 className="text-white text-2xl font-bold text-center">
         YETKİLENDİRME PANELİ
       </h1>
@@ -213,7 +214,7 @@ export default function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* <button onClick={onClickToken}>Token</button> */}
+
       </div>
     </nav>
   );

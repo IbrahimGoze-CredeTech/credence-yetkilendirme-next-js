@@ -1,31 +1,29 @@
 import { yetkiEdit } from '@/actions/yetki-edit';
 import CardWrapper from '@/components/card-wrapper';
+import CustomCombobox from '@/components/custom-combobox';
+import { CustomDatePicker } from '@/components/custom-date-picker';
 import FormError from '@/components/form-error';
 import FormSuccess from '@/components/form-success';
 import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useStaticTablesContext } from '@/context';
 import { toast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 import { eylemTuruStringArray } from '@/modals/eylemTuru';
 import { YetkiEditSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon } from '@radix-ui/react-icons';
-import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
 import React, { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 export default function YetkiEditForm() {
   const staticTablesContext = useStaticTablesContext();
-  const OPTIONS: Option[] = staticTablesContext.kisiler.map((kisi) =>
+  const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
+    ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
+  const yetkilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
 
   const [isPending, startTransition] = useTransition();
@@ -35,6 +33,8 @@ export default function YetkiEditForm() {
 
   const [isBaslangicOpen, setIsBaslangicOpen] = useState(false);
   const [isBitisOpen, setIsBitisOpen] = useState(false);
+  const [isKisiSelected, setIsKisiSelected] = useState(false);
+
 
   const form = useForm<z.infer<typeof YetkiEditSchema>>({
     resolver: zodResolver(YetkiEditSchema),
@@ -85,7 +85,8 @@ export default function YetkiEditForm() {
             <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Kisi</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
+                <CustomCombobox onValueChange={(value) => { field.onChange(value); setIsKisiSelected(true); }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
+                {/* <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Kişi Seç" />
@@ -100,7 +101,7 @@ export default function YetkiEditForm() {
                       ))}
                     </SelectGroup>
                   </SelectContent>
-                </Select>
+                </Select> */}
               </FormItem>
             )} />
 
@@ -108,7 +109,8 @@ export default function YetkiEditForm() {
             <FormField control={form.control} name={'yetkiAdi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Yetki</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
+                <CustomCombobox onValueChange={field.onChange} Options={yetkilerOptions} placeholder={'Yetki Ara'} searchPlaceholder={'Yetki Ara...'} disabled={isPending || !isKisiSelected} />
+                {/* <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Yetki Seç" />
@@ -123,7 +125,7 @@ export default function YetkiEditForm() {
                       ))}
                     </SelectGroup>
                   </SelectContent>
-                </Select>
+                </Select> */}
               </FormItem>
             )} />
             <FormField control={form.control} name='eylemTuru' render={({ field }) => (
@@ -152,7 +154,14 @@ export default function YetkiEditForm() {
             <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Yetki Başlangıç Tarihi</FormLabel>
-                <Popover open={isBaslangicOpen} onOpenChange={setIsBaslangicOpen}>
+                <CustomDatePicker
+                  selectedDate={field.value}
+                  onDateChange={field.onChange}
+                  isOpen={isBaslangicOpen}
+                  setIsOpen={setIsBaslangicOpen}
+                  isDisabled={isPending || !isKisiSelected}
+                />
+                {/* <Popover open={isBaslangicOpen} onOpenChange={setIsBaslangicOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -170,20 +179,20 @@ export default function YetkiEditForm() {
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={(date) => {
-                        field.onChange(date);
-                        setIsBaslangicOpen(false)
-                      }}
-                      initialFocus
-                      locale={tr}
-                    />
-                  </PopoverContent>
-                </Popover>
+                  </PopoverTrigger> */}
+                {/* <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={(date) => {
+                      field.onChange(date);
+                      setIsBaslangicOpen(false)
+                    }}
+                    initialFocus
+                    locale={tr}
+                  />
+                </PopoverContent>
+              </Popover> */}
               </FormItem>
             )} />
 
@@ -191,7 +200,14 @@ export default function YetkiEditForm() {
             <FormField control={form.control} name={'bitisTarihi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Yetki Bitiş Tarihi</FormLabel>
-                <Popover open={isBitisOpen} onOpenChange={setIsBitisOpen}>
+                <CustomDatePicker
+                  selectedDate={field.value}
+                  onDateChange={field.onChange}
+                  isOpen={isBitisOpen}
+                  setIsOpen={setIsBitisOpen}
+                  isDisabled={isPending || !isKisiSelected}
+                />
+                {/* <Popover open={isBitisOpen} onOpenChange={setIsBitisOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -222,7 +238,7 @@ export default function YetkiEditForm() {
                       locale={tr}
                     />
                   </PopoverContent>
-                </Popover>
+                </Popover> */}
               </FormItem>
             )} />
 
@@ -238,6 +254,7 @@ export default function YetkiEditForm() {
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    disabled={isPending || !isKisiSelected}
                   />
                 </FormControl>
               </FormItem>
@@ -247,11 +264,11 @@ export default function YetkiEditForm() {
             <FormField control={form.control} name={'ekstraImza'} render={({ }) => (
               <FormItem>
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
-                {OPTIONS.length > 0 ? (
-                  <MultipleSelector defaultOptions={OPTIONS} onChange={(e) => {
+                {yetkilerOptions.length > 0 ? (
+                  <MultipleSelector defaultOptions={yetkilerOptions} onChange={(e) => {
                     console.log("onChange", e);
                     form.setValue('ekstraImza', e);
-                  }} placeholder="Imza atacak kişileri seçin" />
+                  }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
                 ) : (<span>Yükleniyor...</span>)}
               </FormItem>
             )} />
@@ -261,6 +278,6 @@ export default function YetkiEditForm() {
           <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Yetki Değiştirme Talebi Olustur</Button>
         </form>
       </Form>
-    </CardWrapper>
+    </CardWrapper >
   )
 }
