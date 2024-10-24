@@ -255,9 +255,9 @@ export default function YetkiEditForm() {
                 ) : (<span>Yükleniyor...</span>)}
               </FormItem>
             )} />
-            <FormError message={error} />
-            <FormSuccess message={success} />
           </div>
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Yetki Değiştirme Talebi Olustur</Button>
         </form>
       </Form>
