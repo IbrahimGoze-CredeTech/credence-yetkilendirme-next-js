@@ -1,29 +1,31 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { useModalContext } from '../../context';
-import { RolYetkiOld } from '../../types';
+import React, { useEffect, useState } from "react";
+import { useModalContext } from "../../context";
+import { RolYetkiOld } from "../../types";
 import DataGrid, {
   Column,
   Editing,
   Paging,
   FilterRow,
 } from "devextreme-react/data-grid";
-import { Button } from 'devextreme-react'; // Buton bileşenini içe aktar
-import { rolYetkiDataGridConfig } from '../../configs/rol-yetki-data-grid-config';
-import { fetcherGet, fetcherPost } from '@/utils';
-import { useSession } from 'next-auth/react';
+import { Button } from "devextreme-react"; // Buton bileşenini içe aktar
+import { rolYetkiDataGridConfig } from "../../configs/rol-yetki-data-grid-config";
+import { fetcherGet, fetcherPost } from "@/utils";
+import { useSession } from "next-auth/react";
 
 type RolYetkiInsertType = {
-  rolAdi: string,
-  yetiAdi: string,
-  eylemlerTuruId: number
-}
+  rolAdi: string;
+  yetkiAdi: string;
+  eylemlerTuruId: number;
+};
 
 export default function RolYetkiDetailModal() {
   const session = useSession();
   const modalContext = useModalContext();
 
-  const [insertedRolYetki, setInsertedRolYetki] = useState<RolYetkiInsertType[]>([]);
+  const [insertedRolYetki, setInsertedRolYetki] = useState<
+    RolYetkiInsertType[]
+  >([]);
 
   const [employees, setEmployees] = useState<RolYetkiOld[]>([]);
   const [rolAdi, setRolAdi] = useState<string | null>(null); // Rol Adını tutacak state
@@ -33,14 +35,16 @@ export default function RolYetkiDetailModal() {
 
     const fetchData = async () => {
       try {
-        const bilgilerData = await fetcherGet(`/Rol/yetkiler/${modalContext.id}`, session.data?.token);
+        const bilgilerData = await fetcherGet(
+          `/Rol/yetkiler/${modalContext.id}`,
+          session.data?.token
+        );
         setEmployees(bilgilerData);
 
         // Gelen verilerden ilk rol'ün adını alıyoruz (örnek olarak)
         if (bilgilerData.length > 0) {
           setRolAdi(bilgilerData[0].rolAdi); // İlk kaydın rol adını al
-        }
-        else if (!Array.isArray(bilgilerData)) {
+        } else if (!Array.isArray(bilgilerData)) {
           setRolAdi(bilgilerData.rolAdi);
         }
       } catch (error) {
@@ -53,26 +57,26 @@ export default function RolYetkiDetailModal() {
 
   useEffect(() => {
     if (modalContext?.isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [modalContext?.isOpen]);
 
   const handleInsertRow = (e: { yetkiAdi: string; eylemlerTuruId: number }) => {
-    setInsertedRolYetki(prevState => [
+    setInsertedRolYetki((prevState) => [
       ...prevState,
       {
         rolAdi: rolAdi!,
-        yetiAdi: e.yetkiAdi,
-        eylemlerTuruId: e.eylemlerTuruId
-      }
+        yetkiAdi: e.yetkiAdi,
+        eylemlerTuruId: e.eylemlerTuruId,
+      },
     ]);
-  }
+  };
 
   const handleSaveChanges = async () => {
     console.log(JSON.stringify(insertedRolYetki));
@@ -91,26 +95,48 @@ export default function RolYetkiDetailModal() {
       // }
 
       // const result = await response.json();
-      const result = await fetcherPost('/Rol/rol-yetki', session.data?.token, JSON.stringify(insertedRolYetki));
-      console.log('Kaydedilen veri: ', result);
+      const result = await fetcherPost(
+        "/Rol/rol-yetki",
+        session.data?.token,
+        JSON.stringify(insertedRolYetki)
+      );
+      console.log("Kaydedilen veri: ", result);
 
       // Veriler kaydedildikten sonra modal'ı kapatma veya ek bir işlem yapabilirsiniz
       modalContext.toggle();
-
     } catch (error) {
-      console.error('Kaydetme işlemi başarısız oldu: ', error);
+      console.error("Kaydetme işlemi başarısız oldu: ", error);
     }
   };
 
   return (
-    <div style={{ position: 'fixed', zIndex: 2 }} className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm min-h-[100vh] h-full overflow-auto ${modalContext?.isOpen ? "visible" : "hidden"}`} onPointerDown={(e) => {
-      e.stopPropagation();
-      modalContext.toggle();
-    }}>
-      <div style={{ position: 'relative', pointerEvents: "auto", userSelect: "none", zIndex: 3, top: "20%" }} className="w-[80vw] bg-white p-4 rounded-md" onPointerDown={(e) => e.stopPropagation()}>
-
+    <div
+      style={{ position: "fixed", zIndex: 2 }}
+      className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm min-h-[100vh] h-full overflow-auto ${
+        modalContext?.isOpen ? "visible" : "hidden"
+      }`}
+      onPointerDown={(e) => {
+        e.stopPropagation();
+        modalContext.toggle();
+      }}
+    >
+      <div
+        style={{
+          position: "relative",
+          pointerEvents: "auto",
+          userSelect: "none",
+          zIndex: 3,
+          top: "20%",
+        }}
+        className="w-[80vw] bg-white p-4 rounded-md"
+        onPointerDown={(e) => e.stopPropagation()}
+      >
         {/* Rol Adı Başlık olarak gösteriliyor */}
-        {rolAdi && <h2 className="text-3xl font-bold text-center text-black  pt-8">{rolAdi}</h2>}
+        {rolAdi && (
+          <h2 className="text-3xl font-bold text-center text-black  pt-8">
+            {rolAdi}
+          </h2>
+        )}
 
         <DataGrid
           id="gridContainer"
@@ -133,16 +159,11 @@ export default function RolYetkiDetailModal() {
             useIcons={true} // Simge kullanmayı etkinleştir
           />
 
-          <Column dataField="yetkiAdi" caption="Yetki"
-            allowEditing={false} />
+          <Column dataField="yetkiAdi" caption="Yetki" allowEditing={false} />
           <Column dataField="eylemlerTuruId" caption="Eylem Türü" />
 
           {/* Edit ve Delete simgeleri için özel simgeler ekleyin */}
-          <Column
-            type="buttons"
-            width={100}
-            caption="İşlemler"
-          >
+          <Column type="buttons" width={100} caption="İşlemler">
             <Button
               icon="edit" // Edit simgesi
             />

@@ -1,11 +1,15 @@
 "use client";
-import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
+import DataGrid, {
+  Column,
+  FilterRow,
+  HeaderFilter,
+} from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { KisiOzet } from "../../types";
 import { roles, rollerAdi } from "../../modals/roller";
 import { yetkilerAdi } from "../../modals/yetkiler";
 import { useModalContext } from "../../context";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { fetcherGet } from "@/utils";
 import { useSession } from "next-auth/react";
 
@@ -14,16 +18,19 @@ export default function KisiDataGrid() {
 
   const modalContext = useModalContext();
   const router = useRouter();
-  const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([])
+  const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetcherGet('/Kisi/ozet-bilgi', session.data?.token);
-      setKisiOzet(response)
-    }
+      const response = await fetcherGet(
+        "/Kisi/ozet-bilgi",
+        session.data?.token
+      );
+      setKisiOzet(response);
+    };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   ///-----
 
@@ -32,28 +39,32 @@ export default function KisiDataGrid() {
     // console.log('item: ', item);
     return {
       text: item,
-      value: item
+      value: item,
     };
   }
   const rolesHeaderFilter = {
     dataSource: {
       store: {
         type: "array",
-        data: rollerAdi
+        data: rollerAdi,
       },
-      map: rolesToFilterItem
-    }
+      map: rolesToFilterItem,
+    },
   };
   const yetkilerHeaderFilter = {
     dataSource: {
       store: {
         type: "array",
-        data: yetkilerAdi
+        data: yetkilerAdi,
       },
-      map: rolesToFilterItem
-    }
+      map: rolesToFilterItem,
+    },
   };
-  function calculateFilterExpression(filterValue: string, selectedFilterOperation: string | null = '=') {
+  function calculateFilterExpression(
+    this: any,
+    filterValue: string,
+    selectedFilterOperation: string | null = "="
+  ) {
     const column = this;
 
     if (filterValue) {
@@ -69,7 +80,9 @@ export default function KisiDataGrid() {
         const values = column.calculateCellValue(data);
         return (
           values &&
-          !!values.find((v: string) => applyOperation(v, filterValue, selectedFilterOperation ?? '='))
+          !!values.find((v: string) =>
+            applyOperation(v, filterValue, selectedFilterOperation ?? "=")
+          )
         );
       };
       return [selector, "=", true];
@@ -81,7 +94,10 @@ export default function KisiDataGrid() {
     <>
       <h1
         className="text-3xl font-medium my-4 cursor-pointer"
-        onClick={() => router.push("/kisi-bilgileri")}> {/* Başlığa tıklanınca yönlendirme */}
+        onClick={() => router.push("/kisi-bilgileri")}
+      >
+        {" "}
+        {/* Başlığa tıklanınca yönlendirme */}
         Kişi Bilgileri
       </h1>
       <DataGrid
@@ -103,7 +119,8 @@ export default function KisiDataGrid() {
           caption="Ad Soyad"
           calculateCellValue={(rowData) => `${rowData.ad} ${rowData.soyad}`}
           allowFiltering={true}
-          allowHeaderFiltering={false} />
+          allowHeaderFiltering={false}
+        />
         <Column
           dataField="departman"
           caption="Departman"
@@ -129,8 +146,7 @@ export default function KisiDataGrid() {
           filterOperations={rolesFilterOperations}
           headerFilter={yetkilerHeaderFilter}
         ><HeaderFilter dataSource={yetkilerAdi} /></Column> */}
-
       </DataGrid>
     </>
-  )
+  );
 }
