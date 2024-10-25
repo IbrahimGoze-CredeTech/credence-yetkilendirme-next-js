@@ -34,13 +34,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       // console.log("token: ", token);
       if (token.role && session.user) {
-        session.user.role = token.role;
+        // session.user.role = token.role;
+        // session.role = typeof token.role === "string" ? token.role : "";
+        session.user.role = typeof token.role === "string" ? token.role : "";
         // console.log("session.user.role: ", session.user.role);
       }
       session.token = createToken(session.user.id);
       // console.log("session in auth: ", session);
 
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          role: token.role,
+        },
+      };
     },
     async jwt({ token }) {
       if (!token.sub) return token;
@@ -48,8 +56,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       const existingUser = await getUserById(token.sub);
 
       if (!existingUser) return token;
+      const role = await getUserRole(existingUser.KisiId);
+      if (!role) return token;
+      token.role = role;
+      // console.log("token.role: ", token.role);
 
-      token.role = await getUserRole(existingUser.KisiId);
       // token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       return token;
     },

@@ -30,3 +30,14 @@ export const apiAuthPrefix = "/api/auth";
  * @type{string}
  */
 export const DEFAULT_LOGIN_REDIRECT = "/";
+
+/**
+ * The restricted routes that require a specific role to access
+ * @type{route:string,role:string}[]
+ */
+export const restrictedRoutes = [
+  {
+    route: "/kisi-rol-yetki",
+    role: "sa",
+  },
+];
