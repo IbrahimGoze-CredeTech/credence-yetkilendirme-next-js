@@ -75,3 +75,12 @@ export const KisiSchema = z.object({
     .max(20, { message: "Kullanıcı adı 20 karakterden fazla olamaz" }),
   kisiSifre: z.string().min(1, { message: "Kisi şifresi boş olamaz" }),
 });
+
+export const RolSchema = z.object({
+  rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
+  supervizorRol: z.string().min(1, { message: "Supervizor rol boş olamaz" }),
+});
+
+export const YetkiSchema = z.object({
+  yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
+});

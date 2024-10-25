@@ -2,12 +2,8 @@ import CardWrapper from '@/components/card-wrapper';
 import FormError from '@/components/form-error';
 import FormSuccess from '@/components/form-success';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from "@radix-ui/react-icons"
 import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import React, { useState, useTransition } from 'react'
 import { useStaticTablesContext } from '@/context';
@@ -18,16 +14,18 @@ import { TalepRolAtamaSchema } from '@/schemas';
 import { rolAtama } from '@/actions/rol-atama';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
-import { cn } from '@/lib/utils';
-import { tr } from 'date-fns/locale';
-import { format } from "date-fns"
-
-
+import CustomCombobox from '@/components/custom-combobox';
+import { CustomDatePicker } from '@/components/custom-date-picker';
+import { kisiAtanabilirRoller } from '@/actions/kisi-rol';
 
 export default function RolAtamaForm() {
   const staticTablesContext = useStaticTablesContext();
-  const OPTIONS: Option[] = staticTablesContext.kisiler.map((kisi) =>
+  const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
+  const [roller, setRoller] = useState<string[]>([]);
+  const rollerOptions: Option[] = roller.map((rol) =>
+    ({ label: rol, value: rol })) || [];
+
 
   const [isPending, startTransition] = useTransition();
 
@@ -35,6 +33,8 @@ export default function RolAtamaForm() {
   const [success, setSuccess] = useState<string | undefined>("");
   const [isBaslangicOpen, setIsBaslangicOpen] = useState(false);
   const [isBitisOpen, setIsBitisOpen] = useState(false);
+  const [isKisiSelected, setIsKisiSelected] = useState(false);
+
 
   const form = useForm<z.infer<typeof TalepRolAtamaSchema>>({
     resolver: zodResolver(TalepRolAtamaSchema),
@@ -77,128 +77,59 @@ export default function RolAtamaForm() {
     })
   }
 
+  const onValueChange = (value: string) => {
+    startTransition(async () => {
+      const roller = await kisiAtanabilirRoller(value);
+      setRoller(roller);
+      setIsKisiSelected(true); // Update boolean based on whether there's a value
+    });
+  };
+
   return (
     <CardWrapper headerLabel={'Rol Atama'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
           <div className='grid grid-cols-2 gap-8'>
-            <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
-              <FormItem>
-                <FormLabel>Rol Adi</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Rol Seç" />
-                    </SelectTrigger>
-                  </FormControl>
-
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Roller</SelectLabel>
-                      {staticTablesContext.roller.map((rol) => (
-                        <SelectItem key={rol.rolId} value={rol.rolAdi}>{rol.rolAdi}</SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )} />
-
             <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Kisi Adi</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Kişi Seç" />
-                    </SelectTrigger>
-                  </FormControl>
+                <FormControl>
+                  <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
+                </FormControl>
+              </FormItem>
+            )} />
 
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Kişiler</SelectLabel>
-                      {staticTablesContext.kisiler.map((kisi) => (
-                        <SelectItem key={kisi.kisiSoyadi} value={kisi.kisiAdi + " " + kisi.kisiSoyadi}>{kisi.kisiAdi + " " + kisi.kisiSoyadi}</SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+            <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Rol Adi</FormLabel>
+                <CustomCombobox onValueChange={field.onChange} Options={rollerOptions} placeholder={'Rol Ara'} searchPlaceholder={'Rol Ara...'} disabled={isPending || !isKisiSelected} />
               </FormItem>
             )} />
 
             <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol Başlangıç Tarihi</FormLabel>
-                <Popover open={isBaslangicOpen} onOpenChange={setIsBaslangicOpen}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", { locale: tr }) // Apply Turkish locale
-                        ) : (
-                          <span>Tarih Seçin</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={(date) => {
-                        field.onChange(date);
-                        setIsBaslangicOpen(false)
-                      }}
-                      initialFocus
-                      locale={tr}
-                    />
-                  </PopoverContent>
-                </Popover>
+                <CustomDatePicker
+                  selectedDate={field.value}
+                  onDateChange={field.onChange}
+                  isOpen={isBaslangicOpen}
+                  setIsOpen={setIsBaslangicOpen}
+                  isDisabled={isPending || !isKisiSelected}
+                />
               </FormItem>
             )} />
 
             <FormField control={form.control} name={'bitisTarihi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol Bitiş Tarihi</FormLabel>
-                <Popover open={isBitisOpen} onOpenChange={setIsBitisOpen}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", { locale: tr }) // Apply Turkish locale
-                        ) : (
-                          <span>Tarih Seçin</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={(date) => {
-                        field.onChange(date);
-                        setIsBitisOpen(false)
-                      }}
-                      initialFocus
-                      locale={tr}
-                    />
-                  </PopoverContent>
-                </Popover>
+                <CustomDatePicker
+                  selectedDate={field.value}
+                  onDateChange={field.onChange}
+                  isOpen={isBitisOpen}
+                  setIsOpen={setIsBitisOpen}
+                  isDisabled={isPending || !isKisiSelected}
+                />
+
               </FormItem>
             )} />
 
@@ -214,6 +145,7 @@ export default function RolAtamaForm() {
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    disabled={isPending || !isKisiSelected}
                   />
                 </FormControl>
               </FormItem>
@@ -223,17 +155,17 @@ export default function RolAtamaForm() {
             <FormField control={form.control} name={'ekstraImza'} render={({ }) => (
               <FormItem>
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
-                {OPTIONS.length > 0 ? (
-                  <MultipleSelector defaultOptions={OPTIONS} onChange={(e) => {
+                {kisilerOptions.length > 0 ? (
+                  <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
                     console.log("onChange", e);
                     form.setValue('ekstraImza', e);
-                  }} placeholder="Imza atacak kişileri seçin" />
+                  }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
                 ) : (<span>Yükleniyor...</span>)}
               </FormItem>
             )} />
-            <FormError message={error} />
-            <FormSuccess message={success} />
           </div>
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Rol Atama Talebi Olustur</Button>
         </form>
       </Form>
