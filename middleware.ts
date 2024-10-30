@@ -14,8 +14,18 @@ const { auth } = NextAuth(authConfig);
 
 export default auth(async (req) => {
   // if(process.env.AUTH_SECRET = )
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET || "" });
+
+  const token = await getToken({
+    req,
+    secret: process.env.AUTH_SECRET || "",
+    secureCookie: process.env.NODE_ENV === "production",
+    salt:
+      process.env.NODE_ENV === "production"
+        ? "__Secure-authjs.session-token"
+        : "authjs.session-token",
+  });
   const role = token?.role;
+  // console.log("---role: ", role);
 
   const { nextUrl } = req;
 

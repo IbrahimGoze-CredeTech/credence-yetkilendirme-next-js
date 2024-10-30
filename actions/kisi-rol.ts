@@ -59,3 +59,24 @@ export async function kisiAtanabilirRoller(
   );
   return filteredRollerNames;
 }
+
+export async function kisininYetkileri(kisiName: string): Promise<[]> {
+  const session = await auth();
+
+  //Get the kisi surname from the name by splinting the spaces
+  const kisiNameArray = kisiName.split(" ");
+  const kisiSurname = kisiNameArray[kisiNameArray.length - 1];
+  const kisi = await db.kisi.findFirst({
+    where: {
+      Soyad: kisiSurname,
+    },
+  });
+
+  const kisiYetkiler = await fetcherGet(
+    `/Kisi/yetkiler/${kisi?.KisiId}`,
+    session?.token
+  );
+  console.log("kisiYetkiler: ", kisiYetkiler);
+
+  return kisiYetkiler;
+}

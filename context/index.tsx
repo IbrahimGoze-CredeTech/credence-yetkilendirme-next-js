@@ -85,7 +85,7 @@ export function StaticTablesContextWrapper({ children }: {
           bekleyenTalepler()
         ]);
 
-        console.log("anyBekleyenTalep: ", anyBekleyenTalep);
+        // console.log("anyBekleyenTalep: ", anyBekleyenTalep);
 
         // Set state with the data
         setRoller(rolData);

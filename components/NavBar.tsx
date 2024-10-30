@@ -255,7 +255,7 @@ export default function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <button onClick={onClickToken}>Token</button>
+        {/* <button onClick={onClickToken}>Token</button> */}
       </div>
     </nav>
   );

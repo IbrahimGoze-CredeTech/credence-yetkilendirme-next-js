@@ -1,3 +1,4 @@
+import { kisininYetkileri } from '@/actions/kisi-rol';
 import { yetkiEdit } from '@/actions/yetki-edit';
 import CardWrapper from '@/components/card-wrapper';
 import CustomCombobox from '@/components/custom-combobox';
@@ -12,19 +13,23 @@ import { Switch } from '@/components/ui/switch';
 import { ToastAction } from '@/components/ui/toast';
 import { useStaticTablesContext } from '@/context';
 import { toast } from '@/hooks/use-toast';
-import { eylemTuruStringArray } from '@/modals/eylemTuru';
+import { EylemTuruEnum, eylemTuruStringArray } from '@/modals/eylemTuru';
 import { YetkiEditSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+type KisiYetki = { yetkiAdi: string, eylemlerTuruId: number };
+
 export default function YetkiEditForm() {
   const staticTablesContext = useStaticTablesContext();
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
-  const yetkilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
-    ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
+
+  const [kisiYetkiler, setKisiYetkiler] = useState<KisiYetki[]>([]);
+  const yetkilerOptions: Option[] = kisiYetkiler.map((yetki) =>
+    ({ label: yetki.yetkiAdi, value: yetki.yetkiAdi })) || [];
 
   const [isPending, startTransition] = useTransition();
 
@@ -75,6 +80,29 @@ export default function YetkiEditForm() {
 
   }
 
+  const onValueChange = async (value: string) => {
+    const yetkiler = await kisininYetkileri(value);
+    setKisiYetkiler(yetkiler);
+    setIsKisiSelected(true); // Update boolean based on whether there's a value
+  };
+
+  const onYetkiSelected = (value: string) => {
+    // Find the yetki in kisiYetkiler array based on the value yetkiAdi
+    const yetki = kisiYetkiler.find(yetki => yetki.yetkiAdi === value);
+    const eylemlerTuruId = yetki?.eylemlerTuruId;
+    console.log("yetki: ", eylemlerTuruId);
+    if (eylemlerTuruId) {
+      // Convert eylemlerTuruId to the string representation from EylemTuruEnum
+      const eylemTuruString = EylemTuruEnum[eylemlerTuruId];
+      console.log("eylemTuruString: ", eylemTuruString);
+
+
+      if (eylemTuruString) {
+        form.setValue('eylemTuru', eylemTuruString); // Update the form's eylemTuru field
+      }
+    }
+  }
+
   return (
     <CardWrapper headerLabel={'Yetki Değiştirme'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
@@ -85,23 +113,7 @@ export default function YetkiEditForm() {
             <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Kisi</FormLabel>
-                <CustomCombobox onValueChange={(value) => { field.onChange(value); setIsKisiSelected(true); }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
-                {/* <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Kişi Seç" />
-                    </SelectTrigger>
-                  </FormControl>
-
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Kişiler</SelectLabel>
-                      {staticTablesContext.kisiler.map((kisi) => (
-                        <SelectItem key={kisi.kisiSoyadi} value={kisi.kisiAdi + " " + kisi.kisiSoyadi}>{kisi.kisiAdi + " " + kisi.kisiSoyadi}</SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select> */}
+                <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
               </FormItem>
             )} />
 
@@ -109,29 +121,14 @@ export default function YetkiEditForm() {
             <FormField control={form.control} name={'yetkiAdi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Yetki</FormLabel>
-                <CustomCombobox onValueChange={field.onChange} Options={yetkilerOptions} placeholder={'Yetki Ara'} searchPlaceholder={'Yetki Ara...'} disabled={isPending || !isKisiSelected} />
-                {/* <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Yetki Seç" />
-                    </SelectTrigger>
-                  </FormControl>
-
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Yetkiler</SelectLabel>
-                      {staticTablesContext.yetkiler.map((yetki) => (
-                        <SelectItem key={yetki.yetkiId} value={yetki.yetkiAdi}>{yetki.yetkiAdi}</SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select> */}
+                <CustomCombobox onValueChange={(value) => { field.onChange(value); onYetkiSelected(value) }} Options={yetkilerOptions} placeholder={'Yetki Ara'} searchPlaceholder={'Yetki Ara...'} disabled={isPending || !isKisiSelected} />
               </FormItem>
             )} />
+
             <FormField control={form.control} name='eylemTuru' render={({ field }) => (
               <FormItem>
                 <FormLabel>Eylem Türü</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending || !isKisiSelected} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Eylem Türü Seç" />
@@ -161,38 +158,6 @@ export default function YetkiEditForm() {
                   setIsOpen={setIsBaslangicOpen}
                   isDisabled={isPending || !isKisiSelected}
                 />
-                {/* <Popover open={isBaslangicOpen} onOpenChange={setIsBaslangicOpen}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", { locale: tr }) // Apply Turkish locale
-                        ) : (
-                          <span>Tarih Seçin</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger> */}
-                {/* <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={(date) => {
-                      field.onChange(date);
-                      setIsBaslangicOpen(false)
-                    }}
-                    initialFocus
-                    locale={tr}
-                  />
-                </PopoverContent>
-              </Popover> */}
               </FormItem>
             )} />
 
@@ -207,38 +172,7 @@ export default function YetkiEditForm() {
                   setIsOpen={setIsBitisOpen}
                   isDisabled={isPending || !isKisiSelected}
                 />
-                {/* <Popover open={isBitisOpen} onOpenChange={setIsBitisOpen}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", { locale: tr }) // Apply Turkish locale
-                        ) : (
-                          <span>Tarih Seçin</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={(date) => {
-                        field.onChange(date);
-                        setIsBitisOpen(false)
-                      }}
-                      initialFocus
-                      locale={tr}
-                    />
-                  </PopoverContent>
-                </Popover> */}
+
               </FormItem>
             )} />
 
@@ -264,8 +198,8 @@ export default function YetkiEditForm() {
             <FormField control={form.control} name={'ekstraImza'} render={({ }) => (
               <FormItem>
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
-                {yetkilerOptions.length > 0 ? (
-                  <MultipleSelector defaultOptions={yetkilerOptions} onChange={(e) => {
+                {kisilerOptions.length > 0 ? (
+                  <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
                     console.log("onChange", e);
                     form.setValue('ekstraImza', e);
                   }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
