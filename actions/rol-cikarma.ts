@@ -2,13 +2,12 @@
 
 import { auth } from "@/auth";
 import { TalepRolCikarmaSchema } from "@/schemas";
-import { RolCikarmaClient, Talep } from "@/types";
+import { RolCikarmaClient } from "@/types";
 import { fetcherPost } from "@/utils";
 import { z } from "zod";
 
 type RolCikarmaRequest = {
   talepEdenKisiId: number;
-  // talep: Talep;
   rolCikarma: RolCikarmaClient;
   ciftImza: boolean;
   ekstraImza: string[];
@@ -34,26 +33,14 @@ export async function rolCikarma(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  // const talep: Talep = {
-  //   // talepEdenKisiId: 1,
-  //   // talepId: 0,
-  //   olusturulmaTarihi: "2024-10-14T09:13:38.191Z",
-  //   durum: "",
-  //   durumTarihi: "2024-10-14T09:13:38.191Z",
-  //   talepEdenKisiAdi: "",
-  // };
-
   const rolCikarma: RolCikarmaClient = {
     kisiAdi,
     rolAdi,
     rolCikarmaTarihi: bitisTarihi.toISOString(),
-    // rolId: 0,
-    // kisiId: 0,
   };
 
   const rolCikarmaRequest: RolCikarmaRequest = {
     talepEdenKisiId: session?.user.id,
-    // talep,
     rolCikarma: rolCikarma,
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,

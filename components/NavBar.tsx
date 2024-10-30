@@ -34,7 +34,7 @@ export default function Navbar() {
 
   const onClickToken = async () => {
     console.log(session.data?.token);
-  }
+  };
 
   if (!user)
     return (
@@ -45,6 +45,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-azure-radiance-500 p-5 h-full flex flex-col items-center">
+      <button onClick={onClickToken}>Token</button>
       <h1 className="text-white text-2xl font-bold text-center">
         YETKİLENDİRME PANELİ
       </h1>
@@ -94,6 +95,34 @@ export default function Navbar() {
           </Link>
 
           <Link
+            href="/yetki"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+          >
+            <Image
+              src="/yetkiler.png"
+              alt="Yetki"
+              width={24}
+              height={24}
+              className="mr-2"
+            />
+            Yetkiler
+          </Link>
+
+          <Link
+            href="/kisi"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+          >
+            <Image
+              src="/people.png"
+              alt="Kişi"
+              width={24}
+              height={24}
+              className="mr-2"
+            />
+            Kişiler
+          </Link>
+
+          <Link
             href="/rol-yetki"
             className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
           >
@@ -120,7 +149,10 @@ export default function Navbar() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-2 transition-transform duration-150 ease-in-out">
-              <DropdownMenuItem asChild className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white">
+              <DropdownMenuItem
+                asChild
+                className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
+              >
                 <Link
                   href="/talep-ekran"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
@@ -128,7 +160,10 @@ export default function Navbar() {
                   Talepler
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white">
+              <DropdownMenuItem
+                asChild
+                className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
+              >
                 <Link
                   href="/talep-yarat"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
@@ -137,7 +172,10 @@ export default function Navbar() {
                 </Link>
               </DropdownMenuItem>
 
-              <DropdownMenuItem asChild className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white">
+              <DropdownMenuItem
+                asChild
+                className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
+              >
                 <Link
                   href="/talep-kayitlari"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
@@ -159,11 +197,15 @@ export default function Navbar() {
               height={24}
               className="mr-2 h-6"
             />
-            {
-              StaticTablesContext?.anyBekleyenTalep &&
-              <Image src={"/bildirim-circle.png"} width={18}
-                height={18} alt={""} className="absolute top-0 left-0" />
-            }
+            {StaticTablesContext?.anyBekleyenTalep && (
+              <Image
+                src={"/bildirim-circle.png"}
+                width={18}
+                height={18}
+                alt={""}
+                className="absolute top-0 left-0"
+              />
+            )}
             Onay Bekleyen Talepler
           </Link>
         </div>
@@ -172,7 +214,9 @@ export default function Navbar() {
           <Link
             href="/kisi-rol-yetki"
             className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
-          >Kisi-Rol-Yetki</Link>
+          >
+            Kisi-Rol-Yetki
+          </Link>
         </RoleGate>
 
         <DropdownMenu>
@@ -191,8 +235,6 @@ export default function Navbar() {
             </div>
             <ChevronDownIcon className="w-4 h-4 ml-2" />
           </DropdownMenuTrigger>
-
-
 
           <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-1 transition-transform duration-150 ease-in-out">
             <DropdownMenuItem>
@@ -213,7 +255,7 @@ export default function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* <button onClick={onClickToken}>Token</button> */}
+        <button onClick={onClickToken}>Token</button>
       </div>
     </nav>
   );
