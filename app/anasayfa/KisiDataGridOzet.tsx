@@ -3,6 +3,7 @@ import DataGrid, {
   Column,
   FilterRow,
   HeaderFilter,
+  Pager, Paging, Scrolling
 } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { KisiOzet } from "../../types";
@@ -113,6 +114,15 @@ export default function KisiDataGrid() {
           modalContext.toggle();
         }}
       >
+        <Scrolling rowRenderingMode='virtual'></Scrolling>
+        <Paging defaultPageSize={6} />
+        <Pager
+          visible={true}
+          allowedPageSizes={"auto"}
+          displayMode={"compact"}
+        />
+
+
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
         <Column

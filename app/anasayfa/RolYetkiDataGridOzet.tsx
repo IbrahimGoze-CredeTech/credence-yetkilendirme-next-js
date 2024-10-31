@@ -1,6 +1,6 @@
 "use client";
 
-import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
+import DataGrid, { Column, FilterRow, HeaderFilter, Pager, Paging, Scrolling } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { RolYetkiOzet } from "../../types";
 import { yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
@@ -119,6 +119,14 @@ export default function RolYetkiDataGrid() {
           modalContext.toggle();
         }}
       >
+        <Scrolling rowRenderingMode='virtual'></Scrolling>
+        <Paging defaultPageSize={6} />
+        <Pager
+          visible={true}
+          allowedPageSizes={"auto"}
+          displayMode={"compact"}
+        />
+
 
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
