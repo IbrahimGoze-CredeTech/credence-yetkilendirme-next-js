@@ -188,25 +188,24 @@ export default function Navbar() {
 
           <Link
             href="/talep-onay"
-            className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+            className="relative flex items-center  py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
           >
             <Image
               src="/notifications.png"
               alt="Talepler"
               width={24}
               height={24}
-              className="mr-2 h-6"
+              className="mx-2 h-6"
             />
             {StaticTablesContext?.anyBekleyenTalep && (
               <Image
                 src={"/bildirim-circle.png"}
-                width={18}
-                height={18}
+                width={16}
+                height={16}
                 alt={""}
                 className="absolute top-0 left-0"
               />
             )}
-            Onay Bekleyen Talepler
           </Link>
         </div>
 

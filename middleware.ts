@@ -36,7 +36,7 @@ export default auth(async (req) => {
   const isRestrictedRoute = restrictedRoutes.some(
     (route) => route.route === nextUrl.pathname && route.role !== role
   );
-  console.log("isRestrictedRoute: ", isRestrictedRoute);
+  // console.log("isRestrictedRoute: ", isRestrictedRoute);
 
   if (isAPiAuthRoute) {
     return;
