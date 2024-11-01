@@ -36,7 +36,7 @@ export default function TalepEkranPage() {
   // }
 
   return (
-    <div className='p-4'>
+    <div>
       <h1 className="text-3xl font-medium my-4">Geçmiş Talepler</h1>
 
       <DataGrid dataSource={talepler}
