@@ -1,6 +1,8 @@
 import { YetkiRolOld } from "../types";
 import jwt from "jsonwebtoken";
 
+const isLocalHost: boolean = false;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isYetkiArray = (data: any): data is YetkiRolOld[] => {
   return (
@@ -44,12 +46,18 @@ export const fetcherGet = async (url: string, token: string | undefined) => {
   // console.log("token", token);
 
   // const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-  const response = await fetch("https:/localhost:7210/api" + url, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  // const response = await fetch("https:/localhost:7210/api" + url, {
+  const response = await fetch(
+    isLocalHost
+      ? "https:/localhost:7210/api" + url
+      : process.env.NEXT_PUBLIC_API_URL + url,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Network response was not ok at: " + url);
@@ -74,15 +82,20 @@ export const fetcherPost = async (
     throw new Error("Token is not defined");
   }
 
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-    // const response = await fetch("https://localhost:7210/api" + url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: jsonBody,
-  });
+  const response = await fetch(
+    isLocalHost
+      ? "https:/localhost:7210/api" + url
+      : process.env.NEXT_PUBLIC_API_URL + url,
+    {
+      // const response = await fetch("https://localhost:7210/api" + url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: jsonBody,
+    }
+  );
 
   if (!response.ok) {
     switch (response.status) {
@@ -116,15 +129,20 @@ export const fetcherPUT = async (
     throw new Error("Token is not defined");
   }
 
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-    // const response = await fetch("https://localhost:7210/api" + url, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: jsonBody,
-  });
+  const response = await fetch(
+    isLocalHost
+      ? "https:/localhost:7210/api" + url
+      : process.env.NEXT_PUBLIC_API_URL + url,
+    {
+      // const response = await fetch("https://localhost:7210/api" + url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: jsonBody,
+    }
+  );
 
   if (!response.ok) {
     switch (response.status) {
