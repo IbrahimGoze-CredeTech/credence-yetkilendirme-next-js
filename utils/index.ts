@@ -37,6 +37,7 @@ export const createToken = (userId: string) => {
 
   return token;
 };
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 export const fetcherGet = async (url: string, token: string | undefined) => {
