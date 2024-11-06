@@ -43,8 +43,8 @@ export const fetcherGet = async (url: string, token: string | undefined) => {
   }
   // console.log("token", token);
 
-  // const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-  const response = await fetch("https:/localhost:7210/api" + url, {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
+    //const response = await fetch("https:/localhost:7210/api" + url, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

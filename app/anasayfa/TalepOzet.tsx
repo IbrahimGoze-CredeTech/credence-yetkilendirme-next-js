@@ -3,37 +3,65 @@
 import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
 import { Talep } from '@/types';
 import { fetcherGet } from '@/utils';
-// import { DataGrid } from 'devextreme-react';
 import DataGrid, { Pager, Paging, Scrolling } from 'devextreme-react/data-grid';
 import { useSession } from 'next-auth/react';
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 export default function TalepEkranPage() {
   const session = useSession();
-  // const [isRolAtama, setIsRolAtama] = useState<boolean>(false);
-
-  const [talepler, setTalepler] = useState<Talep[]>()
+  const [talepler, setTalepler] = useState<Talep[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const talepler = await fetcherGet('/Talep', session.data?.token);
-      // console.log("talepler: ", talepler);
       setTalepler(talepler);
-    }
+    };
 
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [session.data?.token]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // function onFieldDataChanged(e: any) {
-  //   // console.log('called');
-  //   console.log(e.value);
-  //   if (e.value === 1) {
-  //     // setIsRolAtama(true);
-  //   }
-  // }
+  const handleExportPDF = () => {
+    const doc = new jsPDF();
+    autoTable(doc, {
+      head: [['Oluşturulma Tarihi', 'Durum', 'Durum Tarihi', 'Talep Eden Kişi']],
+      body: talepler.map((talep) => [
+        talep.olusturulmaTarihi,
+        talep.durum,
+        talep.durumTarihi,
+        talep.talepEdenKisiAdi,
+      ]),
+    });
+    doc.save('GeçmişTalepler.pdf');
+  };
+
+  const handleExportExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Geçmiş Talepler');
+
+    worksheet.columns = [
+      { header: 'Oluşturulma Tarihi', key: 'olusturulmaTarihi', width: 20 },
+      { header: 'Durum', key: 'durum', width: 15 },
+      { header: 'Durum Tarihi', key: 'durumTarihi', width: 20 },
+      { header: 'Talep Eden Kişi', key: 'talepEdenKisiAdi', width: 25 },
+    ];
+
+    talepler.forEach((talep) => {
+      worksheet.addRow({
+        olusturulmaTarihi: talep.olusturulmaTarihi,
+        durum: talep.durum,
+        durumTarihi: talep.durumTarihi,
+        talepEdenKisiAdi: talep.talepEdenKisiAdi,
+      });
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    saveAs(new Blob([buffer]), 'GeçmişTalepler.xlsx');
+  };
 
   return (
     <div>
@@ -41,17 +69,21 @@ export default function TalepEkranPage() {
 
       <DataGrid dataSource={talepler}
         {...talepDataGridConfig}
-        className='overflow-hidden'
+        className="overflow-hidden"
       >
-        <Scrolling rowRenderingMode='virtual'></Scrolling>
+        <Scrolling rowRenderingMode="virtual" />
         <Paging defaultPageSize={7} />
         <Pager
           visible={true}
-          allowedPageSizes={"auto"}
-          displayMode={"compact"}
+          allowedPageSizes="auto"
+          displayMode="compact"
         />
       </DataGrid>
 
+      <div className="flex gap-4 mt-4">
+        <button onClick={handleExportPDF} className="bg-blue-500 text-white px-4 py-2 rounded">PDF'e Aktar</button>
+        <button onClick={handleExportExcel} className="bg-green-500 text-white px-4 py-2 rounded">Excel'e Aktar</button>
+      </div>
     </div>
-  )
+  );
 }

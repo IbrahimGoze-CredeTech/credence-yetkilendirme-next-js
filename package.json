@@ -34,7 +34,10 @@
     "date-fns": "^3.6.0",
     "devextreme": "^24.1.6",
     "devextreme-react": "^24.1.6",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "jsonwebtoken": "^9.0.2",
+    "jspdf-autotable": "^3.8.4",
     "lucide-react": "^0.451.0",
     "next": "^14.2.14",
     "next-auth": "^5.0.0-beta.18",
@@ -48,6 +51,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/file-saver": "^2.0.7",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
