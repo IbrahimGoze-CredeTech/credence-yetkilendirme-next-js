@@ -1,7 +1,7 @@
 import { YetkiRolOld } from "../types";
 import jwt from "jsonwebtoken";
 
-const isLocalHost: boolean = false;
+const isLocalHost: boolean = true;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isYetkiArray = (data: any): data is YetkiRolOld[] => {
