@@ -6,9 +6,11 @@ import { fetcherGet } from '@/utils';
 import DataGrid, { Pager, Paging, Scrolling } from 'devextreme-react/data-grid';
 import { useSession } from 'next-auth/react';
 
+
 import React, { useEffect, useState } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 
@@ -27,6 +29,11 @@ export default function TalepEkranPage() {
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
+
+    doc.addFileToVFS('Roboto-Regular.ttf', '/fonts/Roboto-Regular.ttf');
+    doc.addFont('/fonts/Roboto-Regular.ttf', 'Roboto', 'normal');
+    doc.setFont('Roboto');
+
     autoTable(doc, {
       head: [['Oluşturulma Tarihi', 'Durum', 'Durum Tarihi', 'Talep Eden Kişi']],
       body: talepler.map((talep) => [
@@ -35,6 +42,8 @@ export default function TalepEkranPage() {
         talep.durumTarihi,
         talep.talepEdenKisiAdi,
       ]),
+      styles: { font: 'Roboto' },
+
     });
     doc.save('GeçmişTalepler.pdf');
   };
@@ -65,7 +74,21 @@ export default function TalepEkranPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-medium my-4">Geçmiş Talepler</h1>
+      <div>
+        <h1 className="text-3xl font-medium my-4 flex justify-between items-center mt-4">
+          Geçmiş Talepler
+          <div className="flex gap-4">
+            <button onClick={handleExportPDF} className="bg-blue-500 text-white text-xl px-4 py-2 rounded">
+              PDF'e Aktar
+            </button>
+            <button onClick={handleExportExcel} className="bg-green-500 text-white text-xl px-4 py-2 rounded">
+              Excel'e Aktar
+            </button>
+          </div>
+        </h1>
+      </div>
+
+
 
       <DataGrid dataSource={talepler}
         {...talepDataGridConfig}
@@ -80,10 +103,7 @@ export default function TalepEkranPage() {
         />
       </DataGrid>
 
-      <div className="flex gap-4 mt-4">
-        <button onClick={handleExportPDF} className="bg-blue-500 text-white px-4 py-2 rounded">PDF'e Aktar</button>
-        <button onClick={handleExportExcel} className="bg-green-500 text-white px-4 py-2 rounded">Excel'e Aktar</button>
-      </div>
+
     </div>
   );
 }
