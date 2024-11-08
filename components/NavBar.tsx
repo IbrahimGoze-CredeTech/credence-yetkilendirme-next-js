@@ -44,17 +44,17 @@ export default function Navbar() {
     );
 
   return (
-    <nav className="bg-azure-radiance-500 p-5 h-full flex flex-col items-center">
-      <button onClick={onClickToken}>Token</button>
+    <nav className="bg-azure-radiance-500 p-5 h-full flex flex-col items-center text-sm">
+      {/* <button onClick={onClickToken}>Token</button> */}
       <h1 className="text-white text-2xl font-bold text-center">
         YETKİLENDİRME PANELİ
       </h1>
 
       <div className="w-full flex items-center justify-between mt-4">
-        <div id="Buttons" className="flex items-center space-x-4">
+        <div id="Buttons" className="flex items-center space-x-6">
           <Link
             href="/"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white  py-2 rounded"
           >
             <Image
               src="/homepage.png"
@@ -68,7 +68,7 @@ export default function Navbar() {
 
           <Link
             href="/kisi-bilgileri"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white py-2 rounded"
           >
             <Image
               src="/person.png"
@@ -80,51 +80,80 @@ export default function Navbar() {
             Kişi Bilgileri
           </Link>
 
-          <Link
-            href="/rol"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
-          >
-            <Image
-              src="/role.png"
-              alt="Rol"
-              width={24}
-              height={24}
-              className="mr-2"
-            />
-            Roller
-          </Link>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white  py-2 rounded ">
+              <Image
+                src="/organization.png"
+                alt="Organizasyon"
+                width={24}
+                height={24}
+                className="mr-2"
+              />
+              Organizasyon <ChevronDownIcon className="w-4 h-4 ml-2" />
+            </DropdownMenuTrigger>
 
-          <Link
-            href="/yetki"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
-          >
-            <Image
-              src="/yetkiler.png"
-              alt="Yetki"
-              width={24}
-              height={24}
-              className="mr-2"
-            />
-            Yetkiler
-          </Link>
+            <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-2 transition-transform duration-150 ease-in-out">
+              <DropdownMenuItem
+                asChild
+                className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
+              >
+                <Link
+                  href="/rol"
+                  className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+                >
+                  {/* <Image
+                    src="/role.png"
+                    alt="Rol"
+                    width={24}
+                    height={24}
+                    className="mr-2"
+                  /> */}
+                  Roller
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                asChild
+                className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
+              >
+                <Link
+                  href="/yetki"
+                  className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+                >
+                  {/* <Image
+                    src="/yetkiler.png"
+                    alt="Yetki"
+                    width={24}
+                    height={24}
+                    className="mr-2"
+                  /> */}
+                  Yetkiler
+                </Link>
+              </DropdownMenuItem>
 
-          <Link
-            href="/kisi"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
-          >
-            <Image
-              src="/people.png"
-              alt="Kişi"
-              width={24}
-              height={24}
-              className="mr-2"
-            />
-            Kişiler
-          </Link>
+              <DropdownMenuItem
+                asChild
+                className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
+              >
+                <Link
+                  href="/kisi"
+                  className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+                >
+                  {/* <Image
+                    src="/people.png"
+                    alt="Kişi"
+                    width={24}
+                    height={24}
+                    className="mr-2"
+                  /> */}
+                  Kişiler
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <Link
             href="/rol-yetki"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white  py-2 rounded"
           >
             <Image
               src="/assignment.png"
@@ -137,7 +166,7 @@ export default function Navbar() {
           </Link>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded ">
+            <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white  py-2 rounded ">
               <Image
                 src="/demand.png"
                 alt="Talepler"
@@ -187,25 +216,17 @@ export default function Navbar() {
           </DropdownMenu>
 
           <Link
-            href="/talep-onay"
-            className="relative flex items-center  py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+            href="/rapor"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white py-2 rounded"
           >
             <Image
-              src="/notifications.png"
-              alt="Talepler"
+              src="/report.png"
+              alt="Rol Ve Yetki Atama"
               width={24}
               height={24}
-              className="mx-2 h-6"
+              className="mr-2"
             />
-            {StaticTablesContext?.anyBekleyenTalep && (
-              <Image
-                src={"/bildirim-circle.png"}
-                width={16}
-                height={16}
-                alt={""}
-                className="absolute top-0 left-0"
-              />
-            )}
+            Raporlar
           </Link>
         </div>
 
@@ -228,7 +249,7 @@ export default function Navbar() {
                 height={24}
                 className="mr-2"
               />
-              <span className="text-lg">
+              <span className="text-sm font-bold">
                 {user?.name} ({user?.role})
               </span>
             </div>
@@ -253,7 +274,27 @@ export default function Navbar() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
+        <Link
+          href="/talep-onay"
+          className="absolute flex items-center top-3 right-3  py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+        >
+          <Image
+            src="/notifications.png"
+            alt="Talepler"
+            width={24}
+            height={24}
+            className="mx-2 h-6"
+          />
+          {StaticTablesContext?.anyBekleyenTalep && (
+            <Image
+              src={"/bildirim-circle.png"}
+              width={16}
+              height={16}
+              alt={""}
+              className="absolute top-0 left-0"
+            />
+          )}
+        </Link>
         {/* <button onClick={onClickToken}>Token</button> */}
       </div>
     </nav>
