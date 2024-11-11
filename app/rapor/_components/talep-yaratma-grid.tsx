@@ -12,8 +12,8 @@ export default function TalepYaratmaGrid({ data }: Props) {
       <div>
         <DataGrid dataSource={data}></DataGrid>
       </div>
-      <div>
-        <BarChartComp data={data} quantityValue='yaratılanTalepSayısı' quantityLabel='Yaratılan Talep Sayısı' />
+      <div className='mt-4'>
+        <BarChartComp chartLabel={'En Çok Talep Yaratanlar'} chartDescription='En çok talep yaratan kişiler (rol atama, rol çıkarma ve yetki atama toplamları.' data={data} quantityValue='yaratılanTalepSayısı' quantityLabel='Yaratılan Talep Sayısı' />
       </div>
     </>
   )

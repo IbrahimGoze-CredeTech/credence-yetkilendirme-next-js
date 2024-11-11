@@ -1,6 +1,6 @@
 "use client"
 
-import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
 
 import {
   Card,
@@ -40,53 +40,57 @@ export interface ChartDataItem {
 }
 
 interface ChartData {
+  chartLabel: string,
+  chartDescription?: string,
   data: ChartDataItem[],
   quantityValue: string,
   quantityLabel: string,
 }
 
-export function BarChartComp({ data, quantityValue, quantityLabel }: ChartData) {
+export function BarChartComp({ chartLabel, chartDescription, data, quantityValue, quantityLabel }: ChartData) {
+  // console.log("data in bar chart comp: ", data);
+
   return (
-    <Card>
+    <Card className="">
       <CardHeader>
-        <CardTitle>Bar Chart - Label</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{chartLabel}</CardTitle>
+        <CardDescription>{chartDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="max-h-[500px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              width={600}
-              height={300}
-              barSize={50}
-              accessibilityLayer
-              data={data}
-              margin={{
-                top: 20,
-              }}
-            >
-              <CartesianGrid vertical={true} />
-              <XAxis
-                dataKey="ad"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value, index) => { const item = data[index]; return `${item.ad} ${item.soyad}` }}
+          <BarChart
+            width={600}
+            height={300}
+            barSize={50}
+            accessibilityLayer
+            data={data}
+            margin={{
+              top: 50,
+            }}
+          >
+            <CartesianGrid vertical={true} />
+            <XAxis
+              dataKey="ad"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value, index) => { const item = data[index]; return `${item.ad} ${item.soyad}` }}
+
+            // tickFormatter={(value) => value}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent />}
+            />
+            <Bar dataKey={quantityValue} label={quantityLabel} fill="#3b82f6" radius={8}>
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
               />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent />}
-              />
-              <Bar dataKey={quantityValue} label={quantityLabel} fill="#3b82f6" radius={8}>
-                <LabelList
-                  position="top"
-                  offset={12}
-                  className="fill-foreground"
-                  fontSize={12}
-                />
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+            </Bar>
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>

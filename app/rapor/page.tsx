@@ -26,7 +26,7 @@ export default function RaporPage() {
       setYaratma(rolAtamalar);
       setImzaAtma(imzaAtma);
       setImzaAtanan(imzaAtanan);
-      console.log(rolAtamalar);
+      // console.log(imzaAtanan);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

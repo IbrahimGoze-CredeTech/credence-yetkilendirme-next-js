@@ -45,7 +45,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-azure-radiance-500 p-5 h-full flex flex-col items-center text-sm">
-      {/* <button onClick={onClickToken}>Token</button> */}
+      <button onClick={onClickToken}>Token</button>
       <h1 className="text-white text-2xl font-bold text-center">
         YETKİLENDİRME PANELİ
       </h1>
@@ -54,7 +54,7 @@ export default function Navbar() {
         <div id="Buttons" className="flex items-center space-x-6">
           <Link
             href="/"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white  py-2 rounded"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white p-2 rounded"
           >
             <Image
               src="/homepage.png"
@@ -68,7 +68,7 @@ export default function Navbar() {
 
           <Link
             href="/kisi-bilgileri"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white py-2 rounded"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white p-2 rounded"
           >
             <Image
               src="/person.png"
@@ -81,7 +81,7 @@ export default function Navbar() {
           </Link>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white  py-2 rounded ">
+            <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white  p-2 rounded ">
               <Image
                 src="/organization.png"
                 alt="Organizasyon"
@@ -99,7 +99,7 @@ export default function Navbar() {
               >
                 <Link
                   href="/rol"
-                  className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+                  className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
                 >
                   {/* <Image
                     src="/role.png"
@@ -117,7 +117,7 @@ export default function Navbar() {
               >
                 <Link
                   href="/yetki"
-                  className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+                  className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
                 >
                   {/* <Image
                     src="/yetkiler.png"
@@ -136,7 +136,7 @@ export default function Navbar() {
               >
                 <Link
                   href="/kisi"
-                  className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 py-2 rounded"
+                  className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
                 >
                   {/* <Image
                     src="/people.png"
@@ -153,7 +153,7 @@ export default function Navbar() {
 
           <Link
             href="/rol-yetki"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white  py-2 rounded"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white  p-2 rounded"
           >
             <Image
               src="/assignment.png"
@@ -166,7 +166,7 @@ export default function Navbar() {
           </Link>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white  py-2 rounded ">
+            <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white  p-2 rounded ">
               <Image
                 src="/demand.png"
                 alt="Talepler"
@@ -217,7 +217,7 @@ export default function Navbar() {
 
           <Link
             href="/rapor"
-            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white py-2 rounded"
+            className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white p-2 rounded"
           >
             <Image
               src="/report.png"
