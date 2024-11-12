@@ -32,6 +32,7 @@ export default function OnaylananTaleplerGrid({ pageSize = 10 }: Props) {
   }, [session.data?.token]);
   return (
     <DataGrid dataSource={onaylananTalepler}>
+
       <Paging defaultPageSize={pageSize} />
       <Pager visible={true} allowedPageSizes={"auto"} displayMode={"compact"} />
     </DataGrid>

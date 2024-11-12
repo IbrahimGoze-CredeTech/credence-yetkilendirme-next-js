@@ -131,7 +131,7 @@ export type KisiYetkiEditGridType = {
 };
 
 export interface TalepKayit {
-  talep_Olusturulma_Tarihi: string;
+  talep_Olusturulma_Tarihi: Date;
   talep_Durum_Tarihi: string;
   talepEdenAd: string;
   talepEdenSoyad: string;

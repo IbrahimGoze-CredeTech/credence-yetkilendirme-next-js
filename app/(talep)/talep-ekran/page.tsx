@@ -74,7 +74,7 @@ export default function TalepEkranPage() {
               <>
                 <h4 className="text-3xl font-semibold">Imzalar</h4>
                 <DataGrid dataSource={detailData.imza} showBorders={true}>
-                  <Column dataField="durumTarihi" caption="Imza Tarihi" dataType="date" />
+                  <Column dataField="durumTarihi" caption="Imza Tarihi" dataType="date" format="dd.MM.yyyy" />
                   <Column dataField="kisiAdi" caption="Imza Veren" />
                   <Column dataField="durum" caption="Imza Durumu" />
                 </DataGrid>
@@ -86,8 +86,8 @@ export default function TalepEkranPage() {
                     <DataGrid dataSource={[detailData.rolAtama]} showBorders={true}>
                       <Column dataField="rolAdi" caption="Rol Adı" />
                       <Column dataField="kisiAdi" caption="Kişi Adı" />
-                      <Column dataField="rolBaslangicTarihi" caption="Rol Başlangıç Tarihi" dataType="date" />
-                      <Column dataField="rolBitisTarihi" caption="Rol Bitiş Tarihi" dataType="date" />
+                      <Column dataField="rolBaslangicTarihi" caption="Rol Başlangıç Tarihi" dataType="date" format="dd.MM.yyyy" />
+                      <Column dataField="rolBitisTarihi" caption="Rol Bitiş Tarihi" dataType="date" format="dd.MM.yyyy" />
                     </DataGrid>
                   </>
                 ) : detailData.rolCikarma ? (
@@ -96,7 +96,7 @@ export default function TalepEkranPage() {
                     <DataGrid dataSource={[detailData.rolCikarma]} showBorders={true}>
                       <Column dataField="rolAdi" caption="Rol Adı" />
                       <Column dataField="kisiAdi" caption="Kişi Adı" />
-                      <Column dataField="rolCikarmaTarihi" caption="Rol Çıkarma Tarihi" dataType="date" />
+                      <Column dataField="rolCikarmaTarihi" caption="Rol Çıkarma Tarihi" dataType="date" format="dd.MM.yyyy" />
                     </DataGrid>
                   </>
                 ) : (
