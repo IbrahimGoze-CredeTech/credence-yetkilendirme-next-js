@@ -4,15 +4,12 @@ import { Cell, Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -44,13 +41,12 @@ interface Props {
 }
 
 export function PieChartComp({ data }: Props) {
-  // console.log(data);
+  console.log(data);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Yaratilan Talep Tipleri</CardTitle>
-        <CardDescription>Yaratilan son 100 Talep Tipi Grafigi</CardDescription>
+        <CardTitle>Rol Atama, Rol Çıkarma ve Yetki Edit</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -66,8 +62,9 @@ export function PieChartComp({ data }: Props) {
               data={data}
               dataKey="talepCount"
               nameKey="talepTipi"
-              innerRadius={50}
-              paddingAngle={5}
+              innerRadius={60}
+              outerRadius={80}
+              paddingAngle={3}
             >
               {data.map((entry, index) => (
                 <Cell
@@ -76,12 +73,22 @@ export function PieChartComp({ data }: Props) {
                 />
               ))}
             </Pie>
-            <ChartLegend />
           </PieChart>
         </ChartContainer>
+        <div className="flex justify-center mt-4 space-x-4">
+          {Object.keys(chartConfig).map((key) => (
+            <div key={key} className="flex items-center space-x-2">
+              <span
+                className="w-4 h-4 rounded"
+                style={{ backgroundColor: chartConfig[key as ChartKeys].color }}
+              ></span>
+              <span className="text-sm font-medium">
+                {chartConfig[key as ChartKeys].label}
+              </span>
+            </div>
+          ))}
+        </div>
       </CardContent>
-      <CardFooter>
-      </CardFooter>
     </Card>
   );
 }
