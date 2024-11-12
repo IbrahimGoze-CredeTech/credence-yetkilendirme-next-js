@@ -239,62 +239,65 @@ export default function Navbar() {
           </Link>
         </RoleGate>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center cursor-pointer text-white">
-            <div className="flex items-center">
-              <Image
-                src="/user.png"
-                alt="Kullanıcı"
-                width={24}
-                height={24}
-                className="mr-2"
-              />
-              <span className="text-sm font-bold">
-                {user?.name} ({user?.role})
-              </span>
-            </div>
-            <ChevronDownIcon className="w-4 h-4 ml-2" />
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-1 transition-transform duration-150 ease-in-out">
-            <DropdownMenuItem>
-              <button
-                onClick={onClick}
-                className="block w-full text-left px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150 rounded"
-              >
+        <div className="flex items-center space-x-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center cursor-pointer text-white">
+              <div className="flex items-center">
                 <Image
-                  src="/logout.png"
-                  alt="Çıkış"
+                  src="/user.png"
+                  alt="Kullanıcı"
                   width={24}
                   height={24}
-                  className="inline mr-2"
+                  className="mr-2"
                 />
-                Çıkış Yap
-              </button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <Link
-          href="/talep-onay"
-          className="absolute flex items-center top-3 right-3  py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
-        >
-          <Image
-            src="/notifications.png"
-            alt="Talepler"
-            width={24}
-            height={24}
-            className="mx-2 h-6"
-          />
-          {StaticTablesContext?.anyBekleyenTalep && (
+                <span className="text-sm font-bold">
+                  {user?.name} ({user?.role})
+                </span>
+              </div>
+              <ChevronDownIcon className="w-4 h-4 ml-2" />
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-1 transition-transform duration-150 ease-in-out">
+              <DropdownMenuItem>
+                <button
+                  onClick={onClick}
+                  className="block w-full text-left px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150 rounded"
+                >
+                  <Image
+                    src="/logout.png"
+                    alt="Çıkış"
+                    width={24}
+                    height={24}
+                    className="inline mr-2"
+                  />
+                  Çıkış Yap
+                </button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Link
+            href="/talep-onay"
+            className="relative flex items-center  py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+          >
             <Image
-              src={"/bildirim-circle.png"}
-              width={16}
-              height={16}
-              alt={""}
-              className="absolute top-0 left-0"
+              src="/notifications.png"
+              alt="Talepler"
+              width={24}
+              height={24}
+              className="mx-2 h-6"
             />
-          )}
-        </Link>
+            {StaticTablesContext?.anyBekleyenTalep && (
+              <Image
+                src={"/bildirim-circle.png"}
+                width={16}
+                height={16}
+                alt={""}
+                className="absolute top-0 left-0"
+              />
+            )}
+          </Link>
+        </div>
+
         {/* <button onClick={onClickToken}>Token</button> */}
       </div>
     </nav>

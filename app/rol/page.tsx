@@ -1,9 +1,15 @@
 // page.tsx
 
-'use client';
+"use client";
 
 import React, { useEffect, useState, useTransition } from "react";
-import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/components/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 import { fetcherGet } from "@/utils";
 import { useSession } from "next-auth/react";
 
@@ -20,7 +26,7 @@ const RoleDataTable = () => {
 
   useEffect(() => {
     startTransition(async () => {
-      const data = await fetcherGet('/Rol', session.data?.token);
+      const data = await fetcherGet("/Rol", session.data?.token);
       setRoles(data);
     });
 
@@ -31,13 +37,15 @@ const RoleDataTable = () => {
     return <div>Veriler yükleniyor...</div>;
   }
 
-  const filteredRoles = roles.filter(role =>
+  const filteredRoles = roles.filter((role) =>
     role.rolAdi.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="p-6 max-w-8xl mx-auto bg-white rounded-lg shadow-md">
-      <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">Rol Bilgileri</h1>
+      <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+        Rol Bilgileri
+      </h1>
       <div className="mb-4">
         <input
           type="text"
@@ -56,13 +64,20 @@ const RoleDataTable = () => {
         <TableBody>
           {filteredRoles.length > 0 ? (
             filteredRoles.map((role) => (
-              <TableRow key={role.rolId} className="odd:bg-gray-100 hover:bg-gray-200">
-                <TableCell className="p-3 border-t border-gray-200">{role.rolAdi}</TableCell>
+              <TableRow
+                key={role.rolId}
+                className="odd:bg-gray-100 hover:bg-gray-200"
+              >
+                <TableCell className="p-3 border-t border-gray-200">
+                  {role.rolAdi}
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell className="p-3 border-t border-gray-200 text-gray-500">Sonuç bulunamadı</TableCell>
+              <TableCell className="p-3 border-t border-gray-200 text-gray-500">
+                Sonuç bulunamadı
+              </TableCell>
             </TableRow>
           )}
         </TableBody>
