@@ -29,7 +29,7 @@ export const talepDataGridConfig: IDataGridOptions = {
       caption: "Oluşturulma Tarihi",
       allowEditing: false,
       dataType: "date",
-      format: "dd.MM.yyyy",
+      format: "dd.MM.yyyy - HH:mm ",
     },
     { dataField: "durum", caption: "Durum", allowEditing: false },
     {
@@ -37,7 +37,7 @@ export const talepDataGridConfig: IDataGridOptions = {
       caption: "Durum Tarihi",
       allowEditing: false,
       dataType: "date",
-      format: "dd.MM.yyyy",
+      format: "dd.MM.yyyy - HH:mm ",
     },
     {
       dataField: "talepTipiId",
