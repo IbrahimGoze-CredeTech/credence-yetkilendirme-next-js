@@ -28,9 +28,17 @@ export const talepDataGridConfig: IDataGridOptions = {
       dataField: "olusturulmaTarihi",
       caption: "Oluşturulma Tarihi",
       allowEditing: false,
+      dataType: "date",
+      format: "dd.MM.yyyy",
     },
     { dataField: "durum", caption: "Durum", allowEditing: false },
-    { dataField: "durumTarihi", caption: "Durum Tarihi", allowEditing: false },
+    {
+      dataField: "durumTarihi",
+      caption: "Durum Tarihi",
+      allowEditing: false,
+      dataType: "date",
+      format: "dd.MM.yyyy",
+    },
     {
       dataField: "talepTipiId",
       caption: "Talep Tipi",
