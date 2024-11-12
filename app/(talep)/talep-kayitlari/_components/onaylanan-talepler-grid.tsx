@@ -23,6 +23,7 @@ export default function OnaylananTaleplerGrid({ pageSize = 10 }: Props) {
           session.data?.token
         );
         console.log("Data: ", response);
+
         setOnaylananTalepler(response);
       } catch (error) {
         console.error("Failed to fetch data: ", error);
