@@ -1,12 +1,9 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { Cell, Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -49,8 +46,7 @@ export function PieChartComp({ data }: Props) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Rol Atama, Rol Çıkarma ve Yetki Edit</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -68,7 +64,7 @@ export function PieChartComp({ data }: Props) {
               nameKey="talepTipi"
               innerRadius={60}
               outerRadius={80}
-              paddingAngle={5}
+              paddingAngle={3}
             >
               {data.map((entry, index) => (
                 <Cell
@@ -79,15 +75,20 @@ export function PieChartComp({ data }: Props) {
             </Pie>
           </PieChart>
         </ChartContainer>
+        <div className="flex justify-center mt-4 space-x-4">
+          {Object.keys(chartConfig).map((key) => (
+            <div key={key} className="flex items-center space-x-2">
+              <span
+                className="w-4 h-4 rounded"
+                style={{ backgroundColor: chartConfig[key as ChartKeys].color }}
+              ></span>
+              <span className="text-sm font-medium">
+                {chartConfig[key as ChartKeys].label}
+              </span>
+            </div>
+          ))}
+        </div>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   );
 }
