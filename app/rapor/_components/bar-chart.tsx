@@ -33,7 +33,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export interface ChartDataItem {
+export interface BarChartData {
   ad: string;
   soyad: string;
   quantityData: number;
@@ -42,7 +42,7 @@ export interface ChartDataItem {
 interface ChartData {
   chartLabel: string,
   chartDescription?: string,
-  data: ChartDataItem[],
+  data: BarChartData[],
   quantityValue: string,
   quantityLabel: string,
 }
