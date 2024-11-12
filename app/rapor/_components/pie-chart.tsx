@@ -2,7 +2,6 @@
 
 import { TrendingUp } from "lucide-react";
 import { Cell, Pie, PieChart } from "recharts";
-
 import {
   Card,
   CardContent,
@@ -17,16 +16,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-// const chartData = [
-//   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-//   { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-//   { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-//   { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-//   { browser: "other", visitors: 90, fill: "var(--color-other)" },
-// ]
 
 const chartConfig = {
-  
   RolAtama: {
     label: "Rol Atama",
     color: "hsl(var(--chart-1))",
@@ -37,12 +28,19 @@ const chartConfig = {
   },
   YetkiEdit: {
     label: "Yetki Edit",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
+type ChartKeys = keyof typeof chartConfig;
+
+interface DataItem {
+  talepTipi: ChartKeys;
+  talepCount: number;
+}
+
 interface Props {
-  data: [];
+  data: DataItem[];
 }
 
 export function PieChartComp({ data }: Props) {
@@ -69,10 +67,16 @@ export function PieChartComp({ data }: Props) {
               dataKey="talepCount"
               nameKey="talepTipi"
               innerRadius={60}
-            />
-            {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={chartConfig[entry.talepTipi]?.color} />
-          ))}
+              outerRadius={80}
+              paddingAngle={5}
+            >
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={chartConfig[entry.talepTipi].color}
+                />
+              ))}
+            </Pie>
           </PieChart>
         </ChartContainer>
       </CardContent>
