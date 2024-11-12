@@ -1,9 +1,9 @@
 import { DataGrid } from 'devextreme-react';
 import React from 'react'
-import { BarChartComp, ChartDataItem } from './bar-chart';
+import { BarChartComp, BarChartData } from './bar-chart';
 
 interface Props {
-  data: ChartDataItem[];
+  data: BarChartData[];
 }
 
 export default function TalepYaratmaGrid({ data }: Props) {

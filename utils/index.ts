@@ -16,12 +16,12 @@ export const isYetkiArray = (data: any): data is YetkiRolOld[] => {
   );
 };
 
-export const formatDate = (dateValue: { toISOString: () => string }) => {
-  if (!dateValue) return null; // If the value is null or undefined
-  if (typeof dateValue === "string") return dateValue; // Already a string
-  if (dateValue instanceof Date) return dateValue.toISOString().split("T")[0]; // Convert Date to "YYYY-MM-DD"
-  return null; // If it doesn't match any expected type
-};
+// export const formatDate = (dateValue: { toISOString: () => string }) => {
+//   if (!dateValue) return null; // If the value is null or undefined
+//   if (typeof dateValue === "string") return dateValue; // Already a string
+//   if (dateValue instanceof Date) return dateValue.toISOString().split("T")[0]; // Convert Date to "YYYY-MM-DD"
+//   return null; // If it doesn't match any expected type
+// };
 
 export const createToken = (userId: string) => {
   const secret = process.env.AUTH_SECRET;
@@ -160,3 +160,23 @@ export const fetcherPUT = async (
 
   return response.json();
 };
+
+//#region Data Formatting
+export interface DataItem {
+  date: string;
+  [key: string]: unknown;
+}
+// Function to format the date string
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("tr-TR");
+};
+
+// Function to format a list of data
+export const formatDataList = (dataList: DataItem[]) => {
+  return dataList.map((data) => ({
+    ...data,
+    date: formatDate(data.date),
+  }));
+};
+//#endregion
