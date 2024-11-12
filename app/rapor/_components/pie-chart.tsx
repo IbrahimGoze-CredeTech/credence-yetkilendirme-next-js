@@ -1,6 +1,5 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { Cell, Pie, PieChart } from "recharts";
 import {
   Card,
@@ -13,6 +12,7 @@ import {
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -44,13 +44,13 @@ interface Props {
 }
 
 export function PieChartComp({ data }: Props) {
-  console.log(data);
+  // console.log(data);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Yaratilan Talep Tipleri</CardTitle>
+        <CardDescription>Yaratilan son 100 Talep Tipi Grafigi</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -66,8 +66,7 @@ export function PieChartComp({ data }: Props) {
               data={data}
               dataKey="talepCount"
               nameKey="talepTipi"
-              innerRadius={60}
-              outerRadius={80}
+              innerRadius={50}
               paddingAngle={5}
             >
               {data.map((entry, index) => (
@@ -77,16 +76,11 @@ export function PieChartComp({ data }: Props) {
                 />
               ))}
             </Pie>
+            <ChartLegend />
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
+      <CardFooter>
       </CardFooter>
     </Card>
   );
