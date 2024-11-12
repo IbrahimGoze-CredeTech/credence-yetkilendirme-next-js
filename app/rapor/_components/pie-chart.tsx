@@ -10,7 +10,6 @@ import {
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -42,17 +41,12 @@ interface Props {
 }
 
 export function PieChartComp({ data }: Props) {
-  // console.log(data);
+  console.log(data);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-<<<<<<< HEAD
         <CardTitle>Rol Atama, Rol Çıkarma ve Yetki Edit</CardTitle>
-=======
-        <CardTitle>Yaratilan Talep Tipleri</CardTitle>
-        <CardDescription>Yaratilan son 100 Talep Tipi Grafigi</CardDescription>
->>>>>>> 4b84e42028bdab2025fb2c6ce2b55f0d923953a7
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -68,14 +62,9 @@ export function PieChartComp({ data }: Props) {
               data={data}
               dataKey="talepCount"
               nameKey="talepTipi"
-<<<<<<< HEAD
               innerRadius={60}
               outerRadius={80}
               paddingAngle={3}
-=======
-              innerRadius={50}
-              paddingAngle={5}
->>>>>>> 4b84e42028bdab2025fb2c6ce2b55f0d923953a7
             >
               {data.map((entry, index) => (
                 <Cell
@@ -84,7 +73,6 @@ export function PieChartComp({ data }: Props) {
                 />
               ))}
             </Pie>
-            <ChartLegend />
           </PieChart>
         </ChartContainer>
         <div className="flex justify-center mt-4 space-x-4">
@@ -101,11 +89,6 @@ export function PieChartComp({ data }: Props) {
           ))}
         </div>
       </CardContent>
-<<<<<<< HEAD
-=======
-      <CardFooter>
-      </CardFooter>
->>>>>>> 4b84e42028bdab2025fb2c6ce2b55f0d923953a7
     </Card>
   );
 }
