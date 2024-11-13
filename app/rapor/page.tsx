@@ -58,7 +58,7 @@ export default function RaporPage() {
       <div className="flex flex-col items-center justify-center w-full p-4 space-y-8">
         <h1 className="font-bold text-4xl">Matrisler</h1>
         <Tabs
-          defaultValue="rol-atama"
+          defaultValue="ozet"
           className="w-[95vw] flex flex-col items-center justify-center p-4"
         >
           <TabsList className="bg-gray-200 p-2 py-6">
