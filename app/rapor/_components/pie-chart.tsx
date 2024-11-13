@@ -4,6 +4,7 @@ import { Cell, Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -44,9 +45,10 @@ export function PieChartComp({ data }: Props) {
   console.log(data);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col p-4">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Rol Atama, Rol Çıkarma ve Yetki Edit</CardTitle>
+        <CardTitle>Talep Tipi</CardTitle>
+        <CardDescription>Yaratilan son 100 talebin tiplerine gore grafigi</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
