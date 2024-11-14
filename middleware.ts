@@ -4,7 +4,7 @@ import {
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   authRoutes,
-  restrictedRoutes,
+  // restrictedRoutes,
   // publicRoutes,
 } from "@/routes";
 import { NextResponse } from "next/server";
@@ -24,7 +24,12 @@ export default auth(async (req) => {
         ? "__Secure-authjs.session-token"
         : "authjs.session-token",
   });
-  const role = token?.role;
+
+  // const roles = token?.role;
+  const pages = token?.pages;
+  console.log("page: ", pages);
+  console.log("nextUrl.pathname: ", req.nextUrl.pathname);
+
   // console.log("---role: ", role);
 
   const { nextUrl } = req;
@@ -33,10 +38,13 @@ export default auth(async (req) => {
 
   const isAPiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  const isRestrictedRoute = restrictedRoutes.some(
-    (route) => route.route === nextUrl.pathname && route.role !== role
-  );
-  // console.log("isRestrictedRoute: ", isRestrictedRoute);
+  const isRestrictedRoute = !pages?.includes(nextUrl.pathname);
+  console.log("isRestrictedRoute: ", isRestrictedRoute);
+
+  // const isRestrictedRoute = restrictedRoutes.some(
+  //   (route) => route.route === nextUrl.pathname && !roles?.includes(route.role)
+  // );
+  // console.log("isRestrictedRoute: ", roles?.includes("sa"));
 
   if (isAPiAuthRoute) {
     return;
@@ -62,5 +70,5 @@ export default auth(async (req) => {
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/(api|trpc)(.*)"],
+  matcher: ["/((?!.*\\..*|_next|unauthorized).*)", "/(api|trpc)(.*)"],
 };

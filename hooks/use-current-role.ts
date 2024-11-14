@@ -6,8 +6,8 @@ export const useCurrentRole = () => {
   return session.data?.user.role[0];
 };
 
-export const useCurrentRoles = () => {
+export function useCurrentRoles(): string[] {
   const session = useSession();
 
   return session.data?.user.role;
-};
+}

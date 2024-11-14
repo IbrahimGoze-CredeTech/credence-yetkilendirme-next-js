@@ -43,3 +43,54 @@ export async function getUserRole(KisiId: number): Promise<string[]> {
     return [""]; // Return null or handle it as needed
   }
 }
+
+export async function getUserPages(KisiId: number): Promise<string[]> {
+  try {
+    const rolePages = await db.kisiRol.findMany({
+      where: { KisiId },
+      select: {
+        Rol: {
+          select: {
+            RolAdi: true,
+            RolSayfa: {
+              select: {
+                Sayfa: {
+                  select: {
+                    SayfaRoute: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const kisiPages = await db.kisiSayfa.findMany({
+      where: { KisiId },
+      select: {
+        Sayfa: {
+          select: {
+            SayfaRoute: true,
+          },
+        },
+      },
+    });
+
+    const rolePageRoutes = rolePages
+      .map((page) => page.Rol.RolSayfa.map((p) => p.Sayfa.SayfaRoute))
+      .flat();
+
+    const kisiPageRoutes = kisiPages.map((page) => page.Sayfa.SayfaRoute);
+
+    // Combine both lists and remove duplicates
+    const combinedRoutes = Array.from(
+      new Set([...rolePageRoutes, ...kisiPageRoutes])
+    );
+
+    return combinedRoutes;
+  } catch (error) {
+    console.error(error); // Log the error if necessary
+    return [""]; // Return null or handle it as needed
+  }
+}

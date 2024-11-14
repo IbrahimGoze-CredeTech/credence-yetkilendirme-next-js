@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import authConfig from "./auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
-import { getUserById, getUserRole } from "./data/user";
+import { getUserById, getUserPages, getUserRole } from "./data/user";
 import { db } from "./lib/db";
 import { createToken } from "./utils";
 
@@ -57,8 +57,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       if (!existingUser) return token;
       const role = await getUserRole(existingUser.KisiId);
+      const pages = await getUserPages(existingUser.KisiId);
       if (!role) return token;
       token.role = role;
+      token.pages = pages;
       // console.log("token.role: ", token.role);
 
       // token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;

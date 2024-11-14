@@ -174,7 +174,7 @@ model KisiSayfa {
 }
 
 model RolSayfa {
-  RolSayfaId Int   @id(map: "PK_RolSayfa")
+  RolSayfaId Int   @id(map: "PK_RolSayfa") @default(autoincrement())
   RolId      Int
   SayfaId    Int
   Rol        Rol   @relation(fields: [RolId], references: [RolId], onUpdate: NoAction, map: "FK_RolSayfa_Rol")
