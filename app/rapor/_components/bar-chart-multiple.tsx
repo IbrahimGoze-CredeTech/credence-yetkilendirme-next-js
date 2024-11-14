@@ -16,20 +16,16 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-export const description = "A bar chart with a label";
+export const description = "A multiple bar chart with a label";
 
 const chartConfig = {
   desktop: {
     label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  imzaSayısı: {
-    label: "İmza Sayısı",
     color: "#3b82f6",
   },
-  yaratılanTalepSayısı: {
-    label: "Yaratılan Talep Sayısı",
-    color: "hsl(var(--chart-3))",
+  mobile: {
+    label: "Mobile",
+    color: "#ff0066",
   },
 } satisfies ChartConfig;
 
@@ -43,19 +39,21 @@ interface ChartData {
   chartLabel: string;
   chartDescription?: string;
   data: BarChartData[];
-  quantityValue: string;
-  quantityLabel: string;
+  firstQuantityValue: string;
+  secondQuantityValue: string;
+  firstQuantityLabel: string;
+  secondQuantityLabel: string;
 }
 
-export function BarChartComp({
+export function MultipleBarChartComp({
   chartLabel,
   chartDescription,
   data,
-  quantityValue,
-  quantityLabel,
+  firstQuantityLabel,
+  secondQuantityLabel,
+  firstQuantityValue,
+  secondQuantityValue,
 }: ChartData) {
-  // console.log("data in bar chart comp: ", data);
-
   return (
     <Card>
       <CardHeader>
@@ -84,14 +82,25 @@ export function BarChartComp({
                 const item = data[index];
                 return `${item.ad} ${item.soyad}`;
               }}
-
-              // tickFormatter={(value) => value}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Bar
-              dataKey={quantityValue}
-              label={quantityLabel}
+              dataKey={firstQuantityValue}
+              label={firstQuantityLabel}
               fill="#3b82f6"
+              radius={8}
+            >
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Bar>
+            <Bar
+              dataKey={secondQuantityValue}
+              label={secondQuantityLabel}
+              fill="#ff0066"
               radius={8}
             >
               <LabelList

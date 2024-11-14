@@ -9,10 +9,15 @@ import ImzaAtmaGrid from "./_components/imza-atma-grid";
 import ImzaAtananGrid from "./_components/imza-atanan-grid";
 import { AreaChartComp } from "./_components/area-chart";
 import { PieChartComp } from "./_components/pie-chart";
+import VerimlilikGrid from "./_components/verimlilik-grid";
+import RiskGrid from "./_components/risk-grid";
+import { log } from "console";
 
 export default function RaporPage() {
   const session = useSession();
 
+  const [risk, setRisk] = useState<[]>([]);
+  const [verimlilik, setVerimlilik] = useState<[]>([]);
   const [yaratma, setYaratma] = useState<[]>([]);
   const [imzaAtma, setImzaAtma] = useState<[]>([]);
   const [imzaAtanan, setImzaAtanan] = useState<[]>([]);
@@ -30,6 +35,8 @@ export default function RaporPage() {
         gunlukTalepYaratma,
         gunlukImzaAtma,
         talepTipi,
+        verimlilik,
+        risk,
       ] = await Promise.all([
         fetcherGet("/Matris/talep-yaratma-matris", session.data?.token),
         fetcherGet("/Matris/imza-atma-matris", session.data?.token),
@@ -37,12 +44,17 @@ export default function RaporPage() {
         fetcherGet("/Matris/talep-yaratma-gunluk-matris", session.data?.token),
         fetcherGet("/Matris/imza-atma-gunluk-matris", session.data?.token),
         fetcherGet("/Matris/talep-tipi-matris", session.data?.token),
+        fetcherGet("/Matris/kisi-verimlilik-matris", session.data?.token),
+        fetcherGet("/Matris/kisi-risk-matris", session.data?.token),
       ]);
       // console.log(talepTipi);
       setTalepTipi(talepTipi);
       setYaratma(rolAtamalar);
       setImzaAtma(imzaAtma);
       setImzaAtanan(imzaAtanan);
+      setVerimlilik(verimlilik);
+      setRisk(risk);
+      // console.log(risk);
 
       const formattedGunlukTalepYaratma = formatDataList(gunlukTalepYaratma);
       setGunlukTalepYaratma(formattedGunlukTalepYaratma);
@@ -85,6 +97,16 @@ export default function RaporPage() {
             </TabsTrigger>
             <TabsTrigger
               className="text-xl"
+              value="verimlilik"
+              disabled={isPending}
+            >
+              Verimlilik
+            </TabsTrigger>
+            <TabsTrigger className="text-xl" value="risk" disabled={isPending}>
+              Risk
+            </TabsTrigger>
+            <TabsTrigger
+              className="text-xl"
               value="gunluk"
               disabled={isPending}
             >
@@ -102,6 +124,12 @@ export default function RaporPage() {
           </TabsContent>
           <TabsContent value="imza-atanan">
             <ImzaAtananGrid data={imzaAtanan} />
+          </TabsContent>
+          <TabsContent value="verimlilik">
+            <VerimlilikGrid data={verimlilik} />
+          </TabsContent>
+          <TabsContent value="risk">
+            <RiskGrid data={risk} />
           </TabsContent>
           <TabsContent value="gunluk" className="flex gap-4">
             <AreaChartComp
