@@ -251,7 +251,7 @@ export default function Navbar() {
                   className="mr-2"
                 />
                 <span className="text-sm font-bold">
-                  {user?.name} ({user?.role})
+                  {user?.name} ({user?.role[0]})
                 </span>
               </div>
               <ChevronDownIcon className="w-4 h-4 ml-2" />

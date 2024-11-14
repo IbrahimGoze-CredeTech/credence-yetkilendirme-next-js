@@ -21,28 +21,25 @@ export async function getUserById(id: string | undefined) {
   }
 }
 
-export async function getUserRole(KisiId: number): Promise<string | null> {
+export async function getUserRole(KisiId: number): Promise<string[]> {
   try {
-    // get the role of the user from the kisiRol table
-    const kisiRol = await db.kisiRol.findFirst({ where: { KisiId } });
-    const rol = await db.rol.findFirst({
-      where: { RolId: kisiRol?.RolId },
-      select: { RolAdi: true },
+    const roles = await db.kisiRol.findMany({
+      where: { KisiId },
+      orderBy: {
+        Rol: { RiskWeight: "desc" }, // Sort by RiskWeight in descending order
+      },
+      select: {
+        Rol: {
+          select: {
+            RolAdi: true,
+          },
+        },
+      },
     });
-    return rol?.RolAdi || null;
 
-    // const kisi = db.kisiRol.findUnique({ where: { KisiId : KisiId } });
-    // return kisi?;
+    return roles.map((role) => role.Rol.RolAdi);
   } catch (error) {
     console.error(error); // Log the error if necessary
-    return null; // Return null or handle it as needed
+    return [""]; // Return null or handle it as needed
   }
 }
-// export async function getUserById(id: string | undefined) {
-//   try {
-//     const user = db.user.findUnique({ where: { id } });
-//     return user;
-//   } catch (error) {
-//     return null;
-//   }
-// }

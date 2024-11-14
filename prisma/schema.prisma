@@ -41,6 +41,7 @@ model Kisi {
   Sifre         String?         @db.NVarChar(100)
   Imza          Imza[]
   KisiRol       KisiRol[]
+  KisiSayfa     KisiSayfa[]
   KisiYetki     KisiYetki[]
   KisiYetkiEdit KisiYetkiEdit[]
   RolAtama      RolAtama[]
@@ -80,11 +81,13 @@ model Rol {
   RolId           Int          @id(map: "PK__Rol__F92302F1AB02E21D") @default(autoincrement())
   RolAdi          String       @unique(map: "IX_Rol") @db.NVarChar(100)
   SupervizorRolId Int?
+  RiskWeight      Int?
   KisiRol         KisiRol[]
   Rol             Rol?         @relation("RolToRol", fields: [SupervizorRolId], references: [RolId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Rol_Rol")
   other_Rol       Rol[]        @relation("RolToRol")
   RolAtama        RolAtama[]
   RolCikarma      RolCikarma[]
+  RolSayfa        RolSayfa[]
   RolYetki        RolYetki[]
 }
 
@@ -144,6 +147,7 @@ model TalepTipiEnum {
 model Yetki {
   YetkiId       Int             @id(map: "PK__Yetki__3496142604F36FF5") @default(autoincrement())
   YetkiAdi      String          @db.NVarChar(100)
+  RiskWeight    Int?
   KisiYetki     KisiYetki[]
   KisiYetkiEdit KisiYetkiEdit[]
   RolYetki      RolYetki[]
@@ -159,4 +163,27 @@ model KisiYetkiEdit {
   Kisi                 Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_YetkiEdit_Kisi")
   Talep                Talep     @relation(fields: [KisiYetkiEditId], references: [TalepId], onUpdate: NoAction, map: "FK_YetkiEdit_Talep")
   Yetki                Yetki     @relation(fields: [YetkiId], references: [YetkiId], onUpdate: NoAction, map: "FK_YetkiEdit_Yetki")
+}
+
+model KisiSayfa {
+  KisiSayfaId Int   @id(map: "PK_KisiSayfa") @default(autoincrement())
+  KisiId      Int
+  SayfaId     Int
+  Kisi        Kisi  @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_KisiSayfa_Kisi")
+  Sayfa       Sayfa @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_KisiSayfa_Sayfa")
+}
+
+model RolSayfa {
+  RolSayfaId Int   @id(map: "PK_RolSayfa")
+  RolId      Int
+  SayfaId    Int
+  Rol        Rol   @relation(fields: [RolId], references: [RolId], onUpdate: NoAction, map: "FK_RolSayfa_Rol")
+  Sayfa      Sayfa @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_RolSayfa_Sayfa")
+}
+
+model Sayfa {
+  SayfaId    Int         @id(map: "PK_Sayfa") @default(autoincrement())
+  SayfaRoute String      @db.NVarChar(100)
+  KisiSayfa  KisiSayfa[]
+  RolSayfa   RolSayfa[]
 }

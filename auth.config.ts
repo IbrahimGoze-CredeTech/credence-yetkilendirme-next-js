@@ -31,7 +31,7 @@ export default {
           return {
             id: kisi.KisiId + "",
             name: kisi.Ad + " " + kisi.Soyad,
-            role: rolAdi,
+            role: rolAdi[0],
             kullaniciAdi: kisi.KullaniciAdi,
           } as User;
         }
