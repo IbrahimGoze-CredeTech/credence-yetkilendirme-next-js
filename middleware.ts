@@ -27,8 +27,8 @@ export default auth(async (req) => {
 
   // const roles = token?.role;
   const pages = token?.pages;
-  console.log("page: ", pages);
-  console.log("nextUrl.pathname: ", req.nextUrl.pathname);
+  // console.log("page: ", pages);
+  // console.log("nextUrl.pathname: ", req.nextUrl.pathname);
 
   // console.log("---role: ", role);
 
@@ -39,7 +39,7 @@ export default auth(async (req) => {
   const isAPiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isRestrictedRoute = !pages?.includes(nextUrl.pathname);
-  console.log("isRestrictedRoute: ", isRestrictedRoute);
+  // console.log("isRestrictedRoute: ", isRestrictedRoute);
 
   // const isRestrictedRoute = restrictedRoutes.some(
   //   (route) => route.route === nextUrl.pathname && !roles?.includes(route.role)

@@ -18,7 +18,7 @@ export default {
         // We need to check if they have a password cause they might login using google
         // And Credentials provider can't handle that
         if (!kisi || !kisi.Sifre) {
-          console.log("In AuthConfig that says user not found");
+          console.error("In AuthConfig that says user not found");
           return null;
           // throw new CredentialsSignin("Invalid Credentials");
         }

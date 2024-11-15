@@ -11,7 +11,6 @@ import { AreaChartComp } from "./_components/area-chart";
 import { PieChartComp } from "./_components/pie-chart";
 import VerimlilikGrid from "./_components/verimlilik-grid";
 import RiskGrid from "./_components/risk-grid";
-import { log } from "console";
 
 export default function RaporPage() {
   const session = useSession();
