@@ -177,3 +177,18 @@ export interface KisiYetkiEditTalepler {
   imzaTarihi: string;
   imzaDurumu: string;
 }
+export interface kisiSayfa {
+  kisiAdi: string;
+  kisiSoyad: string;
+  sayfaRoute: string;
+  sayfaBaslangicTarihi: string;
+  sayfaBitisTarihi: string;
+}
+export interface RolSayfa {
+  rolId: string;
+  rolAdi: string;
+  sayfaId: string;
+  sayfaRoute: string;
+  sayfaBaslangicTarihi: string;
+  sayfaBitisTarihi: string;
+}
