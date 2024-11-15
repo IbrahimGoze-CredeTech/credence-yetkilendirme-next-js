@@ -21,11 +21,11 @@ export const description = "A multiple bar chart with a label";
 const chartConfig = {
   desktop: {
     label: "Desktop",
-    color: "#3b82f6",
+    color: "#ff0066",
   },
   mobile: {
     label: "Mobile",
-    color: "#ff0066",
+    color: "#3b82f6",
   },
 } satisfies ChartConfig;
 
@@ -33,6 +33,9 @@ export interface BarChartData {
   ad: string;
   soyad: string;
   quantityData: number;
+  imzaSayısı?: string;
+  averageResponseTime?: number;
+  imzaAtilanTalepSayısı?: string;
 }
 
 interface ChartData {
@@ -87,7 +90,7 @@ export function MultipleBarChartComp({
             <Bar
               dataKey={firstQuantityValue}
               label={firstQuantityLabel}
-              fill="#3b82f6"
+              fill="#ff0066"
               radius={8}
             >
               <LabelList
@@ -100,7 +103,7 @@ export function MultipleBarChartComp({
             <Bar
               dataKey={secondQuantityValue}
               label={secondQuantityLabel}
-              fill="#ff0066"
+              fill="#3b82f6"
               radius={8}
             >
               <LabelList

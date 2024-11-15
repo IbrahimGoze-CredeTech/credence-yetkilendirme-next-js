@@ -9,8 +9,8 @@ import ImzaAtmaGrid from "./_components/imza-atma-grid";
 import ImzaAtananGrid from "./_components/imza-atanan-grid";
 import { AreaChartComp } from "./_components/area-chart";
 import { PieChartComp } from "./_components/pie-chart";
-import VerimlilikGrid from "./_components/verimlilik-grid";
 import RiskGrid from "./_components/risk-grid";
+import ImzaOranıGrid from "./_components/imza-orani-grid";
 
 export default function RaporPage() {
   const session = useSession();
@@ -23,6 +23,8 @@ export default function RaporPage() {
   const [gunlukTalepYaratma, setGunlukTalepYaratma] = useState<DataItem[]>([]);
   const [gunlukImzaAtma, setGunlukImzaAtma] = useState<DataItem[]>([]);
   const [talepTipi, setTalepTipi] = useState<[]>([]);
+  const [combineArray, setCombineArray] = useState([]);
+
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
@@ -60,6 +62,18 @@ export default function RaporPage() {
 
       const formattedGunlukImzaAtma = formatDataList(gunlukImzaAtma);
       setGunlukImzaAtma(formattedGunlukImzaAtma);
+
+      const object3 = imzaAtanan.map((item1: { id: any }) => {
+        const matchingItem = imzaAtma.find(
+          (item2: { id: any }) => item2.id === item1.id
+        );
+        return {
+          ...item1,
+          imzaAtilanTalepSayısı: matchingItem?.imzaAtilanTalepSayısı,
+        };
+      });
+      console.log("Object 3: ", object3);
+      setCombineArray(object3);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -96,10 +110,10 @@ export default function RaporPage() {
             </TabsTrigger>
             <TabsTrigger
               className="text-xl"
-              value="verimlilik"
+              value="imza-atma-oranı"
               disabled={isPending}
             >
-              Verimlilik
+              İmza Oranı
             </TabsTrigger>
             <TabsTrigger className="text-xl" value="risk" disabled={isPending}>
               Risk
@@ -124,8 +138,8 @@ export default function RaporPage() {
           <TabsContent value="imza-atanan">
             <ImzaAtananGrid data={imzaAtanan} />
           </TabsContent>
-          <TabsContent value="verimlilik">
-            <VerimlilikGrid data={verimlilik} />
+          <TabsContent value="imza-atma-oranı">
+            <ImzaOranıGrid data={combineArray} />
           </TabsContent>
           <TabsContent value="risk">
             <RiskGrid data={risk} />
