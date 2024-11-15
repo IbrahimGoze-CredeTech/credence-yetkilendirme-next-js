@@ -46,6 +46,7 @@ export async function getUserRole(KisiId: number): Promise<string[]> {
 
 export async function getUserPages(KisiId: number): Promise<string[]> {
   try {
+    // Get role-based pages
     const rolePages = await db.kisiRol.findMany({
       where: { KisiId },
       select: {
@@ -66,6 +67,7 @@ export async function getUserPages(KisiId: number): Promise<string[]> {
       },
     });
 
+    // Query 2: Get direct pages from KisiSayfa (both permitted and denied pages)
     const kisiPages = await db.kisiSayfa.findMany({
       where: { KisiId },
       select: {
@@ -74,23 +76,36 @@ export async function getUserPages(KisiId: number): Promise<string[]> {
             SayfaRoute: true,
           },
         },
+        IsPermitted: true, // Include the permission status
       },
     });
 
+    // Extract page routes from RolSayfa (role-based permissions)
     const rolePageRoutes = rolePages
-      .map((page) => page.Rol.RolSayfa.map((p) => p.Sayfa.SayfaRoute))
+      .map((role) => role.Rol.RolSayfa.map((p) => p.Sayfa.SayfaRoute))
       .flat();
 
-    const kisiPageRoutes = kisiPages.map((page) => page.Sayfa.SayfaRoute);
+    // Extract page routes from KisiSayfa (direct pages, including IsPermitted)
+    const kisiPageRoutes = kisiPages.map((page) => ({
+      route: page.Sayfa.SayfaRoute,
+      isPermitted: page.IsPermitted,
+    }));
 
-    // Combine both lists and remove duplicates
+    // Combine both role-based pages and KisiSayfa pages
     const combinedRoutes = Array.from(
-      new Set([...rolePageRoutes, ...kisiPageRoutes])
+      new Set([...rolePageRoutes, ...kisiPageRoutes.map((p) => p.route)])
     );
 
-    return combinedRoutes;
+    // Now, filter out any routes that are denied in KisiSayfa (where IsPermitted = false)
+    const permittedRoutes = combinedRoutes.filter((route) => {
+      // Check if KisiSayfa allows the page (if IsPermitted is true, or no entry in KisiSayfa for the page)
+      const kisiPage = kisiPageRoutes.find((page) => page.route === route);
+      return kisiPage ? kisiPage.isPermitted : true; // If not in KisiSayfa, consider the role permission as allowed
+    });
+
+    return permittedRoutes;
   } catch (error) {
     console.error(error); // Log the error if necessary
-    return [""]; // Return null or handle it as needed
+    return []; // Return empty array or handle it as needed
   }
 }

@@ -166,11 +166,12 @@ model KisiYetkiEdit {
 }
 
 model KisiSayfa {
-  KisiSayfaId Int   @id(map: "PK_KisiSayfa") @default(autoincrement())
+  KisiSayfaId Int     @id(map: "PK_KisiSayfa") @default(autoincrement())
   KisiId      Int
   SayfaId     Int
-  Kisi        Kisi  @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_KisiSayfa_Kisi")
-  Sayfa       Sayfa @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_KisiSayfa_Sayfa")
+  IsPermitted Boolean
+  Kisi        Kisi    @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_KisiSayfa_Kisi")
+  Sayfa       Sayfa   @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_KisiSayfa_Sayfa")
 }
 
 model RolSayfa {
