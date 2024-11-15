@@ -19,6 +19,7 @@ export default function RiskGrid({ data }: Props) {
           data={data}
           quantityValue="totalRiskWeight"
           quantityLabel="Risk Sıralaması"
+          barColor="#ff0000"
         />
       </div>
     </>

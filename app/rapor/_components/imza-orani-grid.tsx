@@ -7,7 +7,7 @@ interface Props {
   data: BarChartData[];
 }
 
-export default function VerimlilikGrid({ data }: Props) {
+export default function ImzaOranıGrid({ data }: Props) {
   return (
     <>
       <div>
@@ -15,13 +15,13 @@ export default function VerimlilikGrid({ data }: Props) {
       </div>
       <div className="mt-4">
         <MultipleBarChartComp
-          chartLabel={"Verimlilik Sıralaması"}
-          chartDescription="En verimli çalışan kişiler (gelen taleplere ortalama kaç dakikada yanıt verildiğini gösterir.)"
+          chartLabel={"İmza Atma Oranı"}
+          chartDescription="Gelen taleplerin kaçına imza atıldığını gösterir. "
           data={data}
-          firstQuantityValue="averageResponseTime" //imza sayısı eklenecek
+          firstQuantityValue="imzaSayısı"
           firstQuantityLabel="Gelen İmza Sayısı"
-          secondQuantityValue="averageResponseTime"
-          secondQuantityLabel="Gelen Talepleri Yanıtlama Süresi Ortalaması"
+          secondQuantityValue="imzaAtilanTalepSayısı"
+          secondQuantityLabel="Atılan İmza Sayısı"
         />
       </div>
     </>

@@ -20,7 +20,7 @@ import React, { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-type KisiYetki = { yetkiAdi: string, eylemlerTuruId: number };
+type KisiYetki = { yetkiAdi: string, eylemTuruId: number };
 
 export default function YetkiEditForm() {
   const staticTablesContext = useStaticTablesContext();
@@ -76,8 +76,6 @@ export default function YetkiEditForm() {
 
       }).catch(() => setError('Something went wrong!'));
     });
-
-
   }
 
   const onValueChange = async (value: string) => {
@@ -89,7 +87,10 @@ export default function YetkiEditForm() {
   const onYetkiSelected = (value: string) => {
     // Find the yetki in kisiYetkiler array based on the value yetkiAdi
     const yetki = kisiYetkiler.find(yetki => yetki.yetkiAdi === value);
-    const eylemlerTuruId = yetki?.eylemlerTuruId;
+    const eylemlerTuruId = yetki?.eylemTuruId;
+    console.log("value: ", value);
+
+    console.log("kisiYetki: ", kisiYetkiler);
     console.log("yetki: ", eylemlerTuruId);
     if (eylemlerTuruId) {
       // Convert eylemlerTuruId to the string representation from EylemTuruEnum

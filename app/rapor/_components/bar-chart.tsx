@@ -45,6 +45,7 @@ interface ChartData {
   data: BarChartData[];
   quantityValue: string;
   quantityLabel: string;
+  barColor?: string;
 }
 
 export function BarChartComp({
@@ -53,6 +54,7 @@ export function BarChartComp({
   data,
   quantityValue,
   quantityLabel,
+  barColor = "#3b82f6",
 }: ChartData) {
   // console.log("data in bar chart comp: ", data);
 
@@ -91,7 +93,7 @@ export function BarChartComp({
             <Bar
               dataKey={quantityValue}
               label={quantityLabel}
-              fill="#3b82f6"
+              fill={barColor}
               radius={8}
             >
               <LabelList
