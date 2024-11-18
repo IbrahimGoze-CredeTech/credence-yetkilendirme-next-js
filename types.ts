@@ -179,8 +179,9 @@ export interface KisiYetkiEditTalepler {
 }
 export interface kisiSayfa {
   kisiAdi: string;
-  kisiSoyad: string;
+  // kisiSoyad: string;
   sayfaRoute: string;
+  isPermitted: boolean;
   sayfaBaslangicTarihi: string;
   sayfaBitisTarihi: string;
 }
@@ -192,3 +193,5 @@ export interface RolSayfa {
   sayfaBaslangicTarihi: string;
   sayfaBitisTarihi: string;
 }
+
+export type KisiSayfaFromType = { sayfaRoute: string; isPermitted: boolean };

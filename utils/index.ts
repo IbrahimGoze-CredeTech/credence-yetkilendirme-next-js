@@ -1,7 +1,7 @@
 import { YetkiRolOld } from "../types";
 import jwt from "jsonwebtoken";
 
-const isLocalHost: boolean = false;
+const isLocalHost: boolean = true;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isYetkiArray = (data: any): data is YetkiRolOld[] => {
@@ -15,13 +15,6 @@ export const isYetkiArray = (data: any): data is YetkiRolOld[] => {
     )
   );
 };
-
-// export const formatDate = (dateValue: { toISOString: () => string }) => {
-//   if (!dateValue) return null; // If the value is null or undefined
-//   if (typeof dateValue === "string") return dateValue; // Already a string
-//   if (dateValue instanceof Date) return dateValue.toISOString().split("T")[0]; // Convert Date to "YYYY-MM-DD"
-//   return null; // If it doesn't match any expected type
-// };
 
 export const createToken = (userId: string) => {
   const secret = process.env.AUTH_SECRET;
@@ -44,10 +37,6 @@ export const fetcherGet = async (url: string, token: string | undefined) => {
   if (!token) {
     throw new Error("Token is not defined");
   }
-  // console.log("token", token);
-
-  // const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-  // const response = await fetch("https:/localhost:7210/api" + url, {
   const response = await fetch(
     isLocalHost
       ? "https:/localhost:7210/api" + url
@@ -88,7 +77,6 @@ export const fetcherPost = async (
       ? "https:/localhost:7210/api" + url
       : process.env.NEXT_PUBLIC_API_URL + url,
     {
-      // const response = await fetch("https://localhost:7210/api" + url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -135,7 +123,6 @@ export const fetcherPUT = async (
       ? "https:/localhost:7210/api" + url
       : process.env.NEXT_PUBLIC_API_URL + url,
     {
-      // const response = await fetch("https://localhost:7210/api" + url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -17,14 +17,15 @@ import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
 import { kisininSayfalar } from '@/actions/kisi-sayfa';
+import { KisiSayfaFromType } from '@/types';
 
 export default function KisiSayfaAtamaForm() {
   const staticTablesContext = useStaticTablesContext();
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
-  const [sayfalar] = useState<string[]>([]);
+  const [sayfalar, setSayfalar] = useState<KisiSayfaFromType[]>([]);
   const sayfalarOptions: Option[] = sayfalar.map((sayfa) =>
-    ({ label: sayfa, value: sayfa })) || [];
+    ({ label: sayfa.sayfaRoute, value: sayfa.sayfaRoute })) || [];
 
 
   const [isPending, startTransition] = useTransition();
@@ -34,6 +35,7 @@ export default function KisiSayfaAtamaForm() {
   const [isBaslangicOpen, setIsBaslangicOpen] = useState(false);
   const [isBitisOpen, setIsBitisOpen] = useState(false);
   const [isKisiSelected, setIsKisiSelected] = useState(false);
+  // const [sayfalar, setSayfalar] = useState([])
 
 
   const form = useForm<z.infer<typeof TalepSayfaAtamaSchema>>({
@@ -72,20 +74,28 @@ export default function KisiSayfaAtamaForm() {
             )
           });
         }
-
       }).catch(() => setError('Something went wrong!'));
     })
   }
 
   const onValueChange = (value: string) => {
-    console.log(value);
+    // console.log(value);
 
     startTransition(async () => {
-      await kisininSayfalar(value);
-      // const SayfaRoute = await sayfaAtama(value);
-      // setSayfalar(SayfaRoute);
+      const sayfalar = await kisininSayfalar(value);
+      setSayfalar(sayfalar);
       setIsKisiSelected(true); // Update boolean based on whether there's a value
     });
+  };
+
+  const onSayfaSelected = (value: string) => {
+    // Find the yetki in kisiYetkiler array based on the value yetkiAdi
+    const sayfa = sayfalar.find(sayfa => sayfa.sayfaRoute === value);
+    const isPermitted = sayfa?.isPermitted;
+    if (isPermitted === undefined) {
+      return;
+    }
+    form.setValue('IsPermitted', isPermitted);
   };
 
   return (
@@ -105,9 +115,28 @@ export default function KisiSayfaAtamaForm() {
             <FormField control={form.control} name={'SayfaRoute'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Sayfa Adi</FormLabel>
-                <CustomCombobox onValueChange={field.onChange} Options={sayfalarOptions} placeholder={'Sayfa Ara'} searchPlaceholder={'Sayfa Ara...'} disabled={isPending || !isKisiSelected} />
+                <CustomCombobox onValueChange={(value) => { field.onChange(); onSayfaSelected(value) }} Options={sayfalarOptions} placeholder={'Sayfa Ara'} searchPlaceholder={'Sayfa Ara...'} disabled={isPending || !isKisiSelected} />
               </FormItem>
             )} />
+
+            <FormField control={form.control} name="IsPermitted" render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                <div className="space-y-0.5">
+                  <FormLabel>İzin</FormLabel>
+                  <FormDescription>
+                    Kişi bu sayfayı kullanabilir mi?
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={isPending || !isKisiSelected}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+            />
 
             <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
               <FormItem>

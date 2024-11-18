@@ -88,14 +88,14 @@ export default function YetkiEditForm() {
     // Find the yetki in kisiYetkiler array based on the value yetkiAdi
     const yetki = kisiYetkiler.find(yetki => yetki.yetkiAdi === value);
     const eylemlerTuruId = yetki?.eylemTuruId;
-    console.log("value: ", value);
+    // console.log("value: ", value);
 
-    console.log("kisiYetki: ", kisiYetkiler);
-    console.log("yetki: ", eylemlerTuruId);
+    // console.log("kisiYetki: ", kisiYetkiler);
+    // console.log("yetki: ", eylemlerTuruId);
     if (eylemlerTuruId) {
       // Convert eylemlerTuruId to the string representation from EylemTuruEnum
       const eylemTuruString = EylemTuruEnum[eylemlerTuruId];
-      console.log("eylemTuruString: ", eylemTuruString);
+      // console.log("eylemTuruString: ", eylemTuruString);
 
 
       if (eylemTuruString) {

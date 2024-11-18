@@ -28,6 +28,7 @@ export async function sayfaAtama(
   const {
     kisiAdi,
     SayfaRoute,
+    IsPermitted,
     baslamaTarihi,
     bitisTarihi,
     ciftImza,
@@ -53,6 +54,7 @@ export async function sayfaAtama(
   const sayfaAtama: kisiSayfa = {
     kisiAdi,
     sayfaRoute: SayfaRoute,
+    isPermitted: IsPermitted,
     sayfaBaslangicTarihi: baslamaTarihi.toISOString(),
     sayfaBitisTarihi: bitisTarihi.toISOString(),
     // rolId: 0,

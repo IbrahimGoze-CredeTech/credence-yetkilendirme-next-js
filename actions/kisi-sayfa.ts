@@ -2,9 +2,12 @@
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { KisiSayfaFromType } from "@/types";
 import { fetcherGet } from "@/utils";
 
-export async function kisininSayfalar(kisiName: string): Promise<string[]> {
+export async function kisininSayfalar(
+  kisiName: string
+): Promise<KisiSayfaFromType[]> {
   const session = await auth();
 
   //Get the kisi surname from the name by splinting the spaces
@@ -15,50 +18,27 @@ export async function kisininSayfalar(kisiName: string): Promise<string[]> {
       Soyad: kisiSurname,
     },
   });
-
-  const kisiSayfalar = await db.kisiSayfa.findMany({
-    where: {
-      KisiId: kisi?.KisiId,
-    },
-    select: {
-      Sayfa: { select: { SayfaRoute: true } },
-    },
-  });
-
-  const KisiRolSayfalar = await db.kisiRol.findMany({
-    where: {
-      KisiId: kisi?.KisiId,
-    },
-    select: {
-      Rol: {
-        select: {
-          RolSayfa: {
-            select: {
-              Sayfa: {
-                select: {
-                  SayfaRoute: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-  const sayfaRoutes = KisiRolSayfalar.flatMap(
-    (rol) =>
-      rol.Rol?.RolSayfa.map((rolSayfa) => rolSayfa.Sayfa?.SayfaRoute) || []
+  const pages: KisiSayfaFromType[] = await fetcherGet(
+    `/Sayfa/kisi-sayfa/${kisi?.KisiId}`,
+    session?.token
   );
-  console.log("SayfaRoutes: ", sayfaRoutes);
 
-  // const sayfalar = await fetcherGet(
-  //   `/Sayfa/kisi-sayfa/${kisi?.KisiId}`,
-  //   session?.token
+  // const allPages = await db.sayfa.findMany();
+
+  // Filter the roller array to remove roles that are already assigned to the kisi (present in kisiRoller)
+  // const filteredPages = allPages.filter(
+  //   (page) =>
+  //     !pages.some((kisiRol) => kisiRol.sayfaRoute === page.SayfaRoute)
   // );
 
-  // const sayfa_adları = sayfalar.map((sayfa: { sayfaAdi: string }) => sayfa.sayfaAdi);
-  // return sayfa_adları;
-  return [""];
+  const transformedArray = pages.map(({ sayfaRoute, isPermitted }) => ({
+    sayfaRoute,
+    isPermitted,
+  }));
+
+  // console.log(transformedArray);
+
+  return transformedArray;
 }
 
 export async function kisiAtanabilirSayfalar(
