@@ -43,6 +43,7 @@ export const fetcherGet = async (url: string, token: string | undefined) => {
       : process.env.NEXT_PUBLIC_API_URL + url,
     {
       method: "GET",
+      credentials: "include",
       headers: {
         Authorization: `Bearer ${token}`,
       },

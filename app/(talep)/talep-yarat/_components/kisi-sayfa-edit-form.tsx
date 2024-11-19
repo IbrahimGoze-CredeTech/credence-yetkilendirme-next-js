@@ -7,11 +7,11 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } fr
 import { Switch } from '@/components/ui/switch';
 import React, { useState, useTransition } from 'react'
 import { useStaticTablesContext } from '@/context';
-import { useForm } from 'react-hook-form';
+import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { TalepSayfaAtamaSchema } from '@/schemas';
-import { sayfaAtama } from '@/actions/kisi-sayfa-atama';
+import { TalepKisiSayfaEditSchema } from '@/schemas';
+import { kisiSayfaEdit } from '@/actions/kisi-sayfa-edit';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
@@ -19,10 +19,11 @@ import { CustomDatePicker } from '@/components/custom-date-picker';
 import { kisininSayfalar } from '@/actions/kisi-sayfa';
 import { KisiSayfaFromType } from '@/types';
 
-export default function KisiSayfaAtamaForm() {
+export default function KisiSayfaEditForm() {
   const staticTablesContext = useStaticTablesContext();
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
+
   const [sayfalar, setSayfalar] = useState<KisiSayfaFromType[]>([]);
   const sayfalarOptions: Option[] = sayfalar.map((sayfa) =>
     ({ label: sayfa.sayfaRoute, value: sayfa.sayfaRoute })) || [];
@@ -38,8 +39,8 @@ export default function KisiSayfaAtamaForm() {
   // const [sayfalar, setSayfalar] = useState([])
 
 
-  const form = useForm<z.infer<typeof TalepSayfaAtamaSchema>>({
-    resolver: zodResolver(TalepSayfaAtamaSchema),
+  const form = useForm<z.infer<typeof TalepKisiSayfaEditSchema>>({
+    resolver: zodResolver(TalepKisiSayfaEditSchema),
     defaultValues: {
       SayfaRoute: '',
       kisiAdi: '',
@@ -50,13 +51,13 @@ export default function KisiSayfaAtamaForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof TalepSayfaAtamaSchema>) => {
+  const onSubmit = (values: z.infer<typeof TalepKisiSayfaEditSchema>) => {
+    // console.log('values: ', values);
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
-      sayfaAtama(values).then((data) => {
+      kisiSayfaEdit(values).then((data) => {
         if (data?.error) {
           form.reset();
           setError(data.error);
@@ -89,19 +90,26 @@ export default function KisiSayfaAtamaForm() {
   };
 
   const onSayfaSelected = (value: string) => {
+    console.log(value);
+
     // Find the yetki in kisiYetkiler array based on the value yetkiAdi
     const sayfa = sayfalar.find(sayfa => sayfa.sayfaRoute === value);
     const isPermitted = sayfa?.isPermitted;
     if (isPermitted === undefined) {
       return;
     }
-    form.setValue('IsPermitted', isPermitted);
+    form.setValue('isPermitted', isPermitted);
+    form.setValue('SayfaRoute', value);
   };
 
+  const onFormError: SubmitErrorHandler<z.infer<typeof TalepKisiSayfaEditSchema>> = (e) => {
+    console.error(e)
+  }
+
   return (
-    <CardWrapper headerLabel={'Kişi Sayfa Atama'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
+    <CardWrapper headerLabel={'Kişi Sayfa Edit'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
+        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
           <div className='grid grid-cols-2 gap-8'>
             <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
               <FormItem>
@@ -119,7 +127,7 @@ export default function KisiSayfaAtamaForm() {
               </FormItem>
             )} />
 
-            <FormField control={form.control} name="IsPermitted" render={({ field }) => (
+            <FormField control={form.control} name="isPermitted" render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                 <div className="space-y-0.5">
                   <FormLabel>İzin</FormLabel>
@@ -189,7 +197,7 @@ export default function KisiSayfaAtamaForm() {
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
                   <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
-                    console.log("onChange", e);
+                    // console.log("onChange", e);
                     form.setValue('ekstraImza', e);
                   }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
                 ) : (<span>Yükleniyor...</span>)}

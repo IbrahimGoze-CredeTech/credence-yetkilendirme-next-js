@@ -10,7 +10,9 @@ const OptionSchema = z.object({
 
 //#region Common Schemas
 const SayfaFieldSchema = z.object({
-  SayfaRoute: z.string().min(1, { message: "sayfa adı boş olamaz" }),
+  SayfaRoute: z
+    .string({ required_error: "Sayfa Adi Boş Olamaz" })
+    .min(1, { message: "sayfa adı boş olamaz" }),
 });
 const KisiFieldSchema = z.object({
   kisiAdi: z.string().min(1, { message: "Kisi adı boş olamaz" }),
@@ -54,7 +56,7 @@ export const TalepRolAtamaSchema = KisiFieldSchema.merge(
   .extend({
     rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
   });
-export const TalepSayfaAtamaSchema = KisiFieldSchema.merge(
+export const TalepKisiSayfaEditSchema = KisiFieldSchema.merge(
   BaslamaTarihiFieldSchema
 )
   .merge(BitisTarihiFieldSchema)
@@ -62,7 +64,7 @@ export const TalepSayfaAtamaSchema = KisiFieldSchema.merge(
   .merge(EkstraImzaFieldSchema)
   .merge(SayfaFieldSchema)
   .extend({
-    IsPermitted: z.boolean().default(false),
+    isPermitted: z.boolean().default(false),
   });
 
 export const TalepRolSayfaAtamaSchema = RolFieldSchema.merge(

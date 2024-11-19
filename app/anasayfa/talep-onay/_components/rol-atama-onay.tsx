@@ -1,12 +1,13 @@
 import { talepOnayla } from '@/actions/talep-onaylama';
-import { Separator } from '@/components/ui/separator';
+// import { Separator } from '@/components/ui/separator';
 import { ToastAction } from '@/components/ui/toast';
 import { toast } from '@/hooks/use-toast';
 import { RolAtamaGridType, RolAtamaTalepler } from '@/types';
 import { fetcherGet } from '@/utils';
 import DataGrid, {
   Button, Column, Editing,
-  SearchPanel, Pager, Paging
+  SearchPanel,
+  // Pager, Paging
 } from 'devextreme-react/data-grid';
 import { ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
 import { useSession } from 'next-auth/react';
@@ -21,6 +22,7 @@ export default function RolAtamaGrid({ data, rolAtamaTalepler }: Props) {
   const session = useSession();
 
   const [gridData, setGridData] = useState<RolAtamaGridType[]>(data);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [talepGrid, setTalepGrid] = useState<RolAtamaTalepler[]>([]);
 
   useEffect(() => {

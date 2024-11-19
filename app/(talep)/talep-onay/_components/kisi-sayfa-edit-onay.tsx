@@ -1,9 +1,6 @@
 import { talepOnayla } from '@/actions/talep-onaylama';
 import { ToastAction } from '@/components/ui/toast';
-// import { ekstraYetkilerDataGridConfig } from '@/configs/ekstra-yetkiler-data-grid-config';
 import { toast } from '@/hooks/use-toast';
-import { EylemTuruEnum } from '@/modals/eylemTuru';
-import { KisiYetkiEditGridType, KisiYetkiEditTalepler } from '@/types';
 import { fetcherGet } from '@/utils';
 import DataGrid, {
   Button, Column, Editing,
@@ -11,40 +8,52 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import { ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
 import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react'
 
-const eylemTuruLookup = [
-  { eylemTuruId: EylemTuruEnum.Oku, eylemAdi: "Oku" },
-  { eylemTuruId: EylemTuruEnum.Yaz, eylemAdi: "Yaz" },
-  { eylemTuruId: EylemTuruEnum.Engel, eylemAdi: "Engelle" },
-];
+type KisiSayfaEdit = {
+  kisiSayfaEditId: number;
+  kisiId: number;
+  ad: string;
+  soyad: string;
+  sayfaId: number;
+  sayfaRoute: string;
+  isPermitted: boolean | null; // Use `null` to explicitly allow it
+  baslangicTarihi: string | null; // Assuming null or an ISO date string
+  bitisTarihi: string | null;     // Assuming null or an ISO date string
+};
 
 interface Props {
-  data: KisiYetkiEditGridType[];
-  kisiYetkiEditTalepler: KisiYetkiEditTalepler[];
+  data: KisiSayfaEdit[];
 }
 
-export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
+export default function KisiSayfaEditOnay({ data }: Props) {
   const session = useSession();
 
-  const [gridData, setGridData] = useState<KisiYetkiEditGridType[]>(data);
-  const [talepGrid, setTalepGrid] = useState<KisiYetkiEditTalepler[]>([]);
+  const [gridData, setGridData] = useState<KisiSayfaEdit[]>(data);
+  const [eskiTalepler, setEskiTalepler] = useState([]);
+
+  async function fetcher() {
+    const responseJson = await fetcherGet("/Talep/kisi-sayfaEdit-eski-talepler", session.data?.token);
+    console.log("responseJson: ", responseJson);
+
+    setEskiTalepler(responseJson);
+  }
 
   useEffect(() => {
-    setGridData(data);
-    setTalepGrid(kisiYetkiEditTalepler);
-  }, [data, kisiYetkiEditTalepler])
+    console.log("data: ", data);
 
+    setGridData(data);
+    fetcher();
+
+  }, [data])
 
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
       // console.log('Onaylandı: ', item.row.data);
-      const response = await talepOnayla(true, item.row.data.kisiYetkiEditId);
+      const response = await talepOnayla(true, item.row.data.kisiSayfaEditId);
       if (!response) return;
-      setGridData(prevData => prevData.filter(row => item.row && row.kisiYetkiEditId !== item.row.data.kisiYetkiEditId));
-      const responseJson = await fetcherGet("/Talep/kisi-kisiYetkiEdit-talepler", session.data?.token);
-      setTalepGrid(responseJson);
+      fetcher();
       toast({
         variant: "success",
         title: "Onaylandı",
@@ -58,11 +67,11 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
     }
     else {
       // console.log('Reddedildi: ', item.row.data);
-      talepOnayla(false, item.row.data.kisiYetkiEditId);
+      talepOnayla(false, item.row.data.kisiSayfaEditId);
       toast({
         variant: "destructive",
         title: "Reddedildi",
-        description: "Talebiniz başarıyla reddedildi.",
+        description: "Talebiniz başarıyla reddedildi ve supervisor onayı beklemektedir.",
         action: (
           <ToastAction altText="Goto schedule to undo" onClick={() => {
             console.log("undo clicked");
@@ -71,6 +80,7 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
       });
     }
   }
+
   return (
     <>
       <div className='border-2 p-2 rounded-md'>
@@ -80,11 +90,12 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
             mode="row"
             useIcons={true}
           />
-          <Column dataField="yetkiAdi" caption="Yetki Adı" />
-          <Column dataField="kisiAdi" caption="Kişi Ad" />
-          <Column dataField="eylemTuruId" caption="Eylem Turu" lookup={{ dataSource: eylemTuruLookup, valueExpr: "eylemTuruId", displayExpr: "eylemAdi" }} />
-          <Column dataField="yetkiBaslamaTarihi" caption="Yetki Başlama Tarihi" />
-          <Column dataField="yetkiBitisTarihi" caption="Yetki Bitiş Tarihi" />
+          <Column dataField="ad" caption="Ad" />
+          <Column dataField="soyad" caption="Soyad" />
+          <Column dataField="sayfaRoute" caption="Sayfa" />
+          <Column dataField="isPermitted" caption="Izin" />
+          <Column dataField="baslangicTarihi" caption="Başlama Tarihi" />
+          <Column dataField="bitisTarihi" caption="Bitiş Tarihi" />
           <Column type='buttons' width={120}>
             <Button hint='Onay' visible={true} onClick={(e) => onClick(true, e)} text='Onay' />
             <Button hint='Ret' visible={true} onClick={(e) => onClick(false, e)} text='Ret' />
@@ -94,7 +105,7 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
       </div>
       <div className='w-full mt-8'>
         <p className='font-semibold text-xl mb-4'>Kisi Yetki Geçmiş Talepler</p>
-        <DataGrid dataSource={talepGrid}>
+        <DataGrid dataSource={eskiTalepler}>
           <Paging defaultPageSize={5} />
           <Pager
             visible={true}

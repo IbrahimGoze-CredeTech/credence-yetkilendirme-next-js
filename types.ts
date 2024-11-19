@@ -177,9 +177,8 @@ export interface KisiYetkiEditTalepler {
   imzaTarihi: string;
   imzaDurumu: string;
 }
-export interface kisiSayfa {
+export interface kisiSayfaEdit {
   kisiAdi: string;
-  // kisiSoyad: string;
   sayfaRoute: string;
   isPermitted: boolean;
   sayfaBaslangicTarihi: string;

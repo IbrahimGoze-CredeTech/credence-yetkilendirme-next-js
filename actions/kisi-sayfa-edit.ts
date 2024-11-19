@@ -1,25 +1,26 @@
 "use server";
 
 import { auth } from "@/auth";
-import { TalepSayfaAtamaSchema } from "@/schemas";
-import { kisiSayfa } from "@/types";
+import { TalepKisiSayfaEditSchema } from "@/schemas";
 import { fetcherPost } from "@/utils";
 import { z } from "zod";
 
-type SayfaAtamaRequest = {
-  // talepEdenKisiId: number;
-  // talep: Talep;
-  sayfaAtama: kisiSayfa;
+type KisiSayfaEditRequest = {
+  kisiAdi: string;
+  sayfaRoute: string;
+  isPermitted: boolean;
+  sayfaBaslangicTarihi: string;
+  sayfaBitisTarihi: string;
   ciftImza: boolean;
   ekstraImza: string[];
 };
 
-export async function sayfaAtama(
-  values: z.infer<typeof TalepSayfaAtamaSchema>
+export async function kisiSayfaEdit(
+  values: z.infer<typeof TalepKisiSayfaEditSchema>
 ) {
   const session = await auth();
 
-  const validateFields = TalepSayfaAtamaSchema.safeParse(values);
+  const validateFields = TalepKisiSayfaEditSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -28,12 +29,14 @@ export async function sayfaAtama(
   const {
     kisiAdi,
     SayfaRoute,
-    IsPermitted,
+    isPermitted,
     baslamaTarihi,
     bitisTarihi,
     ciftImza,
     ekstraImza,
   } = values;
+
+  console.log("values: ", values);
 
   let ekstraImzaArray: string[] = [];
   if (ekstraImza === undefined) {
@@ -42,37 +45,26 @@ export async function sayfaAtama(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  // const talep: Talep = {
-  //   // talepEdenKisiId: 1,
-  //   // talepId: 0,
-  //   olusturulmaTarihi: "2024-10-14T09:13:38.191Z",
-  //   durum: "",
-  //   durumTarihi: "2024-10-14T09:13:38.191Z",
-  //   talepEdenKisiAdi: "",
-  // };
-
-  const sayfaAtama: kisiSayfa = {
-    kisiAdi,
+  const sayfaAtama = {
+    kisiAdi: kisiAdi,
     sayfaRoute: SayfaRoute,
-    isPermitted: IsPermitted,
+    isPermitted: isPermitted,
     sayfaBaslangicTarihi: baslamaTarihi.toISOString(),
     sayfaBitisTarihi: bitisTarihi.toISOString(),
-    // rolId: 0,
-    // kisiId: 0,
   };
 
-  const sayfaAtamaRequest: SayfaAtamaRequest = {
-    // talepEdenKisiId: session?.user.id,
-    // talep,
-    sayfaAtama,
+  const sayfaAtamaRequest: KisiSayfaEditRequest = {
+    kisiAdi: sayfaAtama.kisiAdi,
+    sayfaRoute: sayfaAtama.sayfaRoute,
+    isPermitted: sayfaAtama.isPermitted,
+    sayfaBaslangicTarihi: sayfaAtama.sayfaBaslangicTarihi,
+    sayfaBitisTarihi: sayfaAtama.sayfaBitisTarihi,
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  // console.log("session?.token: ", session?.user.id);
-
   await fetcherPost(
-    "/Sayfa/kisi-sayfa",
+    "/Talep/kisi-sayfa-edit",
     session?.token,
     JSON.stringify(sayfaAtamaRequest)
   );

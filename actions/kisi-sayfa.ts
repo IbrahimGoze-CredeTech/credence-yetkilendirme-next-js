@@ -43,7 +43,7 @@ export async function kisininSayfalar(
 
 export async function kisiAtanabilirSayfalar(
   kisiAd: string
-): Promise<string[]> {
+): Promise<KisiSayfaFromType[]> {
   const session = await auth();
 
   //Get the kisi surname from the name by splinting the spaces
@@ -60,18 +60,21 @@ export async function kisiAtanabilirSayfalar(
     session?.token
   );
 
-  const sayfalar = await fetcherGet(`/Sayfa`, session?.token);
+  // const sayfalar = await fetcherGet(`/Sayfa`, session?.token);
 
-  // Filter the roller array to remove roles that are already assigned to the kisi (present in kisiRoller)
+  const sayfalar = await db.sayfa.findMany();
+  // console.log("sayfalar: ", sayfalar);
+
+  // Filter the sayfalar array remove the sayfaRoute that are already assigned to the kisi (present in kisiSayfalar)
   const filteredSayfalar = sayfalar.filter(
-    (sayfa: { sayfaAdi: string }) =>
+    (sayfa: { SayfaRoute: string }) =>
       !kisiSayfalar.some(
-        (kisiRol: { sayfaAdi: string }) => kisiRol.sayfaAdi === sayfa.sayfaAdi
+        (kisiRol: { sayfaRoute: string }) =>
+          kisiRol.sayfaRoute === sayfa.SayfaRoute
       )
   );
 
-  const filteredSayfalarNames = filteredSayfalar.map(
-    (sayfa: { sayfaAdi: string }) => sayfa.sayfaAdi
-  );
-  return filteredSayfalarNames;
+  // console.log("filtered Sayfalar: ", filteredSayfalar);
+
+  return filteredSayfalar;
 }

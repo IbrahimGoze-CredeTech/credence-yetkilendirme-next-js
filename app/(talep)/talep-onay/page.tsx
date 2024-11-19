@@ -9,6 +9,7 @@ import RolCikarmaGrid from './_components/rol-cikarma-onay';
 import KisiYetkiOnay from './_components/kisi-yetki-onay';
 import { fetcherGet } from '@/utils';
 import { useSession } from 'next-auth/react';
+import KisiSayfaEditOnay from './_components/kisi-sayfa-edit-onay';
 
 
 export default function TalepOnayPage() {
@@ -20,17 +21,21 @@ export default function TalepOnayPage() {
   const [rolAtamaTalepler, setRolAtamaTalepler] = useState<RolAtamaTalepler[]>([]);
   const [rolCikarmaTalepler, setRolCikarmaTalepler] = useState<RolCikarmaTalepler[]>([]);
   const [kisiYetkiEditTalepler, setKisiYetkiEditTalepler] = useState<KisiYetkiEditTalepler[]>([]);
+  const [kisiSayfaEdit, setKisiSayfaEdit] = useState([]);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     startTransition(async () => {
-      const [rolAtamalar, rolCikarmalar, kisiYetkiEdit, rolAtamaTalepler, rolCikarmaTalepler, kisiYetkiEditTalepler] = await Promise.all([
+      const [rolAtamalar, rolCikarmalar, kisiYetkiEdit, rolAtamaTalepler, rolCikarmaTalepler, kisiYetkiEditTalepler,
+        kisiSayfaEdit
+      ] = await Promise.all([
         bekleyenRolAtamalar(),
         bekleyenRolCikarmalar(),
         bekleyenKisiYetkiEdit(),
         fetcherGet("/Talep/kisi-rolAtama-talepler", session.data?.token),
         fetcherGet("/Talep/kisi-rolCikarma-talepler", session.data?.token),
-        fetcherGet("/Talep/kisi-kisiYetkiEdit-talepler", session.data?.token)
+        fetcherGet("/Talep/kisi-kisiYetkiEdit-talepler", session.data?.token),
+        fetcherGet("/Talep/kisi-sayfaEdit-bekleyen", session.data?.token)
       ]);
 
       setRolAtamalar(rolAtamalar);
@@ -39,6 +44,7 @@ export default function TalepOnayPage() {
       setRolAtamaTalepler(rolAtamaTalepler);
       setRolCikarmaTalepler(rolCikarmaTalepler);
       setKisiYetkiEditTalepler(kisiYetkiEditTalepler);
+      setKisiSayfaEdit(kisiSayfaEdit);
     });
   }, [])
 
@@ -51,10 +57,12 @@ export default function TalepOnayPage() {
             <TabsTrigger className='text-xl' value="rol-atama" disabled={isPending}>Rol Atama</TabsTrigger>
             <TabsTrigger className='text-xl' value="rol-cikarma" disabled={isPending}>Rol Çıkarma</TabsTrigger>
             <TabsTrigger className='text-xl' value="kisi-yetki" disabled={isPending}>Kişi Yetki</TabsTrigger>
+            <TabsTrigger className='text-xl' value="kisi-sayfa-edit" disabled={isPending}>Kişi Sayfa Edit</TabsTrigger>
           </TabsList>
           <TabsContent value="rol-atama"><RolAtamaGrid data={rolAtamalar} rolAtamaTalepler={rolAtamaTalepler} /></TabsContent>
           <TabsContent value="rol-cikarma"><RolCikarmaGrid data={rolCikarmalar} rolCikarmaTalepler={rolCikarmaTalepler} /></TabsContent>
           <TabsContent value="kisi-yetki"><KisiYetkiOnay data={kisiYetkiEdit} kisiYetkiEditTalepler={kisiYetkiEditTalepler} /></TabsContent>
+          <TabsContent value="kisi-sayfa-edit"><KisiSayfaEditOnay data={kisiSayfaEdit} /></TabsContent>
         </Tabs>
 
       </div>

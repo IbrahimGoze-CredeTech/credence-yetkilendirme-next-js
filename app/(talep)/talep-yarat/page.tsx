@@ -6,7 +6,7 @@ import YetkiEditForm from './_components/yetki-edit-form';
 import RolCikarmaForm from './_components/rol-cikarma-form';
 
 import RolSayfaAtamaForm from './_components/rol-sayfa-atama-form';
-import KisiSayfaAtamaForm from './_components/kisi-sayfa-atama-form';
+import KisiSayfaEditForm from './_components/kisi-sayfa-edit-form';
 
 export default function TalepYaratPage() {
 
@@ -18,14 +18,14 @@ export default function TalepYaratPage() {
           <TabsTrigger className='text-xl' value="rol-atama">Rol Atama</TabsTrigger>
           <TabsTrigger className='text-xl' value="rol-cikarma">Rol Çıkarma</TabsTrigger>
           <TabsTrigger className='text-xl' value="yetki">Yetki</TabsTrigger>
-          <TabsTrigger className='text-xl' value="kisi-sayfa">Kişi Sayfa Atama</TabsTrigger>
+          <TabsTrigger className='text-xl' value="kisi-sayfa-edit">Kişi Sayfa Edit</TabsTrigger>
           <TabsTrigger className='text-xl' value="rol-sayfa">Rol Sayfa Atama</TabsTrigger>
 
         </TabsList>
         <TabsContent value="rol-atama"><RolAtamaForm /></TabsContent>
         <TabsContent value="rol-cikarma"><RolCikarmaForm /></TabsContent>
         <TabsContent value="yetki"><YetkiEditForm /></TabsContent>
-        <TabsContent value="kisi-sayfa"><KisiSayfaAtamaForm /></TabsContent>
+        <TabsContent value="kisi-sayfa-edit"><KisiSayfaEditForm /></TabsContent>
         <TabsContent value="rol-sayfa"><RolSayfaAtamaForm /></TabsContent>
 
       </Tabs>
