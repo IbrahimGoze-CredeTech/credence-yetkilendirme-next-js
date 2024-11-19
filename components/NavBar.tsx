@@ -259,6 +259,21 @@ export default function Navbar() {
 
             <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-1 transition-transform duration-150 ease-in-out">
               <DropdownMenuItem>
+                <Link
+                  className="block w-full text-left px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150 rounded"
+                  href={"/profil"}
+                >
+                  <Image
+                    src="/user.png"
+                    alt="Profil"
+                    width={24}
+                    height={24}
+                    className="inline mr-2"
+                  />
+                  Profil
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
                 <button
                   onClick={onClick}
                   className="block w-full text-left px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150 rounded"
