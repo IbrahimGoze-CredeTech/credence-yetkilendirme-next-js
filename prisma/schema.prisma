@@ -42,6 +42,7 @@ model Kisi {
   Imza          Imza[]
   KisiRol       KisiRol[]
   KisiSayfa     KisiSayfa[]
+  KisiSayfaEdit KisiSayfaEdit[]
   KisiYetki     KisiYetki[]
   KisiYetkiEdit KisiYetkiEdit[]
   RolAtama      RolAtama[]
@@ -130,6 +131,7 @@ model Talep {
   DurumId           Int            @default(1, map: "DF_Talep_DurumId")
   TalepTipiId       Int?
   Imza              Imza[]
+  KisiSayfaEdit     KisiSayfaEdit?
   KisiYetkiEdit     KisiYetkiEdit?
   RolAtama          RolAtama?
   RolCikarma        RolCikarma?
@@ -166,12 +168,14 @@ model KisiYetkiEdit {
 }
 
 model KisiSayfa {
-  KisiSayfaId Int     @id(map: "PK_KisiSayfa") @default(autoincrement())
-  KisiId      Int
-  SayfaId     Int
-  IsPermitted Boolean
-  Kisi        Kisi    @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_KisiSayfa_Kisi")
-  Sayfa       Sayfa   @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_KisiSayfa_Sayfa")
+  KisiSayfaId     Int       @id(map: "PK_KisiSayfa") @default(autoincrement())
+  KisiId          Int
+  SayfaId         Int
+  IsPermitted     Boolean
+  BaslangicTarihi DateTime? @db.DateTime
+  BitisTarihi     DateTime? @db.DateTime
+  Kisi            Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_KisiSayfa_Kisi")
+  Sayfa           Sayfa     @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_KisiSayfa_Sayfa")
 }
 
 model RolSayfa {
@@ -183,8 +187,21 @@ model RolSayfa {
 }
 
 model Sayfa {
-  SayfaId    Int         @id(map: "PK_Sayfa") @default(autoincrement())
-  SayfaRoute String      @db.NVarChar(100)
-  KisiSayfa  KisiSayfa[]
-  RolSayfa   RolSayfa[]
+  SayfaId       Int             @id(map: "PK_Sayfa") @default(autoincrement())
+  SayfaRoute    String          @db.NVarChar(100)
+  KisiSayfa     KisiSayfa[]
+  KisiSayfaEdit KisiSayfaEdit[]
+  RolSayfa      RolSayfa[]
+}
+
+model KisiSayfaEdit {
+  KisiSayfaEditId Int       @id(map: "PK_Talep.KisiSayfaEdit")
+  KisiId          Int?
+  SayfaId         Int?
+  IsPermited      Boolean?
+  BaslangicTarihi DateTime? @db.DateTime
+  BitisTarihi     DateTime? @db.DateTime
+  Kisi            Kisi?     @relation(fields: [KisiId], references: [KisiId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Talep.KisiSayfaEdit_Kisi")
+  Sayfa           Sayfa?    @relation(fields: [SayfaId], references: [SayfaId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Talep.KisiSayfaEdit_Sayfa")
+  Talep           Talep     @relation(fields: [KisiSayfaEditId], references: [TalepId], onUpdate: NoAction, map: "FK_Talep.KisiSayfaEdit_Talep")
 }
