@@ -126,7 +126,7 @@ export default function RaporPage() {
               Gunluk
             </TabsTrigger>
             <TabsTrigger className="text-xl" value="ozet" disabled={isPending}>
-              Özet
+              Talep Tipleri
             </TabsTrigger>
           </TabsList>
           <TabsContent value="talep-yaratma">
