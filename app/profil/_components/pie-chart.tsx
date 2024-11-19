@@ -28,10 +28,6 @@ const chartConfig = {
     label: "Yetki Edit",
     color: "hsl(var(--chart-2))",
   },
-  KisiSayfaEdit: {
-    label: "Kişi Sayfa Edit",
-    color: "hsl(var(--chart-3))", // Yeni renk tanımlandı
-  },
 } satisfies ChartConfig;
 
 type ChartKeys = keyof typeof chartConfig;
@@ -53,7 +49,7 @@ export function PieChartComp({ data }: Props) {
       <CardHeader className="items-center pb-0">
         <CardTitle>Talep Tipi</CardTitle>
         <CardDescription>
-          Yaratılan son 100 talebin tiplerine göre grafiği
+          Yaratilan son 100 talebin tiplerine gore grafigi
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
@@ -77,7 +73,7 @@ export function PieChartComp({ data }: Props) {
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={chartConfig[entry.talepTipi]?.color}
+                  fill={chartConfig[entry.talepTipi].color}
                 />
               ))}
             </Pie>
@@ -88,9 +84,7 @@ export function PieChartComp({ data }: Props) {
             <div key={key} className="flex items-center space-x-2">
               <span
                 className="w-4 h-4 rounded"
-                style={{
-                  backgroundColor: chartConfig[key as ChartKeys].color,
-                }}
+                style={{ backgroundColor: chartConfig[key as ChartKeys].color }}
               ></span>
               <span className="text-sm font-medium">
                 {chartConfig[key as ChartKeys].label}
