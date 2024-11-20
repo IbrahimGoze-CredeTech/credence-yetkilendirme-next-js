@@ -108,11 +108,11 @@ export type Yetki = {
 
 //#region WaitingTalepGridType
 export type WaitingRolAtamaGridType = {
-  rolAtamaId: number;
-  rolAdi: string | undefined;
-  kisiAdi: string;
-  rolBaslangicTarihi: Date | null;
-  rolBitisTarihi: Date | null;
+  RolAtamaId: number;
+  RolAdi: string | undefined;
+  KisiAdi: string;
+  RolBaslangicTarihi: Date | null;
+  RolBitisTarihi: Date | null;
 };
 
 export type WaitingRolCikarmaGridType = {
