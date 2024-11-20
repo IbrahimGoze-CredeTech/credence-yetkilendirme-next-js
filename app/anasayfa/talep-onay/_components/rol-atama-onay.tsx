@@ -2,7 +2,7 @@ import { talepOnayla } from '@/actions/talep-onaylama';
 // import { Separator } from '@/components/ui/separator';
 import { ToastAction } from '@/components/ui/toast';
 import { toast } from '@/hooks/use-toast';
-import { RolAtamaGridType, RolAtamaTalepler } from '@/types';
+import { WaitingRolAtamaGridType, RolAtamaTalepler } from '@/types';
 import { fetcherGet } from '@/utils';
 import DataGrid, {
   Button, Column, Editing,
@@ -14,14 +14,14 @@ import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 
 interface Props {
-  data: RolAtamaGridType[];
+  data: WaitingRolAtamaGridType[];
   rolAtamaTalepler: RolAtamaTalepler[];
 }
 
 export default function RolAtamaGrid({ data, rolAtamaTalepler }: Props) {
   const session = useSession();
 
-  const [gridData, setGridData] = useState<RolAtamaGridType[]>(data);
+  const [gridData, setGridData] = useState<WaitingRolAtamaGridType[]>(data);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [talepGrid, setTalepGrid] = useState<RolAtamaTalepler[]>([]);
 

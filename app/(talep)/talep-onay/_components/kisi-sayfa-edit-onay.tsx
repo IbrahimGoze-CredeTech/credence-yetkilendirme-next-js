@@ -1,59 +1,49 @@
+import { GetWaitingKisiSayfaEdit } from '@/actions/bekleyen-talepler';
+import { GetPreviousKisiSayfaEditDetails } from '@/actions/eski-talepler';
 import { talepOnayla } from '@/actions/talep-onaylama';
 import { ToastAction } from '@/components/ui/toast';
 import { toast } from '@/hooks/use-toast';
-import { fetcherGet } from '@/utils';
+import { PreviousKisiSayfaEditDetails, WaitingKisiSayfaEditGridType } from '@/types';
 import DataGrid, {
   Button, Column, Editing,
   SearchPanel, Pager, Paging
 } from 'devextreme-react/data-grid';
 import { ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
-import { useSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
-type KisiSayfaEdit = {
-  kisiSayfaEditId: number;
-  kisiId: number;
-  ad: string;
-  soyad: string;
-  sayfaId: number;
-  sayfaRoute: string;
-  isPermitted: boolean | null; // Use `null` to explicitly allow it
-  baslangicTarihi: string | null; // Assuming null or an ISO date string
-  bitisTarihi: string | null;     // Assuming null or an ISO date string
-};
+// type KisiSayfaEdit = {
+//   kisiSayfaEditId: number;
+//   kisiId: number;
+//   ad: string;
+//   soyad: string;
+//   sayfaId: number;
+//   sayfaRoute: string;
+//   isPermitted: boolean | null; // Use `null` to explicitly allow it
+//   baslangicTarihi: string | null; // Assuming null or an ISO date string
+//   bitisTarihi: string | null;     // Assuming null or an ISO date string
+// };
 
 interface Props {
-  data: KisiSayfaEdit[];
+  data: WaitingKisiSayfaEditGridType[];
+  previousKisiSayfaEdit: PreviousKisiSayfaEditDetails[];
 }
 
-export default function KisiSayfaEditOnay({ data }: Props) {
-  const session = useSession();
+export default function KisiSayfaEditOnay({ data, previousKisiSayfaEdit }: Props) {
 
-  const [gridData, setGridData] = useState<KisiSayfaEdit[]>(data);
-  const [eskiTalepler, setEskiTalepler] = useState([]);
-
-  async function fetcher() {
-    const responseJson = await fetcherGet("/Talep/kisi-sayfaEdit-eski-talepler", session.data?.token);
-    console.log("responseJson: ", responseJson);
-
-    setEskiTalepler(responseJson);
-  }
-
-  useEffect(() => {
-    console.log("data: ", data);
-
-    setGridData(data);
-    fetcher();
-
-  }, [data])
+  const [gridData, setGridData] = useState<WaitingKisiSayfaEditGridType[]>(data);
+  const [previousGrid, setPreviousGrid] = useState<PreviousKisiSayfaEditDetails[]>(previousKisiSayfaEdit);
 
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
       // console.log('Onaylandı: ', item.row.data);
-      const response = await talepOnayla(true, item.row.data.kisiSayfaEditId);
+      const response = await talepOnayla(true, item.row.data.KisiSayfaEditId);
       if (!response) return;
-      fetcher();
+      const prevGrid = await GetPreviousKisiSayfaEditDetails();
+      setPreviousGrid(prevGrid);
+      const grid = await GetWaitingKisiSayfaEdit();
+      setGridData(grid);
+      // fetcher();
       toast({
         variant: "success",
         title: "Onaylandı",
@@ -67,7 +57,12 @@ export default function KisiSayfaEditOnay({ data }: Props) {
     }
     else {
       // console.log('Reddedildi: ', item.row.data);
-      talepOnayla(false, item.row.data.kisiSayfaEditId);
+      const response = await talepOnayla(false, item.row.data.KisiSayfaEditId);
+      if (!response) return;
+      const prevGrid = await GetPreviousKisiSayfaEditDetails();
+      setPreviousGrid(prevGrid);
+      const grid = await GetWaitingKisiSayfaEdit();
+      setGridData(grid);
       toast({
         variant: "destructive",
         title: "Reddedildi",
@@ -90,12 +85,13 @@ export default function KisiSayfaEditOnay({ data }: Props) {
             mode="row"
             useIcons={true}
           />
-          <Column dataField="ad" caption="Ad" />
-          <Column dataField="soyad" caption="Soyad" />
-          <Column dataField="sayfaRoute" caption="Sayfa" />
-          <Column dataField="isPermitted" caption="Izin" />
-          <Column dataField="baslangicTarihi" caption="Başlama Tarihi" />
-          <Column dataField="bitisTarihi" caption="Bitiş Tarihi" />
+          {/* <Column dataField="ad" caption="Ad" /> */}
+          {/* <Column dataField="soyad" caption="Soyad" /> */}
+          <Column dataField="KisiAdi" caption="Kişi Adı" />
+          <Column dataField="SayfaRoute" caption="Sayfa" />
+          <Column dataField="IsPermitted" caption="Izin" />
+          <Column dataField="BaslangicTarihi" caption="Başlama Tarihi" />
+          <Column dataField="BitisTarihi" caption="Bitiş Tarihi" />
           <Column type='buttons' width={120}>
             <Button hint='Onay' visible={true} onClick={(e) => onClick(true, e)} text='Onay' />
             <Button hint='Ret' visible={true} onClick={(e) => onClick(false, e)} text='Ret' />
@@ -105,7 +101,7 @@ export default function KisiSayfaEditOnay({ data }: Props) {
       </div>
       <div className='w-full mt-8'>
         <p className='font-semibold text-xl mb-4'>Kisi Yetki Geçmiş Talepler</p>
-        <DataGrid dataSource={eskiTalepler}>
+        <DataGrid dataSource={previousGrid}>
           <Paging defaultPageSize={5} />
           <Pager
             visible={true}

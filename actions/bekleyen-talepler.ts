@@ -3,9 +3,10 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import {
-  KisiYetkiEditGridType,
-  RolAtamaGridType,
-  RolCikarmaGridType,
+  WaitingKisiSayfaEditGridType,
+  WaitingKisiYetkiEditGridType,
+  WaitingRolAtamaGridType,
+  WaitingRolCikarmaGridType,
 } from "@/types";
 import { Imza, RolAtama, RolCikarma, Talep } from "@prisma/client";
 
@@ -40,108 +41,8 @@ export async function bekleyenTalepler(): Promise<boolean> {
   return true;
 }
 
-export async function bekleyenRolAtamalar(): Promise<RolAtamaGridType[]> {
-  const kisi = await currentUser();
-
-  if (!kisi) {
-    return [];
-  }
-
-  // console.log("kisi in  bekleyenRolAtamalar: ", kisi);
-
-  // Get All the imza with the KisiId Only if imza has a DurumId of 1
-  const imzalar = await db.imza.findMany({
-    where: {
-      KisiId: +kisi.id,
-      DurumId: 1,
-    },
-  });
-
-  const rolAtamalar = await Promise.all(
-    imzalar.map(async (imza) => {
-      const rolAtama = await db.rolAtama.findFirst({
-        where: {
-          RolAtamaId: imza.TalepId,
-        },
-      });
-      if (!rolAtama) return;
-      const kisi = await db.kisi.findFirst({
-        where: {
-          KisiId: rolAtama.KisiId,
-        },
-      });
-      const rol = await db.rol.findFirst({
-        where: {
-          RolId: rolAtama.RolId,
-        },
-      });
-      return {
-        rolAtamaId: rolAtama.RolAtamaId,
-        rolAdi: rol?.RolAdi,
-        kisiAdi: kisi?.Ad + " " + kisi?.Soyad,
-        rolBaslangicTarihi: rolAtama.RolBaslangicTarihi,
-        rolBitisTarihi: rolAtama.RolBitisTarihi,
-      };
-    })
-  );
-  return rolAtamalar.filter(
-    (rolAtama): rolAtama is RolAtamaGridType => rolAtama !== undefined
-  );
-}
-
-export async function bekleyenRolCikarmalar(): Promise<RolCikarmaGridType[]> {
-  const kisi = await currentUser();
-
-  if (!kisi) {
-    return [];
-  }
-
-  // console.log("kisi in  bekleyenRolAtamalar: ", kisi);
-
-  // Get All the imza with the KisiId Only if imza has a DurumId of 1
-  const imzalar = await db.imza.findMany({
-    where: {
-      KisiId: +kisi.id,
-      DurumId: 1,
-    },
-  });
-
-  const rolCikarmalar = await Promise.all(
-    imzalar.map(async (imza) => {
-      const rolCikarma = await db.rolCikarma.findFirst({
-        where: {
-          RolCikarmaId: imza.TalepId,
-        },
-      });
-      if (!rolCikarma) return;
-      const kisi = await db.kisi.findFirst({
-        where: {
-          KisiId: rolCikarma.KisiId,
-        },
-      });
-      const rol = await db.rol.findFirst({
-        where: {
-          RolId: rolCikarma.RolId,
-        },
-      });
-      return {
-        rolCikarmaId: rolCikarma.RolCikarmaId,
-        rolAdi: rol?.RolAdi,
-        kisiAdi: kisi?.Ad + " " + kisi?.Soyad,
-        rolCikarmaTarihi: rolCikarma.RolCikarmaTarihi,
-      };
-    })
-  );
-
-  if (rolCikarmalar.length === 0) return [];
-
-  return rolCikarmalar.filter(
-    (rolCikarma): rolCikarma is RolCikarmaGridType => rolCikarma !== undefined
-  );
-}
-
-export async function bekleyenKisiYetkiEdit(): Promise<
-  KisiYetkiEditGridType[]
+export async function GetWaitingRolAtamalar(): Promise<
+  WaitingRolAtamaGridType[]
 > {
   const kisi = await currentUser();
 
@@ -149,46 +50,93 @@ export async function bekleyenKisiYetkiEdit(): Promise<
     return [];
   }
 
-  const imzalar = await db.imza.findMany({
-    where: {
-      KisiId: +kisi.id,
-      DurumId: 1,
-    },
-  });
+  // console.log("kisi in  bekleyenRolAtamalar: ", kisi);
+  const rolAtamalar = await db.$queryRaw<WaitingRolAtamaGridType[]>`
+  EXEC GetWaitingRolAtamalar @KisiId = ${+kisi.id}
+`;
 
-  const kisiYetkiEdits = await Promise.all(
-    imzalar.map(async (imza) => {
-      const kisiYetki = await db.kisiYetkiEdit.findFirst({
-        where: {
-          KisiYetkiEditId: imza.TalepId,
-        },
-      });
-      if (!kisiYetki) return;
-      const kisi = await db.kisi.findFirst({
-        where: {
-          KisiId: kisiYetki.KisiId,
-        },
-      });
-      const yetki = await db.yetki.findFirst({
-        where: {
-          YetkiId: kisiYetki.YetkiId,
-        },
-      });
-      return {
-        kisiYetkiEditId: kisiYetki.KisiYetkiEditId,
-        yetkiAdi: yetki?.YetkiAdi,
-        kisiAdi: kisi?.Ad + " " + kisi?.Soyad,
-        eylemTuruId: kisiYetki.EylemTuruId,
-        yetkiBaslamaTarihi: kisiYetki.YetkiBaslnagicTarihi,
-        yetkiBitisTarihi: kisiYetki.YetkiBitisTarihi,
-      };
-    })
-  );
+  return rolAtamalar.map((item) => ({
+    RolAtamaId: item.RolAtamaId,
+    RolAdi: item.RolAdi,
+    KisiAdi: item.KisiAdi,
+    RolBaslangicTarihi: item.RolBaslangicTarihi,
+    RolBitisTarihi: item.RolBitisTarihi,
+  }));
+}
 
-  if (kisiYetkiEdits.length === 0) return [];
+export async function GetWaitingRolCikarmalar(): Promise<
+  WaitingRolCikarmaGridType[]
+> {
+  const kisi = await currentUser();
 
-  return kisiYetkiEdits.filter(
-    (kisiYetkiEdit): kisiYetkiEdit is KisiYetkiEditGridType =>
-      kisiYetkiEdit !== undefined
-  );
+  if (!kisi) {
+    return [];
+  }
+
+  // console.log("kisi in  bekleyenRolAtamalar: ", kisi);
+
+  // Get All the imza with the KisiId Only if imza has a DurumId of 1
+  const rolCikarmalar = await db.$queryRaw<WaitingRolCikarmaGridType[]>`
+  EXEC GetWaitingRolCikarmalar @KisiId = ${+kisi.id}
+`;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return rolCikarmalar.map((item) => ({
+    RolCikarmaId: item.RolCikarmaId,
+    RolAdi: item.RolAdi,
+    KisiAdi: item.KisiAdi,
+    RolCikarmaTarihi: item.RolCikarmaTarihi,
+  }));
+}
+
+export async function GetWaitingKisiYetkiEdit(): Promise<
+  WaitingKisiYetkiEditGridType[]
+> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  const kisiYetkiEdits = await db.$queryRaw<WaitingKisiYetkiEditGridType[]>`
+  EXEC GetWaitingKisiYetkiEdits @KisiId = ${+kisi.id}
+`;
+
+  // console.log("kisiYetkiEdits: ", kisiYetkiEdits);
+
+  return kisiYetkiEdits.map((item) => ({
+    KisiYetkiEditId: item.KisiYetkiEditId,
+    YetkiAdi: item.YetkiAdi,
+    KisiAdi: item.KisiAdi,
+    EylemTuruId: item.EylemTuruId,
+    YetkiBaslamaTarihi: item.YetkiBaslamaTarihi,
+    YetkiBitisTarihi: item.YetkiBitisTarihi,
+  }));
+}
+
+export async function GetWaitingKisiSayfaEdit(): Promise<
+  WaitingKisiSayfaEditGridType[]
+> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  const kisiSayfaEdits = await db.$queryRaw<WaitingKisiSayfaEditGridType[]>`
+  EXEC GetWaitingKisiSayfaEdits @KisiId = ${+kisi.id}
+`;
+
+  // console.log("kisiYetkiEdits: ", kisiYetkiEdits);
+
+  return kisiSayfaEdits.map((item) => ({
+    KisiSayfaEditId: item.KisiSayfaEditId,
+    KisiId: item.KisiId,
+    KisiAdi: item.KisiAdi,
+    SayfaId: item.SayfaId,
+    SayfaRoute: item.SayfaRoute,
+    IsPermitted: item.IsPermitted,
+    BaslangicTarihi: item.BaslangicTarihi,
+    BitisTarihi: item.BitisTarihi,
+  }));
 }

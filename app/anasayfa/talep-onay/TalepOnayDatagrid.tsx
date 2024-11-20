@@ -1,69 +1,37 @@
 'use client';
-import { bekleyenKisiYetkiEdit, bekleyenRolAtamalar, bekleyenRolCikarmalar } from '@/actions/bekleyen-talepler'
+import { GetWaitingKisiYetkiEdit, GetWaitingRolAtamalar, GetWaitingRolCikarmalar } from '@/actions/bekleyen-talepler'
 import React, { useEffect, useState, useTransition } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import RolAtamaGrid from './_components/rol-atama-onay';
-import { KisiYetkiEditGridType, KisiYetkiEditTalepler, RolAtamaGridType, RolAtamaTalepler, RolCikarmaGridType, RolCikarmaTalepler } from '@/types';
-import RolCikarmaGrid from './_components/rol-cikarma-onay';
-import KisiYetkiOnay from './_components/kisi-yetki-onay';
-import { fetcherGet } from '@/utils';
-import { useSession } from 'next-auth/react';
+import { WaitingKisiYetkiEditGridType, WaitingRolAtamaGridType, WaitingRolCikarmaGridType } from '@/types';
 
 export default function TalepOnayPage() {
-  const session = useSession();
 
-  const [rolAtamalar, setRolAtamalar] = useState<RolAtamaGridType[]>([])
-  const [rolCikarmalar, setRolCikarmalar] = useState<RolCikarmaGridType[]>([])
-  const [kisiYetkiEdit, setKisiYetkiEdit] = useState<KisiYetkiEditGridType[]>([])
-  const [rolAtamaTalepler, setRolAtamaTalepler] = useState<RolAtamaTalepler[]>([]);
-  const [rolCikarmaTalepler, setRolCikarmaTalepler] = useState<RolCikarmaTalepler[]>([]);
-  const [kisiYetkiEditTalepler, setKisiYetkiEditTalepler] = useState<KisiYetkiEditTalepler[]>([]);
+  const [rolAtamalar, setRolAtamalar] = useState<WaitingRolAtamaGridType[]>([])
+  const [rolCikarmalar, setRolCikarmalar] = useState<WaitingRolCikarmaGridType[]>([])
+  const [kisiYetkiEdit, setKisiYetkiEdit] = useState<WaitingKisiYetkiEditGridType[]>([])
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     startTransition(async () => {
-      const [rolAtamalar, rolCikarmalar, kisiYetkiEdit, rolAtamaTalepler, rolCikarmaTalepler, kisiYetkiEditTalepler] = await Promise.all([
-        bekleyenRolAtamalar(),
-        bekleyenRolCikarmalar(),
-        bekleyenKisiYetkiEdit(),
-        fetcherGet("/Talep/kisi-rolAtama-talepler", session.data?.token),
-        fetcherGet("/Talep/kisi-rolCikarma-talepler", session.data?.token),
-        fetcherGet("/Talep/kisi-kisiYetkiEdit-talepler", session.data?.token)
+      const [rolAtamalar, rolCikarmalar, kisiYetkiEdit] = await Promise.all([
+        GetWaitingRolAtamalar(),
+        GetWaitingRolCikarmalar(),
+        GetWaitingKisiYetkiEdit(),
       ]);
 
       setRolAtamalar(rolAtamalar);
       setRolCikarmalar(rolCikarmalar);
       setKisiYetkiEdit(kisiYetkiEdit);
-      setRolAtamaTalepler(rolAtamaTalepler);
-      setRolCikarmaTalepler(rolCikarmaTalepler);
-      setKisiYetkiEditTalepler(kisiYetkiEditTalepler);
     });
   }, [])
 
-  useEffect(() => {
-    console.log("Giriş yapan kullanıcı:", session.data?.user);
-  }, [session]);
-
-
-
-
   // Giriş yapan kullanıcının taleplerini almak için filtreleme
   const getPendingCount = () => {
-    const userName = session.data?.user.name;
-    const [userFirstName, userLastName] = userName?.split(" ") || ["", ""];
-
     // Giriş yapan kullanıcıya ait onay bekleyen talepler
-    const pendingRolAtama = rolAtamaTalepler.filter(
-      talep => talep.imzaAd === userFirstName && talep.imzaSoyad === userLastName && talep.durumAd === "Bekliyor" // "Bekliyor" onay durumu eklenebilir
-    ).length;
+    const pendingRolAtama = rolAtamalar.length;
 
-    const pendingRolCikarma = rolCikarmaTalepler.filter(
-      talep => talep.imzaAd === userFirstName && talep.imzaSoyad === userLastName && talep.imzaDurumu === "Bekliyor" // "Bekliyor" onay durumu eklenebilir
-    ).length;
+    const pendingRolCikarma = rolCikarmalar.length;
 
-    const pendingKisiYetki = kisiYetkiEditTalepler.filter(
-      talep => talep.imzaAd === userFirstName && talep.imzaSoyad === userLastName && talep.imzaDurumu === "Bekliyor" // "Bekliyor" onay durumu eklenebilir
-    ).length;
+    const pendingKisiYetki = kisiYetkiEdit.length;
 
     return {
       rolAtama: pendingRolAtama,
@@ -74,6 +42,54 @@ export default function TalepOnayPage() {
 
   const pendingCounts = getPendingCount();
 
+  if (isPending) {
+    return (
+      <div className='flex flex-col items-center justify-center w-full p-4 space-y-8 animate-pulse'>
+        {/* Summary Table */}
+        <div className="w-full mb-6 bg-gray-200 p-4 rounded-lg">
+          <div className="h-6 bg-gray-300 rounded w-2/3 mb-4"></div>
+          <table className="min-w-full table-auto">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-4 py-2 text-left">
+                  <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+                </th>
+                <th className="px-4 py-2 text-left">
+                  <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-4 py-2">
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                </td>
+                <td className="px-4 py-2">
+                  <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2">
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                </td>
+                <td className="px-4 py-2">
+                  <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2">
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                </td>
+                <td className="px-4 py-2">
+                  <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='flex flex-col items-center justify-center w-full p-4 space-y-8'>
@@ -103,8 +119,6 @@ export default function TalepOnayPage() {
           </tbody>
         </table>
       </div>
-
-
     </div>
   );
 }

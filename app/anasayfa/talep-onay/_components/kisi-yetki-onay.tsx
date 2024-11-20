@@ -3,7 +3,7 @@ import { ToastAction } from '@/components/ui/toast';
 // import { ekstraYetkilerDataGridConfig } from '@/configs/ekstra-yetkiler-data-grid-config';
 import { toast } from '@/hooks/use-toast';
 import { EylemTuruEnum } from '@/modals/eylemTuru';
-import { KisiYetkiEditGridType, KisiYetkiEditTalepler } from '@/types';
+import { WaitingKisiYetkiEditGridType, KisiYetkiEditTalepler } from '@/types';
 import { fetcherGet } from '@/utils';
 import DataGrid, {
   Button, Column, Editing,
@@ -20,7 +20,7 @@ const eylemTuruLookup = [
 ];
 
 interface Props {
-  data: KisiYetkiEditGridType[];
+  data: WaitingKisiYetkiEditGridType[];
   kisiYetkiEditTalepler: KisiYetkiEditTalepler[];
 
 }
@@ -28,7 +28,7 @@ interface Props {
 export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
   const session = useSession();
 
-  const [gridData, setGridData] = useState<KisiYetkiEditGridType[]>(data);
+  const [gridData, setGridData] = useState<WaitingKisiYetkiEditGridType[]>(data);
   const [talepGrid, setTalepGrid] = useState<KisiYetkiEditTalepler[]>([]);
 
   useEffect(() => {

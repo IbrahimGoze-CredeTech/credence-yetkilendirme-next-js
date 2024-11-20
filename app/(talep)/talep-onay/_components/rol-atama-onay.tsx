@@ -1,9 +1,9 @@
+import { GetPreviousRolAtamaDetails } from "@/actions/eski-talepler";
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { Separator } from "@/components/ui/separator";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/hooks/use-toast";
-import { RolAtamaGridType, RolAtamaTalepler } from "@/types";
-import { fetcherGet } from "@/utils";
+import { PreviousRolAtamaDetails, WaitingRolAtamaGridType } from "@/types";
 import DataGrid, {
   Button,
   Column,
@@ -13,19 +13,16 @@ import DataGrid, {
   Paging,
 } from "devextreme-react/data-grid";
 import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 interface Props {
-  data: RolAtamaGridType[];
-  rolAtamaTalepler: RolAtamaTalepler[];
+  data: WaitingRolAtamaGridType[];
+  rolAtamaTalepler: PreviousRolAtamaDetails[];
 }
 
 export default function RolAtamaGrid({ data, rolAtamaTalepler }: Props) {
-  const session = useSession();
-
-  const [gridData, setGridData] = useState<RolAtamaGridType[]>(data);
-  const [talepGrid, setTalepGrid] = useState<RolAtamaTalepler[]>([]);
+  const [gridData, setGridData] = useState<WaitingRolAtamaGridType[]>(data);
+  const [talepGrid, setTalepGrid] = useState<PreviousRolAtamaDetails[]>([]);
 
   useEffect(() => {
     setGridData(data);
@@ -36,18 +33,15 @@ export default function RolAtamaGrid({ data, rolAtamaTalepler }: Props) {
     if (item.row === undefined) return;
     if (approved) {
       // console.log('Onaylandı: ', item.row.data);
-      const response = await talepOnayla(true, item.row.data.rolAtamaId);
+      const response = await talepOnayla(true, item.row.data.RolAtamaId);
 
       if (!response) return;
       setGridData((prevData) =>
         prevData.filter(
-          (row) => item.row && row.rolAtamaId !== item.row.data.rolAtamaId
+          (row) => item.row && row.RolAtamaId !== item.row.data.RolAtamaId
         )
       );
-      const responseJson = await fetcherGet(
-        "/Talep/kisi-rolAtama-talepler",
-        session.data?.token
-      );
+      const responseJson = await GetPreviousRolAtamaDetails();
       setTalepGrid(responseJson);
 
       toast({
@@ -67,8 +61,15 @@ export default function RolAtamaGrid({ data, rolAtamaTalepler }: Props) {
       });
     } else {
       // console.log('Reddedildi: ', item.row.data);
-      talepOnayla(false, item.row.data.rolAtamaId);
-
+      const response = await talepOnayla(false, item.row.data.RolAtamaId);
+      if (!response) return;
+      setGridData((prevData) =>
+        prevData.filter(
+          (row) => item.row && row.RolAtamaId !== item.row.data.RolAtamaId
+        )
+      );
+      const responseJson = await GetPreviousRolAtamaDetails();
+      setTalepGrid(responseJson);
       toast({
         variant: "destructive",
         title: "Reddedildi",
@@ -98,13 +99,16 @@ export default function RolAtamaGrid({ data, rolAtamaTalepler }: Props) {
         >
           <SearchPanel visible={true} placeholder="Arama Yapın..." />
           <Editing mode="row" useIcons={true} />
-          <Column dataField="rolAdi" caption="Rol Adı" />
-          <Column dataField="kisiAdi" caption="Kişi Ad" />
+          {/*Make RolAtamaId Column hidden */}
+
+          <Column dataField="RolAtamaId" caption="Rol Adı" visible={false} />
+          <Column dataField="RolAdi" caption="Rol Adı" />
+          <Column dataField="KisiAdi" caption="Kişi Ad" />
           <Column
-            dataField="rolBaslangicTarihi"
+            dataField="RolBaslangicTarihi"
             caption="Rol Başlangıç Tarihi"
           />
-          <Column dataField="rolBitisTarihi" caption="Rol Bitiş Tarihi" />
+          <Column dataField="RolBitisTarihi" caption="Rol Bitiş Tarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"

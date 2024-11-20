@@ -9,8 +9,8 @@ type KisiSayfaEditRequest = {
   kisiAdi: string;
   sayfaRoute: string;
   isPermitted: boolean;
-  sayfaBaslangicTarihi: string;
-  sayfaBitisTarihi: string;
+  baslangicTarihi: string;
+  bitisTarihi: string;
   ciftImza: boolean;
   ekstraImza: string[];
 };
@@ -36,8 +36,6 @@ export async function kisiSayfaEdit(
     ekstraImza,
   } = values;
 
-  console.log("values: ", values);
-
   let ekstraImzaArray: string[] = [];
   if (ekstraImza === undefined) {
     ekstraImzaArray = [];
@@ -45,23 +43,25 @@ export async function kisiSayfaEdit(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const sayfaAtama = {
+  // const sayfaAtama = {
+  //   kisiAdi: kisiAdi,
+  //   sayfaRoute: SayfaRoute,
+  //   isPermitted: isPermitted,
+  //   BaslangicTarihi: baslamaTarihi.toISOString(),
+  //   BitisTarihi: bitisTarihi.toISOString(),
+  // };
+
+  const sayfaAtamaRequest: KisiSayfaEditRequest = {
     kisiAdi: kisiAdi,
     sayfaRoute: SayfaRoute,
     isPermitted: isPermitted,
-    sayfaBaslangicTarihi: baslamaTarihi.toISOString(),
-    sayfaBitisTarihi: bitisTarihi.toISOString(),
-  };
-
-  const sayfaAtamaRequest: KisiSayfaEditRequest = {
-    kisiAdi: sayfaAtama.kisiAdi,
-    sayfaRoute: sayfaAtama.sayfaRoute,
-    isPermitted: sayfaAtama.isPermitted,
-    sayfaBaslangicTarihi: sayfaAtama.sayfaBaslangicTarihi,
-    sayfaBitisTarihi: sayfaAtama.sayfaBitisTarihi,
+    baslangicTarihi: baslamaTarihi.toISOString(),
+    bitisTarihi: bitisTarihi.toISOString(),
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
+
+  console.log("values kisiSayfaEdit: ", sayfaAtamaRequest);
 
   await fetcherPost(
     "/Talep/kisi-sayfa-edit",
@@ -70,3 +70,5 @@ export async function kisiSayfaEdit(
   );
   return { success: "Talep Yaratıldı", error: "" };
 }
+
+export async function getKisiSayfaEdit() {}

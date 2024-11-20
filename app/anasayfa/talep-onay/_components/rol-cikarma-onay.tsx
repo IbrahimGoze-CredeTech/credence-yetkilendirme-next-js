@@ -1,7 +1,7 @@
 import { talepOnayla } from '@/actions/talep-onaylama';
 import { ToastAction } from '@/components/ui/toast';
 import { toast } from '@/hooks/use-toast';
-import { RolCikarmaGridType, RolCikarmaTalepler } from '@/types';
+import { WaitingRolCikarmaGridType, RolCikarmaTalepler } from '@/types';
 import { fetcherGet } from '@/utils';
 import DataGrid, {
   Button, Column, Editing,
@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator"
 import React, { useEffect, useState } from 'react';
 
 interface Props {
-  data: RolCikarmaGridType[];
+  data: WaitingRolCikarmaGridType[];
   rolCikarmaTalepler: RolCikarmaTalepler[];
 
 }
@@ -22,7 +22,7 @@ interface Props {
 export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
   const session = useSession();
 
-  const [gridData, setGridData] = useState<RolCikarmaGridType[]>(data);
+  const [gridData, setGridData] = useState<WaitingRolCikarmaGridType[]>(data);
   const [talepGrid, setTalepGrid] = useState<RolCikarmaTalepler[]>([]);
 
   useEffect(() => {
@@ -31,12 +31,15 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
   }, [data, rolCikarmaTalepler])
 
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
+    console.log("item1: ");
     if (item.row === undefined) return;
+    console.log("item2: ");
+
     if (approved) {
-      // console.log('Onaylandı: ', item.row.data);
-      const response = await talepOnayla(true, item.row.data.rolCikarmaId);
+      console.log('Onaylandı: ', item.row.data);
+      const response = await talepOnayla(true, item.row.data.RolCikarmaId);
       if (!response) return;
-      setGridData(prevData => prevData.filter(row => item.row && row.rolCikarmaId !== item.row.data.rolCikarmaId));
+      setGridData(prevData => prevData.filter(row => item.row && row.RolCikarmaId !== item.row.data.RolCikarmaId));
       const responseJson = await fetcherGet("/Talep/kisi-rolCikarma-talepler", session.data?.token);
       setTalepGrid(responseJson);
       toast({
@@ -51,8 +54,8 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
       });
     }
     else {
-      // console.log('Reddedildi: ', item.row.data);
-      talepOnayla(false, item.row.data.rolCikarmaId);
+      console.log('Reddedildi: ', item.row.data);
+      await talepOnayla(false, item.row.data.RolCikarmaId);
       toast({
         variant: "destructive",
         title: "Reddedildi",
@@ -75,9 +78,10 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
             mode="row"
             useIcons={true}
           />
-          <Column dataField="rolAdi" caption="Rol Adı" />
-          <Column dataField="kisiAdi" caption="Kişi Ad" />
-          <Column dataField="rolCikarmaTarihi" caption="Rol Bitiş Tarihi" />
+          <Column dataField="RolCikarmaId" caption='Rol Cikarma Id' visible={false} />
+          <Column dataField="RolAdi" caption="Rol Adı" />
+          <Column dataField="KisiAdi" caption="Kişi Ad" />
+          <Column dataField="RolCikarmaTarihi" caption="Rol Bitiş Tarihi" />
           <Column type='buttons' width={120}>
             <Button hint='Onay' visible={true} onClick={(e) => onClick(true, e)} text='Onay' />
             <Button hint='Ret' visible={true} onClick={(e) => onClick(false, e)} text='Ret' />

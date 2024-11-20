@@ -1,10 +1,10 @@
+import { GetPreviousKisiYetkiEditDetails } from "@/actions/eski-talepler";
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { ToastAction } from "@/components/ui/toast";
 // import { ekstraYetkilerDataGridConfig } from '@/configs/ekstra-yetkiler-data-grid-config';
 import { toast } from "@/hooks/use-toast";
 import { EylemTuruEnum } from "@/modals/eylemTuru";
-import { KisiYetkiEditGridType, KisiYetkiEditTalepler } from "@/types";
-import { fetcherGet } from "@/utils";
+import { PreviousKisiYetkiEditDetails, WaitingKisiYetkiEditGridType } from "@/types";
 import DataGrid, {
   Button,
   Column,
@@ -14,7 +14,6 @@ import DataGrid, {
   Paging,
 } from "devextreme-react/data-grid";
 import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 const eylemTuruLookup = [
@@ -24,15 +23,13 @@ const eylemTuruLookup = [
 ];
 
 interface Props {
-  data: KisiYetkiEditGridType[];
-  kisiYetkiEditTalepler: KisiYetkiEditTalepler[];
+  data: WaitingKisiYetkiEditGridType[];
+  kisiYetkiEditTalepler: PreviousKisiYetkiEditDetails[];
 }
 
 export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
-  const session = useSession();
-
-  const [gridData, setGridData] = useState<KisiYetkiEditGridType[]>(data);
-  const [talepGrid, setTalepGrid] = useState<KisiYetkiEditTalepler[]>([]);
+  const [gridData, setGridData] = useState<WaitingKisiYetkiEditGridType[]>(data);
+  const [talepGrid, setTalepGrid] = useState<PreviousKisiYetkiEditDetails[]>([]);
 
   useEffect(() => {
     setGridData(data);
@@ -48,13 +45,10 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
       setGridData((prevData) =>
         prevData.filter(
           (row) =>
-            item.row && row.kisiYetkiEditId !== item.row.data.kisiYetkiEditId
+            item.row && row.KisiYetkiEditId !== item.row.data.kisiYetkiEditId
         )
       );
-      const responseJson = await fetcherGet(
-        "/Talep/kisi-kisiYetkiEdit-talepler",
-        session.data?.token
-      );
+      const responseJson = await GetPreviousKisiYetkiEditDetails();
       setTalepGrid(responseJson);
       toast({
         variant: "success",
@@ -73,7 +67,16 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
       });
     } else {
       // console.log('Reddedildi: ', item.row.data);
-      talepOnayla(false, item.row.data.kisiYetkiEditId);
+      const response = await talepOnayla(false, item.row.data.kisiYetkiEditId);
+      if (!response) return;
+      setGridData((prevData) =>
+        prevData.filter(
+          (row) =>
+            item.row && row.KisiYetkiEditId !== item.row.data.kisiYetkiEditId
+        )
+      );
+      const responseJson = await GetPreviousKisiYetkiEditDetails();
+      setTalepGrid(responseJson);
       toast({
         variant: "destructive",
         title: "Reddedildi",
@@ -100,10 +103,10 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
         >
           <SearchPanel visible={true} placeholder="Arama Yapın..." />
           <Editing mode="row" useIcons={true} />
-          <Column dataField="yetkiAdi" caption="Yetki Adı" />
-          <Column dataField="kisiAdi" caption="Kişi Ad" />
+          <Column dataField="YetkiAdi" caption="Yetki Adı" />
+          <Column dataField="KisiAdi" caption="Kişi Ad" />
           <Column
-            dataField="eylemTuruId"
+            dataField="EylemTuruId"
             caption="Eylem Turu"
             lookup={{
               dataSource: eylemTuruLookup,
@@ -112,10 +115,10 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
             }}
           />
           <Column
-            dataField="yetkiBaslamaTarihi"
+            dataField="YetkiBaslamaTarihi"
             caption="Yetki Başlama Tarihi"
           />
-          <Column dataField="yetkiBitisTarihi" caption="Yetki Bitiş Tarihi" />
+          <Column dataField="YetkiBitisTarihi" caption="Yetki Bitiş Tarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"

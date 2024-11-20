@@ -106,7 +106,8 @@ export type Yetki = {
   siniflandirma: string;
 };
 
-export type RolAtamaGridType = {
+//#region WaitingTalepGridType
+export type WaitingRolAtamaGridType = {
   rolAtamaId: number;
   rolAdi: string | undefined;
   kisiAdi: string;
@@ -114,22 +115,80 @@ export type RolAtamaGridType = {
   rolBitisTarihi: Date | null;
 };
 
-export type RolCikarmaGridType = {
-  rolCikarmaId: number;
-  rolAdi: string | undefined;
-  kisiAdi: string;
-  rolCikarmaTarihi: Date | null;
+export type WaitingRolCikarmaGridType = {
+  RolCikarmaId: number;
+  RolAdi: string | undefined;
+  KisiAdi: string;
+  RolCikarmaTarihi: Date | null;
 };
 
-export type KisiYetkiEditGridType = {
-  kisiYetkiEditId: number;
+export type WaitingKisiYetkiEditGridType = {
+  KisiYetkiEditId: number;
+  YetkiAdi: string;
+  EylemTuruId: number;
+  KisiAdi: string;
+  YetkiBaslamaTarihi: Date | null;
+  YetkiBitisTarihi: Date | null;
+};
+
+export interface WaitingKisiSayfaEditGridType {
+  KisiSayfaEditId: number;
+  KisiId: number;
+  KisiAdi: string;
+  SayfaId: number;
+  SayfaRoute: string;
+  IsPermitted: boolean;
+  BaslangicTarihi: Date | null;
+  BitisTarihi: Date | null;
+}
+//#endregion
+
+//#region PreviousTalepGridTypes
+export interface PreviousRolAtamaDetails {
+  rolAdi: string;
+  rolAtananAd: string;
+  rolAtananSoyad: string;
+  rolBaslangicTarihi: Date;
+  rolBitisTarihi: Date;
+  imzaAd: string;
+  imzaSoyad: string;
+  imzaDurumTarihi: Date;
+  durumAd: string;
+}
+
+export interface PreviousRolCikarmaDetails {
+  rolCikarilanAd: string;
+  rolCikarilanSoyad: string;
+  rolAdi: string;
+  rolCikarmaTarihi: string; // Since the value is a string representing a date, we keep it as string type.
+  imzaAd: string;
+  imzaSoyad: string;
+  imzaTarihi: Date | null; // Date or null, because imzaTarihi could be null.
+  imzaDurumu: string;
+}
+
+export interface PreviousKisiYetkiEditDetails {
+  ad: string;
+  soyad: string;
   yetkiAdi: string;
-  eylemTuruId: number;
-  kisiAdi: string;
-  yetkiBaslamaTarihi: Date | null;
-  yetkiBitisTarihi: Date | null;
-};
+  eylemAdi: string;
+  yetkiBaslangicTarihi: Date | null;
+  yetkiBitisTarihi: string;
+  imzaAd: string;
+  imzaSoyad: string;
+  imzaTarihi: Date | null;
+  imzaDurumu: string;
+}
 
+export interface PreviousKisiSayfaEditDetails {
+  kisiAdi: string; // Full name from CONCAT(k.Ad, ' ', k.Soyad)
+  sayfaRoute: string; // Route information from s.SayfaRoute
+  isPermitted: boolean; // Permission flag from kse.IsPermitted
+  baslangicTarihi: Date | null; // Start date from kse.BaslangicTarihi
+  bitisTarihi: Date | null; // End date from kse.BitisTarihi
+}
+
+//#endregion
 export interface TalepKayit {
   talep_Olusturulma_Tarihi: Date;
   talep_Durum_Tarihi: string;
@@ -141,49 +200,49 @@ export interface TalepKayit {
   talepTipi: string;
 }
 
-export interface RolAtamaTalepler {
-  rolAdi: string;
-  rolAtananAd: string;
-  rolAtananSoyad: string;
-  rolBaslangicTarihi: string;
-  rolBitisTarihi: string;
-  imzaAd: string;
-  imzaSoyad: string;
-  imzaDurumTarihi: string;
-  durumAd: string;
-}
+// export interface RolAtamaTalepler {
+//   rolAdi: string;
+//   rolAtananAd: string;
+//   rolAtananSoyad: string;
+//   rolBaslangicTarihi: string;
+//   rolBitisTarihi: string;
+//   imzaAd: string;
+//   imzaSoyad: string;
+//   imzaDurumTarihi: string;
+//   durumAd: string;
+// }
 
-export interface RolCikarmaTalepler {
-  rolCikarilanAd: string;
-  rolCikarilanSoyad: string;
-  rolAdi: string;
-  rolCikarmaTarihi: string;
-  imzaAd: string;
-  imzaSoyad: string;
-  imzaTarihi: string;
-  imzaDurumu: string;
-}
+// export interface RolCikarmaTalepler {
+//   rolCikarilanAd: string;
+//   rolCikarilanSoyad: string;
+//   rolAdi: string;
+//   rolCikarmaTarihi: string;
+//   imzaAd: string;
+//   imzaSoyad: string;
+//   imzaTarihi: string;
+//   imzaDurumu: string;
+// }
 
-export interface KisiYetkiEditTalepler {
-  kisiYetkiEditId: number;
-  ad: string;
-  soyad: string;
-  yetkiAdi: string;
-  eylemAdi: string;
-  yetkiBaslangicTarihi: string;
-  yetkiBitisTarihi: string;
-  imzaAd: string;
-  imzaSoyad: string;
-  imzaTarihi: string;
-  imzaDurumu: string;
-}
-export interface kisiSayfaEdit {
-  kisiAdi: string;
-  sayfaRoute: string;
-  isPermitted: boolean;
-  sayfaBaslangicTarihi: string;
-  sayfaBitisTarihi: string;
-}
+// export interface KisiYetkiEditTalepler {
+//   kisiYetkiEditId: number;
+//   ad: string;
+//   soyad: string;
+//   yetkiAdi: string;
+//   eylemAdi: string;
+//   yetkiBaslangicTarihi: string;
+//   yetkiBitisTarihi: string;
+//   imzaAd: string;
+//   imzaSoyad: string;
+//   imzaTarihi: string;
+//   imzaDurumu: string;
+// }
+// export interface kisiSayfaEdit {
+//   kisiAdi: string;
+//   sayfaRoute: string;
+//   isPermitted: boolean;
+//   sayfaBaslangicTarihi: string;
+//   sayfaBitisTarihi: string;
+// }
 export interface RolSayfa {
   rolId: string;
   rolAdi: string;

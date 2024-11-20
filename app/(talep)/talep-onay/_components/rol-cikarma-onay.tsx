@@ -1,8 +1,7 @@
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/hooks/use-toast";
-import { RolCikarmaGridType, RolCikarmaTalepler } from "@/types";
-import { fetcherGet } from "@/utils";
+import { PreviousRolCikarmaDetails, WaitingRolCikarmaGridType } from "@/types";
 import DataGrid, {
   Button,
   Column,
@@ -12,21 +11,20 @@ import DataGrid, {
   Paging,
 } from "devextreme-react/data-grid";
 import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import { useSession } from "next-auth/react";
 import { Separator } from "@/components/ui/separator";
 
 import React, { useEffect, useState } from "react";
+import { GetPreviousRolCikarmaDetails } from "@/actions/eski-talepler";
 
 interface Props {
-  data: RolCikarmaGridType[];
-  rolCikarmaTalepler: RolCikarmaTalepler[];
+  data: WaitingRolCikarmaGridType[];
+  rolCikarmaTalepler: PreviousRolCikarmaDetails[];
 }
 
 export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
-  const session = useSession();
 
-  const [gridData, setGridData] = useState<RolCikarmaGridType[]>(data);
-  const [talepGrid, setTalepGrid] = useState<RolCikarmaTalepler[]>([]);
+  const [gridData, setGridData] = useState<WaitingRolCikarmaGridType[]>(data);
+  const [talepGrid, setTalepGrid] = useState<PreviousRolCikarmaDetails[]>([]);
 
   useEffect(() => {
     setGridData(data);
@@ -37,17 +35,15 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
     if (item.row === undefined) return;
     if (approved) {
       // console.log('Onaylandı: ', item.row.data);
-      const response = await talepOnayla(true, item.row.data.rolCikarmaId);
+      const response = await talepOnayla(true, item.row.data.RolCikarmaId);
+      // If response is successful these will update the datagrids
       if (!response) return;
       setGridData((prevData) =>
         prevData.filter(
-          (row) => item.row && row.rolCikarmaId !== item.row.data.rolCikarmaId
+          (row) => item.row && row.RolCikarmaId !== item.row.data.RolCikarmaId
         )
       );
-      const responseJson = await fetcherGet(
-        "/Talep/kisi-rolCikarma-talepler",
-        session.data?.token
-      );
+      const responseJson = await GetPreviousRolCikarmaDetails();
       setTalepGrid(responseJson);
       toast({
         variant: "success",
@@ -66,7 +62,15 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
       });
     } else {
       // console.log('Reddedildi: ', item.row.data);
-      talepOnayla(false, item.row.data.rolCikarmaId);
+      const response = await talepOnayla(false, item.row.data.RolCikarmaId);
+      if (!response) return;
+      setGridData((prevData) =>
+        prevData.filter(
+          (row) => item.row && row.RolCikarmaId !== item.row.data.RolCikarmaId
+        )
+      );
+      const responseJson = await GetPreviousRolCikarmaDetails();
+      setTalepGrid(responseJson);
       toast({
         variant: "destructive",
         title: "Reddedildi",
@@ -96,9 +100,9 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
         >
           <SearchPanel visible={true} placeholder="Arama Yapın..." />
           <Editing mode="row" useIcons={true} />
-          <Column dataField="rolAdi" caption="Rol Adı" />
-          <Column dataField="kisiAdi" caption="Kişi Ad" />
-          <Column dataField="rolCikarmaTarihi" caption="Rol Bitiş Tarihi" />
+          <Column dataField="RolAdi" caption="Rol Adı" />
+          <Column dataField="KisiAdi" caption="Kişi Ad" />
+          <Column dataField="RolCikarmaTarihi" caption="Rol Bitiş Tarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"
