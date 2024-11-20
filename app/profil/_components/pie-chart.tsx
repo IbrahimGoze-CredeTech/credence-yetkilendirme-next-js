@@ -14,6 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { kisiSayfaEdit } from "@/actions/kisi-sayfa-edit";
 
 const chartConfig = {
   RolAtama: {
@@ -27,6 +28,10 @@ const chartConfig = {
   YetkiEdit: {
     label: "Yetki Edit",
     color: "hsl(var(--chart-2))",
+  },
+  kisiSayfaEdit: {
+    label: "Kişi Sayfa Edit",
+    color: "hsl(var(--chart-3))",
   },
 } satisfies ChartConfig;
 
@@ -73,7 +78,7 @@ export function PieChartComp({ data }: Props) {
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={chartConfig[entry.talepTipi].color}
+                  fill={chartConfig[entry.talepTipi]?.color}
                 />
               ))}
             </Pie>
