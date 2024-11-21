@@ -47,17 +47,22 @@ export async function WaitingRolAtamalar(): Promise<IWaitingRolAtama[]> {
     return [];
   }
 
-  const rolAtamalar = await db.$queryRaw<IWaitingRolAtama[]>`
-  EXEC GetWaitingRolAtamalar @KisiId = ${+kisi.id}
+  try {
+    const rolAtamalar = await db.$queryRaw<IWaitingRolAtama[]>`
+  EXEC WaitingRolAtamas @KisiId = ${+kisi.id}
 `;
 
-  return rolAtamalar.map((item) => ({
-    RolAtamaId: item.RolAtamaId,
-    RolAdi: item.RolAdi,
-    KisiAdi: item.KisiAdi,
-    RolBaslangicTarihi: item.RolBaslangicTarihi,
-    RolBitisTarihi: item.RolBitisTarihi,
-  }));
+    return rolAtamalar.map((item) => ({
+      RolAtamaId: item.RolAtamaId,
+      RolAdi: item.RolAdi,
+      KisiAdi: item.KisiAdi,
+      RolBaslangicTarihi: item.RolBaslangicTarihi,
+      RolBitisTarihi: item.RolBitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
 }
 
 export async function WaitingRolCikarmalar(): Promise<IWaitingRolCikarma[]> {
@@ -67,18 +72,23 @@ export async function WaitingRolCikarmalar(): Promise<IWaitingRolCikarma[]> {
     return [];
   }
 
-  // Get All the imza with the KisiId Only if imza has a DurumId of 1
-  const rolCikarmalar = await db.$queryRaw<IWaitingRolCikarma[]>`
-  EXEC GetWaitingRolCikarmalar @KisiId = ${+kisi.id}
+  try {
+    // Get All the imza with the KisiId Only if imza has a DurumId of 1
+    const rolCikarmalar = await db.$queryRaw<IWaitingRolCikarma[]>`
+  EXEC WaitingRolCikarmas @KisiId = ${+kisi.id}
 `;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return rolCikarmalar.map((item) => ({
-    RolCikarmaId: item.RolCikarmaId,
-    RolAdi: item.RolAdi,
-    KisiAdi: item.KisiAdi,
-    RolCikarmaTarihi: item.RolCikarmaTarihi,
-  }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return rolCikarmalar.map((item) => ({
+      RolCikarmaId: item.RolCikarmaId,
+      RolAdi: item.RolAdi,
+      KisiAdi: item.KisiAdi,
+      RolCikarmaTarihi: item.RolCikarmaTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
 }
 
 export async function WaitingKisiYetkiEdit(): Promise<IWaitingKisiYetkiEdit[]> {
@@ -88,18 +98,23 @@ export async function WaitingKisiYetkiEdit(): Promise<IWaitingKisiYetkiEdit[]> {
     return [];
   }
 
-  const kisiYetkiEdits = await db.$queryRaw<IWaitingKisiYetkiEdit[]>`
-  EXEC GetWaitingKisiYetkiEdits @KisiId = ${+kisi.id}
+  try {
+    const kisiYetkiEdits = await db.$queryRaw<IWaitingKisiYetkiEdit[]>`
+  EXEC WaitingKisiYetkiEdits @KisiId = ${+kisi.id}
 `;
 
-  return kisiYetkiEdits.map((item) => ({
-    KisiYetkiEditId: item.KisiYetkiEditId,
-    YetkiAdi: item.YetkiAdi,
-    KisiAdi: item.KisiAdi,
-    EylemTuruId: item.EylemTuruId,
-    YetkiBaslamaTarihi: item.YetkiBaslamaTarihi,
-    YetkiBitisTarihi: item.YetkiBitisTarihi,
-  }));
+    return kisiYetkiEdits.map((item) => ({
+      KisiYetkiEditId: item.KisiYetkiEditId,
+      YetkiAdi: item.YetkiAdi,
+      KisiAdi: item.KisiAdi,
+      EylemTuruId: item.EylemTuruId,
+      YetkiBaslamaTarihi: item.YetkiBaslamaTarihi,
+      YetkiBitisTarihi: item.YetkiBitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
 }
 
 export async function WaitingKisiSayfaEdit(): Promise<IWaitingKisiSayfaEdit[]> {
@@ -109,20 +124,25 @@ export async function WaitingKisiSayfaEdit(): Promise<IWaitingKisiSayfaEdit[]> {
     return [];
   }
 
-  const kisiSayfaEdits = await db.$queryRaw<IWaitingKisiSayfaEdit[]>`
-  EXEC GetWaitingKisiSayfaEdits @KisiId = ${+kisi.id}
+  try {
+    const kisiSayfaEdits = await db.$queryRaw<IWaitingKisiSayfaEdit[]>`
+  EXEC WaitingKisiSayfaEdits @KisiId = ${+kisi.id}
 `;
 
-  return kisiSayfaEdits.map((item) => ({
-    KisiSayfaEditId: item.KisiSayfaEditId,
-    KisiId: item.KisiId,
-    KisiAdi: item.KisiAdi,
-    SayfaId: item.SayfaId,
-    SayfaRoute: item.SayfaRoute,
-    IsPermitted: item.IsPermitted,
-    BaslangicTarihi: item.BaslangicTarihi,
-    BitisTarihi: item.BitisTarihi,
-  }));
+    return kisiSayfaEdits.map((item) => ({
+      KisiSayfaEditId: item.KisiSayfaEditId,
+      KisiId: item.KisiId,
+      KisiAdi: item.KisiAdi,
+      SayfaId: item.SayfaId,
+      SayfaRoute: item.SayfaRoute,
+      IsPermitted: item.IsPermitted,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
 }
 
 export async function WaitingKisiSayfaAtama(): Promise<
@@ -134,17 +154,22 @@ export async function WaitingKisiSayfaAtama(): Promise<
     return [];
   }
 
-  const kisiSayfaAtama = await db.$queryRaw<IWaitingKisiSayfaAtama[]>`
-  EXEC GetWaitingKisiSayfaAtamas @KisiId = ${+kisi.id}
+  try {
+    const kisiSayfaAtama = await db.$queryRaw<IWaitingKisiSayfaAtama[]>`
+  EXEC WaitingKisiSayfaAtamas @KisiId = ${+kisi.id}
 `;
 
-  return kisiSayfaAtama.map((item) => ({
-    KisiSayfaAtamaId: item.KisiSayfaAtamaId,
-    KisiId: item.KisiId,
-    KisiAdi: item.KisiAdi,
-    SayfaId: item.SayfaId,
-    SayfaRoute: item.SayfaRoute,
-    BaslangicTarihi: item.BaslangicTarihi,
-    BitisTarihi: item.BitisTarihi,
-  }));
+    return kisiSayfaAtama.map((item) => ({
+      KisiSayfaAtamaId: item.KisiSayfaAtamaId,
+      KisiId: item.KisiId,
+      KisiAdi: item.KisiAdi,
+      SayfaId: item.SayfaId,
+      SayfaRoute: item.SayfaRoute,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
 }
