@@ -30,8 +30,12 @@ const chartConfig = {
   },
   KisiSayfaEdit: {
     label: "Kişi Sayfa Edit",
-    color: "hsl(var(--chart-3))", // Yeni renk tanımlandı
+    color: "hsl(var(--chart-3))", 
   },
+  KisiSayfaAtama: {
+    label: "Kişi Sayfa Atama",
+    color: "hsl(var(--chart-4))", 
+  }
 } satisfies ChartConfig;
 
 type ChartKeys = keyof typeof chartConfig;
