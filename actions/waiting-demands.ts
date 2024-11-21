@@ -4,10 +4,12 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import {
   IWaitingKisiSayfaAtama,
+  IWaitingKisiSayfaCikarma,
   IWaitingKisiSayfaEdit,
   IWaitingKisiYetkiEdit,
   IWaitingRolAtama,
   IWaitingRolCikarma,
+  IWaitingRolSayfaAtama,
 } from "@/types";
 import { Imza, RolAtama, RolCikarma, Talep } from "@prisma/client";
 
@@ -173,3 +175,63 @@ export async function WaitingKisiSayfaAtama(): Promise<
   }
   return [];
 }
+
+export async function WaitingKisiSayfaCikarma(): Promise<
+  IWaitingKisiSayfaCikarma[]
+> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  try {
+    const kisiSayfaAtama = await db.$queryRaw<IWaitingKisiSayfaCikarma[]>`
+  EXEC WaitingKisiSayfaCikarmas @KisiId = ${+kisi.id}
+`;
+
+    return kisiSayfaAtama.map((item) => ({
+      KisiSayfaCikarmaId: item.KisiSayfaCikarmaId,
+      KisiId: item.KisiId,
+      KisiAdi: item.KisiAdi,
+      SayfaId: item.SayfaId,
+      SayfaRoute: item.SayfaRoute,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}
+
+//#region Rol Sayfa
+export async function WaitingRolSayfaAtama(): Promise<IWaitingRolSayfaAtama[]> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  try {
+    const rolSayfaAtama = await db.$queryRaw<IWaitingRolSayfaAtama[]>`
+  EXEC WaitingRolSayfaAtamas @KisiId = ${+kisi.id}
+`;
+
+    console.log(rolSayfaAtama);
+
+    return rolSayfaAtama.map((item) => ({
+      RolSayfaAtamaId: item.RolSayfaAtamaId,
+      RolId: item.RolId,
+      RolAdi: item.RolAdi,
+      SayfaId: item.SayfaId,
+      SayfaRoute: item.SayfaRoute,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}
+//#endregion

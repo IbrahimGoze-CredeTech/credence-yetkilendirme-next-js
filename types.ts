@@ -151,6 +151,26 @@ export interface IWaitingKisiSayfaAtama {
   BaslangicTarihi: string | null; // Assuming datetime fields are returned as ISO strings, null for optional
   BitisTarihi: string | null; // Adjust type if using Date objects in TypeScript
 }
+
+export interface IWaitingRolSayfaAtama {
+  RolSayfaAtamaId: number;
+  RolId: number;
+  RolAdi: string;
+  SayfaId: number;
+  SayfaRoute: string;
+  BaslangicTarihi: string | null; // Assuming datetime fields are returned as ISO strings, null for optional
+  BitisTarihi: string | null; // Adjust type if using Date objects in TypeScript
+}
+
+export interface IWaitingKisiSayfaCikarma {
+  KisiSayfaCikarmaId: number;
+  KisiId: number;
+  KisiAdi: string;
+  SayfaId: number;
+  SayfaRoute: string;
+  BaslangicTarihi: string | null; // Assuming datetime fields are returned as ISO strings, null for optional
+  BitisTarihi: string | null; // Adjust type if using Date objects in TypeScript
+}
 //#endregion
 
 //#region PreviousTalepGridTypes
@@ -199,6 +219,20 @@ export interface IPreviousKisiSayfaEdit {
 }
 
 export interface IPreviousKisiSayfaAtama {
+  KisiAdi: string;
+  SayfaRoute: string;
+  BaslangicTarihi: string | null; // Nullable datetime as ISO string
+  BitisTarihi: string | null; // Nullable datetime as ISO string
+}
+
+export interface IPreviousRolSayfaAtama {
+  RolAdi: string;
+  SayfaRoute: string;
+  BaslangicTarihi: string | null; // Nullable datetime as ISO string
+  BitisTarihi: string | null; // Nullable datetime as ISO string
+}
+
+export interface IPreviousKisiSayfaCikarma {
   KisiAdi: string;
   SayfaRoute: string;
   BaslangicTarihi: string | null; // Nullable datetime as ISO string

@@ -4,10 +4,12 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import {
   IPreviousKisiSayfaAtama,
+  IPreviousKisiSayfaCikarma,
   IPreviousKisiSayfaEdit,
   IPreviousKisiYetkiEdit,
   IPreviousRolAtama,
   IPreviousRolCikarma,
+  IPreviousRolSayfaAtama,
 } from "@/types";
 
 export async function PreviousRolAtama(): Promise<IPreviousRolAtama[]> {
@@ -19,7 +21,7 @@ export async function PreviousRolAtama(): Promise<IPreviousRolAtama[]> {
 
   try {
     const rolAtamalar = await db.$queryRaw<IPreviousRolAtama[]>`
-      EXEC PreviousRolAtama @KisiId = ${+kisi.id}`;
+      EXEC PreviousRolAtamas @KisiId = ${+kisi.id}`;
 
     return rolAtamalar.map((item) => ({
       RolAdi: item.RolAdi,
@@ -47,7 +49,7 @@ export async function PreviousRolCikarma(): Promise<IPreviousRolCikarma[]> {
 
   try {
     const rolCikarmalar = await db.$queryRaw<IPreviousRolCikarma[]>`
-  EXEC PreviousRolCikarma @KisiId = ${+kisi.id}`;
+  EXEC PreviousRolCikarmas @KisiId = ${+kisi.id}`;
 
     return rolCikarmalar.map((item) => ({
       RolCikarilanAd: item.RolCikarilanAd,
@@ -76,7 +78,7 @@ export async function PreviousKisiYetkiEdit(): Promise<
 
   try {
     const kisiYetkiEdit = await db.$queryRaw<IPreviousKisiYetkiEdit[]>`
-  EXEC PreviousKisiYetkiEdit @KisiId = ${+kisi.id}`;
+  EXEC PreviousKisiYetkiEdits @KisiId = ${+kisi.id}`;
 
     return kisiYetkiEdit.map((item) => ({
       Ad: item.Ad,
@@ -107,7 +109,7 @@ export async function PreviousKisiSayfaEdit(): Promise<
 
   try {
     const kisiSayfaEdit = await db.$queryRaw<IPreviousKisiSayfaEdit[]>`
-  EXEC PreviousKisiSayfaEdit @KisiId = ${+kisi.id}`;
+  EXEC PreviousKisiSayfaEdits @KisiId = ${+kisi.id}`;
 
     return kisiSayfaEdit.map((item) => ({
       KisiAdi: item.KisiAdi,
@@ -133,7 +135,7 @@ export async function PreviousKisiSayfaAtama(): Promise<
 
   try {
     const kisiSayfaEdit = await db.$queryRaw<IPreviousKisiSayfaAtama[]>`
-  EXEC PreviousKisiSayfaAtama @KisiId = ${+kisi.id}`;
+  EXEC PreviousKisiSayfaAtamas @KisiId = ${+kisi.id}`;
 
     return kisiSayfaEdit.map((item) => ({
       KisiAdi: item.KisiAdi,
@@ -146,3 +148,55 @@ export async function PreviousKisiSayfaAtama(): Promise<
   }
   return [];
 }
+
+export async function PreviousKisiSayfaCikarma(): Promise<
+  IPreviousKisiSayfaCikarma[]
+> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  try {
+    const kisiSayfaEdit = await db.$queryRaw<IPreviousKisiSayfaCikarma[]>`
+  EXEC PreviousKisiSayfaCikarmas @KisiId = ${+kisi.id}`;
+
+    return kisiSayfaEdit.map((item) => ({
+      KisiAdi: item.KisiAdi,
+      SayfaRoute: item.SayfaRoute,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}
+
+//#region Rol Sayfa
+export async function PreviousRolSayfaAtama(): Promise<
+  IPreviousRolSayfaAtama[]
+> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  try {
+    const kisiSayfaEdit = await db.$queryRaw<IPreviousRolSayfaAtama[]>`
+  EXEC PreviousRolSayfaAtamas @KisiId = ${+kisi.id}`;
+
+    return kisiSayfaEdit.map((item) => ({
+      RolAdi: item.RolAdi,
+      SayfaRoute: item.SayfaRoute,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}
+//#endregion

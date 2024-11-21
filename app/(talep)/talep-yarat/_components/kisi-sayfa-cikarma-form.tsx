@@ -10,26 +10,23 @@ import { useStaticTablesContext } from '@/context';
 import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { TalepRolSayfaAtamaSchema } from '@/schemas';
+import { TalepKisiSayfaCikarmaSchema } from '@/schemas';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
-import { RoleAtanabilirSayfalar, rolSayfaAtamaPost } from '@/actions/rol-sayfa';
+import { kisiCikarilabilirSayfalar, kisiSayfaCikarmaPost } from '@/actions/kisi-sayfa';
 
-export default function RolSayfaAtamaForm() {
+export default function KisiSayfaAtamaForm() {
   const staticTablesContext = useStaticTablesContext();
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
-  const rollerOptions: Option[] = staticTablesContext.roller.map((rol) => ({
-    label: rol.rolAdi, // Roller sadece ad içeriyor
-    value: rol.rolAdi,
-  })) || [];
+
   const [sayfalar, setSayfalar] = useState<string[]>([]);
-  const sayfalarOptions = sayfalar.map((sayfa) => ({
-    label: sayfa,
-    value: sayfa,
-  })) || [];
+  const sayfalarOptions: Option[] = sayfalar.map((sayfa) =>
+    ({ label: sayfa, value: sayfa })) || [];
+
+
   const [isPending, startTransition] = useTransition();
 
   const [error, setError] = useState<string | undefined>("")
@@ -37,13 +34,14 @@ export default function RolSayfaAtamaForm() {
   const [isBaslangicOpen, setIsBaslangicOpen] = useState(false);
   const [isBitisOpen, setIsBitisOpen] = useState(false);
   const [isKisiSelected, setIsKisiSelected] = useState(false);
+  // const [sayfalar, setSayfalar] = useState([])
 
 
-  const form = useForm<z.infer<typeof TalepRolSayfaAtamaSchema>>({
-    resolver: zodResolver(TalepRolSayfaAtamaSchema),
+  const form = useForm<z.infer<typeof TalepKisiSayfaCikarmaSchema>>({
+    resolver: zodResolver(TalepKisiSayfaCikarmaSchema),
     defaultValues: {
       SayfaRoute: '',
-      rolAdi: '',
+      kisiAdi: '',
       baslamaTarihi: new Date(),
       bitisTarihi: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
       ciftImza: false,
@@ -51,13 +49,13 @@ export default function RolSayfaAtamaForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof TalepRolSayfaAtamaSchema>) => {
+  const onSubmit = (values: z.infer<typeof TalepKisiSayfaCikarmaSchema>) => {
+    // console.log('values: ', values);
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
-      rolSayfaAtamaPost(values).then((data) => {
+      kisiSayfaCikarmaPost(values).then((data) => {
         if (data?.error) {
           form.reset();
           setError(data.error);
@@ -75,35 +73,33 @@ export default function RolSayfaAtamaForm() {
             )
           });
         }
-
       }).catch(() => setError('Something went wrong!'));
     })
   }
 
   const onValueChange = (value: string) => {
-    console.log(value);
-
+    // console.log(value);
     startTransition(async () => {
-      const sayfalar = await RoleAtanabilirSayfalar(value);
+      const sayfalar = await kisiCikarilabilirSayfalar(value);
       setSayfalar(sayfalar);
       setIsKisiSelected(true); // Update boolean based on whether there's a value
     });
   };
 
-  const onFormError: SubmitErrorHandler<z.infer<typeof TalepRolSayfaAtamaSchema>> = (e) => {
+  const onFormError: SubmitErrorHandler<z.infer<typeof TalepKisiSayfaCikarmaSchema>> = (e) => {
     console.error(e)
   }
 
   return (
-    <CardWrapper headerLabel={'Rol Sayfa Atama'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
+    <CardWrapper headerLabel={'Kişi Sayfa Çıkarma'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
           <div className='grid grid-cols-2 gap-8'>
-            <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
+            <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Rol Adi</FormLabel>
+                <FormLabel>Kisi Adi</FormLabel>
                 <FormControl>
-                  <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={rollerOptions} placeholder={'Rol Ara'} searchPlaceholder={'Rol Ara...'} />
+                  <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
                 </FormControl>
               </FormItem>
             )} />
@@ -166,7 +162,7 @@ export default function RolSayfaAtamaForm() {
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
                   <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
-                    console.log("onChange", e);
+                    // console.log("onChange", e);
                     form.setValue('ekstraImza', e);
                   }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
                 ) : (<span>Yükleniyor...</span>)}

@@ -2,10 +2,22 @@
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { TalepKisiSayfaAtamaSchema, TalepKisiSayfaEditSchema } from "@/schemas";
+import {
+  TalepKisiSayfaAtamaSchema,
+  TalepKisiSayfaCikarmaSchema,
+  TalepKisiSayfaEditSchema,
+} from "@/schemas";
 import { KisiSayfaFromType } from "@/types";
 import { fetcherGet, fetcherPost } from "@/utils";
 import { z } from "zod";
+
+type KisiSayfaType = {
+  kisiId: number;
+  kisiAd: string;
+  kisiSoyad: string;
+  sayfaRoute: string;
+  isPermitted: boolean;
+};
 
 export async function kisininSayfalar(
   kisiName: string
@@ -47,13 +59,6 @@ export async function kisiAtanabilirSayfalar(
     },
   });
 
-  type KisiSayfaType = {
-    kisiId: number;
-    kisiAd: string;
-    kisiSoyad: string;
-    sayfaRoute: string;
-    isPermitted: boolean;
-  };
   const kisiSayfalar: KisiSayfaType[] = await fetcherGet(
     `/Sayfa/kisi-sayfa/${kisi?.KisiId}`,
     session?.token
@@ -72,6 +77,32 @@ export async function kisiAtanabilirSayfalar(
 
   return filteredSayfalar;
 }
+
+export async function kisiCikarilabilirSayfalar(
+  kisiAd: string
+): Promise<string[]> {
+  const session = await auth();
+
+  //Get the kisi surname from the name by splinting the spaces
+  const kisiNameArray = kisiAd.split(" ");
+  const kisiSurname = kisiNameArray[kisiNameArray.length - 1];
+  const kisi = await db.kisi.findFirst({
+    where: {
+      Soyad: kisiSurname,
+    },
+  });
+
+  const kisiSayfalar: KisiSayfaType[] = await fetcherGet(
+    `/Sayfa/kisi-sayfa/${kisi?.KisiId}`,
+    session?.token
+  );
+
+  const kisiSayfaRoutes = kisiSayfalar.map((item) => item.sayfaRoute);
+
+  return kisiSayfaRoutes;
+}
+
+//#region Post Requests
 
 export async function kisiSayfaEditPost(
   values: z.infer<typeof TalepKisiSayfaEditSchema>
@@ -185,3 +216,59 @@ export async function kisiSayfaAtamaPost(
 
   return { success: response.message, error: "" };
 }
+
+export async function kisiSayfaCikarmaPost(
+  values: z.infer<typeof TalepKisiSayfaCikarmaSchema>
+) {
+  type KisiSayfaCikarmaRequest = {
+    kisiAdi: string;
+    sayfaRoute: string;
+    baslangicTarihi: string;
+    bitisTarihi: string;
+    ciftImza: boolean;
+    ekstraImza: string[];
+  };
+
+  const session = await auth();
+
+  const validateFields = TalepKisiSayfaCikarmaSchema.safeParse(values);
+
+  if (!validateFields.success) {
+    return { success: "", error: validateFields.error.errors[0].message };
+  }
+
+  const {
+    kisiAdi,
+    SayfaRoute,
+    baslamaTarihi,
+    bitisTarihi,
+    ciftImza,
+    ekstraImza,
+  } = values;
+
+  let ekstraImzaArray: string[] = [];
+  if (ekstraImza === undefined) {
+    ekstraImzaArray = [];
+  } else {
+    ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
+  }
+
+  const kisiSayfaAtamaRequest: KisiSayfaCikarmaRequest = {
+    kisiAdi: kisiAdi,
+    sayfaRoute: SayfaRoute,
+    baslangicTarihi: baslamaTarihi.toISOString(),
+    bitisTarihi: bitisTarihi.toISOString(),
+    ciftImza: ciftImza,
+    ekstraImza: ekstraImzaArray,
+  };
+
+  const response = await fetcherPost(
+    "/Talep/kisi-sayfa-cikarma",
+    session?.token,
+    JSON.stringify(kisiSayfaAtamaRequest)
+  );
+  // console.log("response: ", response);
+
+  return { success: response.message, error: "" };
+}
+//#endregion

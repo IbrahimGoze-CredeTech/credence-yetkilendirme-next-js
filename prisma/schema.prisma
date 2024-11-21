@@ -33,22 +33,23 @@ model Imza {
 }
 
 model Kisi {
-  KisiId         Int              @id(map: "PK__Kisi__110EDCE9FCC2459D") @default(autoincrement())
-  Ad             String           @db.NVarChar(100)
-  Soyad          String           @db.NVarChar(200)
-  Departman      String?          @db.NVarChar(100)
-  KullaniciAdi   String?          @unique(map: "IX_Kisi") @db.NVarChar(50)
-  Sifre          String?          @db.NVarChar(100)
-  Imza           Imza[]
-  KisiRol        KisiRol[]
-  KisiSayfa      KisiSayfa[]
-  KisiSayfaAtama KisiSayfaAtama[]
-  KisiSayfaEdit  KisiSayfaEdit[]
-  KisiYetki      KisiYetki[]
-  KisiYetkiEdit  KisiYetkiEdit[]
-  RolAtama       RolAtama[]
-  RolCikarma     RolCikarma[]
-  Talep          Talep[]
+  KisiId           Int                @id(map: "PK__Kisi__110EDCE9FCC2459D") @default(autoincrement())
+  Ad               String             @db.NVarChar(100)
+  Soyad            String             @db.NVarChar(200)
+  Departman        String?            @db.NVarChar(100)
+  KullaniciAdi     String?            @unique(map: "IX_Kisi") @db.NVarChar(50)
+  Sifre            String?            @db.NVarChar(100)
+  Imza             Imza[]
+  KisiRol          KisiRol[]
+  KisiSayfa        KisiSayfa[]
+  KisiSayfaAtama   KisiSayfaAtama[]
+  KisiSayfaCikarma KisiSayfaCikarma[]
+  KisiSayfaEdit    KisiSayfaEdit[]
+  KisiYetki        KisiYetki[]
+  KisiYetkiEdit    KisiYetkiEdit[]
+  RolAtama         RolAtama[]
+  RolCikarma       RolCikarma[]
+  Talep            Talep[]
 }
 
 model KisiRol {
@@ -125,21 +126,22 @@ model RolYetki {
 }
 
 model Talep {
-  TalepId           Int             @id(map: "PK__Talep__AF6511A35397F4B7") @default(autoincrement())
-  OlusturulmaTarihi DateTime?       @db.DateTime
-  DurumTarihi       DateTime?       @db.DateTime
+  TalepId           Int               @id(map: "PK__Talep__AF6511A35397F4B7") @default(autoincrement())
+  OlusturulmaTarihi DateTime?         @db.DateTime
+  DurumTarihi       DateTime?         @db.DateTime
   TalepEdenKisiId   Int?
-  DurumId           Int             @default(1, map: "DF_Talep_DurumId")
+  DurumId           Int               @default(1, map: "DF_Talep_DurumId")
   TalepTipiId       Int?
   Imza              Imza[]
   KisiSayfaAtama    KisiSayfaAtama?
+  KisiSayfaCikarma  KisiSayfaCikarma?
   KisiSayfaEdit     KisiSayfaEdit?
   KisiYetkiEdit     KisiYetkiEdit?
   RolAtama          RolAtama?
   RolCikarma        RolCikarma?
-  Kisi              Kisi?           @relation(fields: [TalepEdenKisiId], references: [KisiId], onDelete: NoAction, onUpdate: NoAction, map: "FK__Talep__TalepEden__00200768")
-  DurumEnum         DurumEnum       @relation(fields: [DurumId], references: [DurumId], onUpdate: NoAction, map: "FK_Talep_Durum.Enum")
-  TalepTipiEnum     TalepTipiEnum?  @relation(fields: [TalepTipiId], references: [TalepTipiId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Talep_TalepTipiEnum")
+  Kisi              Kisi?             @relation(fields: [TalepEdenKisiId], references: [KisiId], onDelete: NoAction, onUpdate: NoAction, map: "FK__Talep__TalepEden__00200768")
+  DurumEnum         DurumEnum         @relation(fields: [DurumId], references: [DurumId], onUpdate: NoAction, map: "FK_Talep_Durum.Enum")
+  TalepTipiEnum     TalepTipiEnum?    @relation(fields: [TalepTipiId], references: [TalepTipiId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Talep_TalepTipiEnum")
 }
 
 model TalepTipiEnum {
@@ -189,12 +191,13 @@ model RolSayfa {
 }
 
 model Sayfa {
-  SayfaId        Int              @id(map: "PK_Sayfa") @default(autoincrement())
-  SayfaRoute     String           @db.NVarChar(100)
-  KisiSayfa      KisiSayfa[]
-  KisiSayfaAtama KisiSayfaAtama[]
-  KisiSayfaEdit  KisiSayfaEdit[]
-  RolSayfa       RolSayfa[]
+  SayfaId          Int                @id(map: "PK_Sayfa") @default(autoincrement())
+  SayfaRoute       String             @db.NVarChar(100)
+  KisiSayfa        KisiSayfa[]
+  KisiSayfaAtama   KisiSayfaAtama[]
+  KisiSayfaCikarma KisiSayfaCikarma[]
+  KisiSayfaEdit    KisiSayfaEdit[]
+  RolSayfa         RolSayfa[]
 }
 
 model KisiSayfaEdit {
@@ -218,4 +221,15 @@ model KisiSayfaAtama {
   Kisi             Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_KisiSayfaAtama_Kisi")
   Sayfa            Sayfa     @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_KisiSayfaAtama_Sayfa")
   Talep            Talep     @relation(fields: [KisiSayfaAtamaId], references: [TalepId], onUpdate: NoAction, map: "FK_KisiSayfaAtama_Talep")
+}
+
+model KisiSayfaCikarma {
+  KisiSayfaCikarmaId Int       @id(map: "PK_KisiSayfaCikarma")
+  KisiId             Int
+  SayfaId            Int
+  BaslangicTarihi    DateTime? @db.DateTime
+  BitisTarihi        DateTime? @db.DateTime
+  Kisi               Kisi      @relation(fields: [KisiId], references: [KisiId], onUpdate: NoAction, map: "FK_KisiSayfaCikarma_Kisi")
+  Sayfa              Sayfa     @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_KisiSayfaCikarma_Sayfa")
+  Talep              Talep     @relation(fields: [KisiSayfaCikarmaId], references: [TalepId], onUpdate: NoAction, map: "FK_KisiSayfaCikarma_Talep")
 }

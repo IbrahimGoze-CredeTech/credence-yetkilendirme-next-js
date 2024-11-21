@@ -75,6 +75,14 @@ export const TalepKisiSayfaAtamaSchema = KisiFieldSchema.merge(
   .merge(EkstraImzaFieldSchema)
   .merge(SayfaFieldSchema);
 
+export const TalepKisiSayfaCikarmaSchema = KisiFieldSchema.merge(
+  BaslamaTarihiFieldSchema
+)
+  .merge(BitisTarihiFieldSchema)
+  .merge(CiftImzaFieldSchema)
+  .merge(EkstraImzaFieldSchema)
+  .merge(SayfaFieldSchema);
+
 export const TalepRolSayfaAtamaSchema = RolFieldSchema.merge(
   BaslamaTarihiFieldSchema
 )

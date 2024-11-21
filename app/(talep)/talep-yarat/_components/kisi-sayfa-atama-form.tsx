@@ -15,9 +15,9 @@ import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
-import { kisiAtanabilirSayfalar, kisiSayfaAtamaPost } from '@/actions/kisi-sayfa';
+import { kisiCikarilabilirSayfalar, kisiSayfaAtamaPost } from '@/actions/kisi-sayfa';
 
-export default function KisiSayfaAtamaForm() {
+export default function KisiSayfaCikarmaForm() {
   const staticTablesContext = useStaticTablesContext();
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
@@ -80,7 +80,7 @@ export default function KisiSayfaAtamaForm() {
   const onValueChange = (value: string) => {
     // console.log(value);
     startTransition(async () => {
-      const sayfalar = await kisiAtanabilirSayfalar(value);
+      const sayfalar = await kisiCikarilabilirSayfalar(value);
       setSayfalar(sayfalar);
       setIsKisiSelected(true); // Update boolean based on whether there's a value
     });
