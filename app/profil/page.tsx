@@ -18,7 +18,7 @@ import { useSession } from "next-auth/react";
 import { PieChartComp } from "./_components/pie-chart";
 
 export default function ProfilePage() {
-  const user = {
+  const kullanıcı = {
     name: "Can Emir Dilber",
     position: "Yönetici",
     department: "IT Departmanı",
@@ -32,9 +32,10 @@ export default function ProfilePage() {
     activeTasks: 5,
   };
   const currentUser = useCurrentUser();
-  // const [user, setUser] = useState<ExtendedUser | undefined>(undefined);
+  const [user, setUser] = useState<ExtendedUser | undefined>(undefined);
   const session = useSession();
 
+  const [kisiselRoller, setKisiselRoller] = useState<[]>([]);
   const [risk, setRisk] = useState<[]>([]);
   const [verimlilik, setVerimlilik] = useState<[]>([]);
   const [yaratma, setYaratma] = useState<[]>([]);
@@ -47,9 +48,9 @@ export default function ProfilePage() {
 
   const [isPending, startTransition] = useTransition();
 
-  // useEffect(() => {
-  //   setUser(currentUser);
-  // }, [currentUser]);
+  useEffect(() => {
+    setUser(currentUser);
+  }, [currentUser]);
   useEffect(() => {
     startTransition(async () => {
       const [
@@ -61,6 +62,7 @@ export default function ProfilePage() {
         talepTipi,
         verimlilik,
         risk,
+        kisiselRoller,
       ] = await Promise.all([
         fetcherGet("/Matris/talep-yaratma-matris", session.data?.token),
         fetcherGet("/Matris/imza-atma-matris", session.data?.token),
@@ -70,6 +72,7 @@ export default function ProfilePage() {
         fetcherGet("/Matris/talep-tipi-matris", session.data?.token),
         fetcherGet("/Matris/kisi-verimlilik-matris", session.data?.token),
         fetcherGet("/Matris/kisi-risk-matris", session.data?.token),
+        fetcherGet("/Kisi/ozet-bilgi", session.data?.token),
       ]);
       // console.log(talepTipi);
       setTalepTipi(talepTipi);
@@ -78,7 +81,13 @@ export default function ProfilePage() {
       setImzaAtanan(imzaAtanan);
       setVerimlilik(verimlilik);
       setRisk(risk);
+      setKisiselRoller(kisiselRoller);
+      console.log("Kişisel Roller:", kisiselRoller);
       // console.log(risk);
+
+      const roller = kisiselRoller[0]?.roller || [];
+      console.log("Roller:", roller);
+      setKisiselRoller(roller);
 
       const formattedGunlukTalepYaratma = formatDataList(gunlukTalepYaratma);
       setGunlukTalepYaratma(formattedGunlukTalepYaratma);
@@ -113,25 +122,25 @@ export default function ProfilePage() {
           />
 
           {/* Temel Bilgiler */}
-          <h2 className="text-lg font-bold text-center">{user.name}</h2>
+          <h2 className="text-lg font-bold text-center">{kullanıcı.name}</h2>
           <p className="text-sm text-center text-gray-500">
-            {user.position} - {user.department}
+            {kullanıcı.position} - {kullanıcı.department}
           </p>
           <p className="text-xs text-center text-gray-400">
-            Son Giriş: {user.lastLogin}
+            Son Giriş: {kullanıcı.lastLogin}
           </p>
 
           {/* Performans Göstergeleri */}
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
               <p className="text-lg font-bold text-blue-500">
-                {user.requestCount}
+                {kullanıcı.requestCount}
               </p>
               <p className="text-sm text-gray-500">Tamamlanan Talepler</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-bold text-green-500">
-                {user.approvalCount}
+                {kullanıcı.approvalCount}
               </p>
               <p className="text-sm text-gray-500">Onaylanan Talepler</p>
             </div>
@@ -139,13 +148,15 @@ export default function ProfilePage() {
 
           {/* Rol ve Yetki Bilgileri */}
           <div>
-            <p className="font-semibold text-gray-800">Rol ve Yetkiler:</p>
+            <p className="font-semibold text-gray-800">Roller:</p>
             <ul className="list-disc list-inside text-sm text-gray-600">
-              <li>{user.role}</li>
+              {kisiselRoller.map((rol: string, index: number) => (
+                <li key={index}>{rol}</li>
+              ))}
             </ul>
             <p className="font-semibold text-gray-800 mt-2">Yetkiler:</p>
             <ul className="list-disc list-inside text-sm text-gray-600">
-              {user.permissions.map((perm, index) => (
+              {kullanıcı.permissions.map((perm, index) => (
                 <li key={index}>{perm}</li>
               ))}
             </ul>
@@ -155,10 +166,10 @@ export default function ProfilePage() {
           <div className="mt-4">
             <p className="font-semibold text-gray-800">İşlem Geçmişi:</p>
             <p className="text-sm text-gray-600">
-              Tamamlanan Görevler: {user.tasksCompleted}
+              Tamamlanan Görevler: {kullanıcı.tasksCompleted}
             </p>
             <p className="text-sm text-gray-600">
-              Aktif Görevler: {user.activeTasks}
+              Aktif Görevler: {kullanıcı.activeTasks}
             </p>
           </div>
         </div>
