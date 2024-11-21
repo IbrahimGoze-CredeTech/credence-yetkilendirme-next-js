@@ -14,7 +14,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { kisiSayfaEdit } from "@/actions/kisi-sayfa-edit";
 
 const chartConfig = {
   RolAtama: {
