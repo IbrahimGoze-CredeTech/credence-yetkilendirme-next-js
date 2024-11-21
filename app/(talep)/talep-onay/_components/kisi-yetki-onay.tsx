@@ -1,10 +1,10 @@
-import { GetPreviousKisiYetkiEditDetails } from "@/actions/eski-talepler";
+import { PreviousKisiYetkiEdit } from "@/actions/previous-demands";
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { ToastAction } from "@/components/ui/toast";
 // import { ekstraYetkilerDataGridConfig } from '@/configs/ekstra-yetkiler-data-grid-config';
 import { toast } from "@/hooks/use-toast";
 import { EylemTuruEnum } from "@/modals/eylemTuru";
-import { PreviousKisiYetkiEditDetails, WaitingKisiYetkiEditGridType } from "@/types";
+import { IPreviousKisiYetkiEdit, IWaitingKisiYetkiEdit } from "@/types";
 import DataGrid, {
   Button,
   Column,
@@ -23,13 +23,13 @@ const eylemTuruLookup = [
 ];
 
 interface Props {
-  data: WaitingKisiYetkiEditGridType[];
-  kisiYetkiEditTalepler: PreviousKisiYetkiEditDetails[];
+  data: IWaitingKisiYetkiEdit[];
+  kisiYetkiEditTalepler: IPreviousKisiYetkiEdit[];
 }
 
 export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
-  const [gridData, setGridData] = useState<WaitingKisiYetkiEditGridType[]>(data);
-  const [talepGrid, setTalepGrid] = useState<PreviousKisiYetkiEditDetails[]>([]);
+  const [gridData, setGridData] = useState<IWaitingKisiYetkiEdit[]>(data);
+  const [talepGrid, setTalepGrid] = useState<IPreviousKisiYetkiEdit[]>([]);
 
   useEffect(() => {
     setGridData(data);
@@ -48,7 +48,7 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
             item.row && row.KisiYetkiEditId !== item.row.data.kisiYetkiEditId
         )
       );
-      const responseJson = await GetPreviousKisiYetkiEditDetails();
+      const responseJson = await PreviousKisiYetkiEdit();
       setTalepGrid(responseJson);
       toast({
         variant: "success",
@@ -75,7 +75,7 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
             item.row && row.KisiYetkiEditId !== item.row.data.kisiYetkiEditId
         )
       );
-      const responseJson = await GetPreviousKisiYetkiEditDetails();
+      const responseJson = await PreviousKisiYetkiEdit();
       setTalepGrid(responseJson);
       toast({
         variant: "destructive",

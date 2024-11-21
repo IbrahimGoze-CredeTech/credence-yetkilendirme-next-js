@@ -1,9 +1,9 @@
-import { GetPreviousRolAtamaDetails } from "@/actions/eski-talepler";
+import { PreviousRolAtama } from "@/actions/previous-demands";
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { Separator } from "@/components/ui/separator";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/hooks/use-toast";
-import { PreviousRolAtamaDetails, WaitingRolAtamaGridType } from "@/types";
+import { IPreviousRolAtama, IWaitingRolAtama } from "@/types";
 import DataGrid, {
   Button,
   Column,
@@ -16,13 +16,13 @@ import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
 import React, { useEffect, useState } from "react";
 
 interface Props {
-  data: WaitingRolAtamaGridType[];
-  rolAtamaTalepler: PreviousRolAtamaDetails[];
+  data: IWaitingRolAtama[];
+  rolAtamaTalepler: IPreviousRolAtama[];
 }
 
 export default function RolAtamaGrid({ data, rolAtamaTalepler }: Props) {
-  const [gridData, setGridData] = useState<WaitingRolAtamaGridType[]>(data);
-  const [talepGrid, setTalepGrid] = useState<PreviousRolAtamaDetails[]>([]);
+  const [gridData, setGridData] = useState<IWaitingRolAtama[]>(data);
+  const [talepGrid, setTalepGrid] = useState<IPreviousRolAtama[]>([]);
 
   useEffect(() => {
     setGridData(data);
@@ -41,7 +41,7 @@ export default function RolAtamaGrid({ data, rolAtamaTalepler }: Props) {
           (row) => item.row && row.RolAtamaId !== item.row.data.RolAtamaId
         )
       );
-      const responseJson = await GetPreviousRolAtamaDetails();
+      const responseJson = await PreviousRolAtama();
       setTalepGrid(responseJson);
 
       toast({
@@ -68,7 +68,7 @@ export default function RolAtamaGrid({ data, rolAtamaTalepler }: Props) {
           (row) => item.row && row.RolAtamaId !== item.row.data.RolAtamaId
         )
       );
-      const responseJson = await GetPreviousRolAtamaDetails();
+      const responseJson = await PreviousRolAtama();
       setTalepGrid(responseJson);
       toast({
         variant: "destructive",

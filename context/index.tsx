@@ -1,5 +1,5 @@
 "use client";
-import { bekleyenTalepler } from "@/actions/bekleyen-talepler";
+import { bekleyenTalepler } from "@/actions/waiting-demands";
 import { Kisi, RolOld, Yetki } from "@/types";
 import { fetcherGet } from "@/utils";
 // import { set } from "date-fns";

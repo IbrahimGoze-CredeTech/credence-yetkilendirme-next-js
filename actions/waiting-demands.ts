@@ -3,10 +3,11 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import {
-  WaitingKisiSayfaEditGridType,
-  WaitingKisiYetkiEditGridType,
-  WaitingRolAtamaGridType,
-  WaitingRolCikarmaGridType,
+  IWaitingKisiSayfaAtama,
+  IWaitingKisiSayfaEdit,
+  IWaitingKisiYetkiEdit,
+  IWaitingRolAtama,
+  IWaitingRolCikarma,
 } from "@/types";
 import { Imza, RolAtama, RolCikarma, Talep } from "@prisma/client";
 
@@ -24,7 +25,6 @@ export async function bekleyenTalepler(): Promise<boolean> {
   if (!kisi) {
     return false;
   }
-  // console.log("kisi: ", kisi);
 
   // Get All the imza with the KisiId Only if imza has a DurumId of 1
   const imzalar = await db.imza.findFirst({
@@ -33,7 +33,6 @@ export async function bekleyenTalepler(): Promise<boolean> {
       DurumId: 1,
     },
   });
-  // console.log("imzalar: ", imzalar);
 
   if (!imzalar) {
     return false;
@@ -41,17 +40,14 @@ export async function bekleyenTalepler(): Promise<boolean> {
   return true;
 }
 
-export async function GetWaitingRolAtamalar(): Promise<
-  WaitingRolAtamaGridType[]
-> {
+export async function WaitingRolAtamalar(): Promise<IWaitingRolAtama[]> {
   const kisi = await currentUser();
 
   if (!kisi) {
     return [];
   }
 
-  // console.log("kisi in  bekleyenRolAtamalar: ", kisi);
-  const rolAtamalar = await db.$queryRaw<WaitingRolAtamaGridType[]>`
+  const rolAtamalar = await db.$queryRaw<IWaitingRolAtama[]>`
   EXEC GetWaitingRolAtamalar @KisiId = ${+kisi.id}
 `;
 
@@ -64,19 +60,15 @@ export async function GetWaitingRolAtamalar(): Promise<
   }));
 }
 
-export async function GetWaitingRolCikarmalar(): Promise<
-  WaitingRolCikarmaGridType[]
-> {
+export async function WaitingRolCikarmalar(): Promise<IWaitingRolCikarma[]> {
   const kisi = await currentUser();
 
   if (!kisi) {
     return [];
   }
 
-  // console.log("kisi in  bekleyenRolAtamalar: ", kisi);
-
   // Get All the imza with the KisiId Only if imza has a DurumId of 1
-  const rolCikarmalar = await db.$queryRaw<WaitingRolCikarmaGridType[]>`
+  const rolCikarmalar = await db.$queryRaw<IWaitingRolCikarma[]>`
   EXEC GetWaitingRolCikarmalar @KisiId = ${+kisi.id}
 `;
 
@@ -89,20 +81,16 @@ export async function GetWaitingRolCikarmalar(): Promise<
   }));
 }
 
-export async function GetWaitingKisiYetkiEdit(): Promise<
-  WaitingKisiYetkiEditGridType[]
-> {
+export async function WaitingKisiYetkiEdit(): Promise<IWaitingKisiYetkiEdit[]> {
   const kisi = await currentUser();
 
   if (!kisi) {
     return [];
   }
 
-  const kisiYetkiEdits = await db.$queryRaw<WaitingKisiYetkiEditGridType[]>`
+  const kisiYetkiEdits = await db.$queryRaw<IWaitingKisiYetkiEdit[]>`
   EXEC GetWaitingKisiYetkiEdits @KisiId = ${+kisi.id}
 `;
-
-  // console.log("kisiYetkiEdits: ", kisiYetkiEdits);
 
   return kisiYetkiEdits.map((item) => ({
     KisiYetkiEditId: item.KisiYetkiEditId,
@@ -114,20 +102,16 @@ export async function GetWaitingKisiYetkiEdit(): Promise<
   }));
 }
 
-export async function GetWaitingKisiSayfaEdit(): Promise<
-  WaitingKisiSayfaEditGridType[]
-> {
+export async function WaitingKisiSayfaEdit(): Promise<IWaitingKisiSayfaEdit[]> {
   const kisi = await currentUser();
 
   if (!kisi) {
     return [];
   }
 
-  const kisiSayfaEdits = await db.$queryRaw<WaitingKisiSayfaEditGridType[]>`
+  const kisiSayfaEdits = await db.$queryRaw<IWaitingKisiSayfaEdit[]>`
   EXEC GetWaitingKisiSayfaEdits @KisiId = ${+kisi.id}
 `;
-
-  // console.log("kisiYetkiEdits: ", kisiYetkiEdits);
 
   return kisiSayfaEdits.map((item) => ({
     KisiSayfaEditId: item.KisiSayfaEditId,
@@ -136,6 +120,30 @@ export async function GetWaitingKisiSayfaEdit(): Promise<
     SayfaId: item.SayfaId,
     SayfaRoute: item.SayfaRoute,
     IsPermitted: item.IsPermitted,
+    BaslangicTarihi: item.BaslangicTarihi,
+    BitisTarihi: item.BitisTarihi,
+  }));
+}
+
+export async function WaitingKisiSayfaAtama(): Promise<
+  IWaitingKisiSayfaAtama[]
+> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  const kisiSayfaAtama = await db.$queryRaw<IWaitingKisiSayfaAtama[]>`
+  EXEC GetWaitingKisiSayfaAtamas @KisiId = ${+kisi.id}
+`;
+
+  return kisiSayfaAtama.map((item) => ({
+    KisiSayfaAtamaId: item.KisiSayfaAtamaId,
+    KisiId: item.KisiId,
+    KisiAdi: item.KisiAdi,
+    SayfaId: item.SayfaId,
+    SayfaRoute: item.SayfaRoute,
     BaslangicTarihi: item.BaslangicTarihi,
     BitisTarihi: item.BitisTarihi,
   }));

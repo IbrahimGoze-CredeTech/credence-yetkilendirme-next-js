@@ -1,41 +1,47 @@
 import { Suspense } from 'react'
-import { GetWaitingKisiSayfaEdit, GetWaitingKisiYetkiEdit, GetWaitingRolAtamalar, GetWaitingRolCikarmalar } from '@/actions/bekleyen-talepler';
-import { GetPreviousKisiSayfaEditDetails, GetPreviousKisiYetkiEditDetails, GetPreviousRolAtamaDetails, GetPreviousRolCikarmaDetails } from '@/actions/eski-talepler';
 import { TalepOnayClient } from './talep-onay-client';
+import { PreviousKisiSayfaAtama, PreviousKisiSayfaEdit, PreviousKisiYetkiEdit, PreviousRolAtama, PreviousRolCikarma } from '@/actions/previous-demands';
+import { WaitingRolAtamalar, WaitingRolCikarmalar, WaitingKisiYetkiEdit, WaitingKisiSayfaAtama, WaitingKisiSayfaEdit } from '@/actions/waiting-demands';
 
 
 async function TalepOnayData() {
+  // MAke promise awawit for 2 seconds
+  // await new Promise(resolve => setTimeout(resolve, 2000));
   const [
-    rolAtamalar,
-    rolCikarmalar,
-    kisiYetkiEdit,
-    kisiSayfaEdit,
-    rolAtamaTalepler,
-    rolCikarmaTalepler,
-    kisiYetkiEditTalepler,
+    waitingRolAtamalar,
+    waitingRolCikarmalar,
+    waitingKisiYetkiEdit,
+    waitingKisiSayfaAtama,
+    waitingKisiSayfaEdit,
+    previousRolAtama,
+    previousRolCikarma,
+    previousKisiYetkiEdit,
+    previousKisiSayfaAtama,
     previousKisiSayfaEdit
-    // kisiSayfaEdit
   ] = await Promise.all([
-    GetWaitingRolAtamalar(),
-    GetWaitingRolCikarmalar(),
-    GetWaitingKisiYetkiEdit(),
-    GetWaitingKisiSayfaEdit(),
-    GetPreviousRolAtamaDetails(),
-    GetPreviousRolCikarmaDetails(),
-    GetPreviousKisiYetkiEditDetails(),
-    GetPreviousKisiSayfaEditDetails()
-    // fetcherGet("/Talep/kisi-sayfaEdit-bekleyen").then(res => res.json())
+    WaitingRolAtamalar(),
+    WaitingRolCikarmalar(),
+    WaitingKisiYetkiEdit(),
+    WaitingKisiSayfaAtama(),
+    WaitingKisiSayfaEdit(),
+    PreviousRolAtama(),
+    PreviousRolCikarma(),
+    PreviousKisiYetkiEdit(),
+    PreviousKisiSayfaAtama(),
+    PreviousKisiSayfaEdit()
   ]);
 
   return (
     <TalepOnayClient
-      rolAtamalar={rolAtamalar}
-      rolCikarmalar={rolCikarmalar}
-      kisiYetkiEdit={kisiYetkiEdit}
-      rolAtamaTalepler={rolAtamaTalepler}
-      rolCikarmaTalepler={rolCikarmaTalepler}
-      kisiYetkiEditTalepler={kisiYetkiEditTalepler}
-      kisiSayfaEdit={kisiSayfaEdit}
+      waitingRolAtamalar={waitingRolAtamalar}
+      waitingRolCikarmalar={waitingRolCikarmalar}
+      waitingKisiYetkiEdit={waitingKisiYetkiEdit}
+      waitingKisiSayfaAtama={waitingKisiSayfaAtama}
+      waitingKisiSayfaEdit={waitingKisiSayfaEdit}
+      previousRolAtama={previousRolAtama}
+      previousRolCikarma={previousRolCikarma}
+      previousKisiYetkiEdit={previousKisiYetkiEdit}
+      previousKisiSayfaAtama={previousKisiSayfaAtama}
       previousKisiSayfaEdit={previousKisiSayfaEdit}
     />
   )
