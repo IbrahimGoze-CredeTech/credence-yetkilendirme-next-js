@@ -1,7 +1,7 @@
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/hooks/use-toast";
-import { PreviousRolCikarmaDetails, WaitingRolCikarmaGridType } from "@/types";
+import { IPreviousRolCikarma, IWaitingRolCikarma } from "@/types";
 import DataGrid, {
   Button,
   Column,
@@ -14,17 +14,17 @@ import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
 import { Separator } from "@/components/ui/separator";
 
 import React, { useEffect, useState } from "react";
-import { GetPreviousRolCikarmaDetails } from "@/actions/eski-talepler";
+import { PreviousRolCikarma } from "@/actions/previous-demands";
 
 interface Props {
-  data: WaitingRolCikarmaGridType[];
-  rolCikarmaTalepler: PreviousRolCikarmaDetails[];
+  data: IWaitingRolCikarma[];
+  rolCikarmaTalepler: IPreviousRolCikarma[];
 }
 
 export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
 
-  const [gridData, setGridData] = useState<WaitingRolCikarmaGridType[]>(data);
-  const [talepGrid, setTalepGrid] = useState<PreviousRolCikarmaDetails[]>([]);
+  const [gridData, setGridData] = useState<IWaitingRolCikarma[]>(data);
+  const [talepGrid, setTalepGrid] = useState<IPreviousRolCikarma[]>([]);
 
   useEffect(() => {
     setGridData(data);
@@ -43,7 +43,7 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
           (row) => item.row && row.RolCikarmaId !== item.row.data.RolCikarmaId
         )
       );
-      const responseJson = await GetPreviousRolCikarmaDetails();
+      const responseJson = await PreviousRolCikarma();
       setTalepGrid(responseJson);
       toast({
         variant: "success",
@@ -69,7 +69,7 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
           (row) => item.row && row.RolCikarmaId !== item.row.data.RolCikarmaId
         )
       );
-      const responseJson = await GetPreviousRolCikarmaDetails();
+      const responseJson = await PreviousRolCikarma();
       setTalepGrid(responseJson);
       toast({
         variant: "destructive",

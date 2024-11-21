@@ -1,21 +1,21 @@
 'use client';
-import { GetWaitingKisiYetkiEdit, GetWaitingRolAtamalar, GetWaitingRolCikarmalar } from '@/actions/bekleyen-talepler'
 import React, { useEffect, useState, useTransition } from 'react'
-import { WaitingKisiYetkiEditGridType, WaitingRolAtamaGridType, WaitingRolCikarmaGridType } from '@/types';
+import { IWaitingKisiYetkiEdit, IWaitingRolAtama, IWaitingRolCikarma } from '@/types';
+import { WaitingKisiYetkiEdit, WaitingRolAtamalar, WaitingRolCikarmalar } from '@/actions/waiting-demands';
 
 export default function TalepOnayPage() {
 
-  const [rolAtamalar, setRolAtamalar] = useState<WaitingRolAtamaGridType[]>([])
-  const [rolCikarmalar, setRolCikarmalar] = useState<WaitingRolCikarmaGridType[]>([])
-  const [kisiYetkiEdit, setKisiYetkiEdit] = useState<WaitingKisiYetkiEditGridType[]>([])
+  const [rolAtamalar, setRolAtamalar] = useState<IWaitingRolAtama[]>([])
+  const [rolCikarmalar, setRolCikarmalar] = useState<IWaitingRolCikarma[]>([])
+  const [kisiYetkiEdit, setKisiYetkiEdit] = useState<IWaitingKisiYetkiEdit[]>([])
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     startTransition(async () => {
       const [rolAtamalar, rolCikarmalar, kisiYetkiEdit] = await Promise.all([
-        GetWaitingRolAtamalar(),
-        GetWaitingRolCikarmalar(),
-        GetWaitingKisiYetkiEdit(),
+        WaitingRolAtamalar(),
+        WaitingRolCikarmalar(),
+        WaitingKisiYetkiEdit(),
       ]);
 
       setRolAtamalar(rolAtamalar);

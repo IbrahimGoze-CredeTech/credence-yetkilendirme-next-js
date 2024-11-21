@@ -2,8 +2,10 @@
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { TalepKisiSayfaAtamaSchema, TalepKisiSayfaEditSchema } from "@/schemas";
 import { KisiSayfaFromType } from "@/types";
-import { fetcherGet } from "@/utils";
+import { fetcherGet, fetcherPost } from "@/utils";
+import { z } from "zod";
 
 export async function kisininSayfalar(
   kisiName: string
@@ -23,27 +25,17 @@ export async function kisininSayfalar(
     session?.token
   );
 
-  // const allPages = await db.sayfa.findMany();
-
-  // Filter the roller array to remove roles that are already assigned to the kisi (present in kisiRoller)
-  // const filteredPages = allPages.filter(
-  //   (page) =>
-  //     !pages.some((kisiRol) => kisiRol.sayfaRoute === page.SayfaRoute)
-  // );
-
   const transformedArray = pages.map(({ sayfaRoute, isPermitted }) => ({
     sayfaRoute,
     isPermitted,
   }));
-
-  // console.log(transformedArray);
 
   return transformedArray;
 }
 
 export async function kisiAtanabilirSayfalar(
   kisiAd: string
-): Promise<KisiSayfaFromType[]> {
+): Promise<string[]> {
   const session = await auth();
 
   //Get the kisi surname from the name by splinting the spaces
@@ -55,26 +47,141 @@ export async function kisiAtanabilirSayfalar(
     },
   });
 
-  const kisiSayfalar = await fetcherGet(
+  type KisiSayfaType = {
+    kisiId: number;
+    kisiAd: string;
+    kisiSoyad: string;
+    sayfaRoute: string;
+    isPermitted: boolean;
+  };
+  const kisiSayfalar: KisiSayfaType[] = await fetcherGet(
     `/Sayfa/kisi-sayfa/${kisi?.KisiId}`,
     session?.token
   );
 
-  // const sayfalar = await fetcherGet(`/Sayfa`, session?.token);
+  const kisiSayfaRoutes = kisiSayfalar.map((item) => item.sayfaRoute);
 
-  const sayfalar = await db.sayfa.findMany();
-  // console.log("sayfalar: ", sayfalar);
+  const sayfalar = await db.sayfa.findMany({ select: { SayfaRoute: true } });
+
+  const sayfaRoutes = sayfalar.map((item) => item.SayfaRoute);
 
   // Filter the sayfalar array remove the sayfaRoute that are already assigned to the kisi (present in kisiSayfalar)
-  const filteredSayfalar = sayfalar.filter(
-    (sayfa: { SayfaRoute: string }) =>
-      !kisiSayfalar.some(
-        (kisiRol: { sayfaRoute: string }) =>
-          kisiRol.sayfaRoute === sayfa.SayfaRoute
-      )
+  const filteredSayfalar = sayfaRoutes.filter(
+    (sayfaRoute) => !kisiSayfaRoutes.includes(sayfaRoute)
   );
 
-  // console.log("filtered Sayfalar: ", filteredSayfalar);
-
   return filteredSayfalar;
+}
+
+export async function kisiSayfaEditPost(
+  values: z.infer<typeof TalepKisiSayfaEditSchema>
+) {
+  type KisiSayfaEditRequest = {
+    kisiAdi: string;
+    sayfaRoute: string;
+    isPermitted: boolean;
+    baslangicTarihi: string;
+    bitisTarihi: string;
+    ciftImza: boolean;
+    ekstraImza: string[];
+  };
+
+  const session = await auth();
+
+  const validateFields = TalepKisiSayfaEditSchema.safeParse(values);
+
+  if (!validateFields.success) {
+    return { success: "", error: validateFields.error.errors[0].message };
+  }
+
+  const {
+    kisiAdi,
+    SayfaRoute,
+    isPermitted,
+    baslamaTarihi,
+    bitisTarihi,
+    ciftImza,
+    ekstraImza,
+  } = values;
+
+  let ekstraImzaArray: string[] = [];
+  if (ekstraImza === undefined) {
+    ekstraImzaArray = [];
+  } else {
+    ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
+  }
+
+  const kisiSayfaEditRequest: KisiSayfaEditRequest = {
+    kisiAdi: kisiAdi,
+    sayfaRoute: SayfaRoute,
+    isPermitted: isPermitted,
+    baslangicTarihi: baslamaTarihi.toISOString(),
+    bitisTarihi: bitisTarihi.toISOString(),
+    ciftImza: ciftImza,
+    ekstraImza: ekstraImzaArray,
+  };
+
+  // console.log("values kisiSayfaEdit: ", sayfaAtamaRequest);
+
+  await fetcherPost(
+    "/Talep/kisi-sayfa-edit",
+    session?.token,
+    JSON.stringify(kisiSayfaEditRequest)
+  );
+  return { success: "Talep Yaratıldı", error: "" };
+}
+
+export async function kisiSayfaAtamaPost(
+  values: z.infer<typeof TalepKisiSayfaAtamaSchema>
+) {
+  type KisiSayfaAtamaRequest = {
+    kisiAdi: string;
+    sayfaRoute: string;
+    baslangicTarihi: string;
+    bitisTarihi: string;
+    ciftImza: boolean;
+    ekstraImza: string[];
+  };
+
+  const session = await auth();
+
+  const validateFields = TalepKisiSayfaAtamaSchema.safeParse(values);
+
+  if (!validateFields.success) {
+    return { success: "", error: validateFields.error.errors[0].message };
+  }
+
+  const {
+    kisiAdi,
+    SayfaRoute,
+    baslamaTarihi,
+    bitisTarihi,
+    ciftImza,
+    ekstraImza,
+  } = values;
+
+  let ekstraImzaArray: string[] = [];
+  if (ekstraImza === undefined) {
+    ekstraImzaArray = [];
+  } else {
+    ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
+  }
+
+  const kisiSayfaAtamaRequest: KisiSayfaAtamaRequest = {
+    kisiAdi: kisiAdi,
+    sayfaRoute: SayfaRoute,
+    baslangicTarihi: baslamaTarihi.toISOString(),
+    bitisTarihi: bitisTarihi.toISOString(),
+    ciftImza: ciftImza,
+    ekstraImza: ekstraImzaArray,
+  };
+
+  const response = await fetcherPost(
+    "/Talep/kisi-sayfa-atama",
+    session?.token,
+    JSON.stringify(kisiSayfaAtamaRequest)
+  );
+  // console.log("response: ", response);
+
+  return { success: response.message, error: "" };
 }

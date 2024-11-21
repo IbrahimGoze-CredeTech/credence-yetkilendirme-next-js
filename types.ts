@@ -107,7 +107,7 @@ export type Yetki = {
 };
 
 //#region WaitingTalepGridType
-export type WaitingRolAtamaGridType = {
+export type IWaitingRolAtama = {
   RolAtamaId: number;
   RolAdi: string | undefined;
   KisiAdi: string;
@@ -115,14 +115,14 @@ export type WaitingRolAtamaGridType = {
   RolBitisTarihi: Date | null;
 };
 
-export type WaitingRolCikarmaGridType = {
+export type IWaitingRolCikarma = {
   RolCikarmaId: number;
   RolAdi: string | undefined;
   KisiAdi: string;
   RolCikarmaTarihi: Date | null;
 };
 
-export type WaitingKisiYetkiEditGridType = {
+export type IWaitingKisiYetkiEdit = {
   KisiYetkiEditId: number;
   YetkiAdi: string;
   EylemTuruId: number;
@@ -131,7 +131,7 @@ export type WaitingKisiYetkiEditGridType = {
   YetkiBitisTarihi: Date | null;
 };
 
-export interface WaitingKisiSayfaEditGridType {
+export interface IWaitingKisiSayfaEdit {
   KisiSayfaEditId: number;
   KisiId: number;
   KisiAdi: string;
@@ -141,53 +141,69 @@ export interface WaitingKisiSayfaEditGridType {
   BaslangicTarihi: Date | null;
   BitisTarihi: Date | null;
 }
+
+export interface IWaitingKisiSayfaAtama {
+  KisiSayfaAtamaId: number;
+  KisiId: number;
+  KisiAdi: string;
+  SayfaId: number;
+  SayfaRoute: string;
+  BaslangicTarihi: string | null; // Assuming datetime fields are returned as ISO strings, null for optional
+  BitisTarihi: string | null; // Adjust type if using Date objects in TypeScript
+}
 //#endregion
 
 //#region PreviousTalepGridTypes
-export interface PreviousRolAtamaDetails {
-  rolAdi: string;
-  rolAtananAd: string;
-  rolAtananSoyad: string;
-  rolBaslangicTarihi: Date;
-  rolBitisTarihi: Date;
-  imzaAd: string;
-  imzaSoyad: string;
-  imzaDurumTarihi: Date;
-  durumAd: string;
+export interface IPreviousRolAtama {
+  RolAdi: string;
+  RolAtananAd: string;
+  RolAtananSoyad: string;
+  RolBaslangicTarihi: Date;
+  RolBitisTarihi: Date;
+  ImzaAd: string;
+  ImzaSoyad: string;
+  ImzaDurumTarihi: Date;
+  DurumAd: string;
 }
 
-export interface PreviousRolCikarmaDetails {
-  rolCikarilanAd: string;
-  rolCikarilanSoyad: string;
-  rolAdi: string;
-  rolCikarmaTarihi: string; // Since the value is a string representing a date, we keep it as string type.
-  imzaAd: string;
-  imzaSoyad: string;
-  imzaTarihi: Date | null; // Date or null, because imzaTarihi could be null.
-  imzaDurumu: string;
+export interface IPreviousRolCikarma {
+  RolCikarilanAd: string;
+  RolCikarilanSoyad: string;
+  RolAdi: string;
+  RolCikarmaTarihi: string; // Since the value is a string representing a date, we keep it as string type.
+  ImzaAd: string;
+  ImzaSoyad: string;
+  ImzaTarihi: Date | null; // Date or null, because imzaTarihi could be null.
+  ImzaDurumu: string;
 }
 
-export interface PreviousKisiYetkiEditDetails {
-  ad: string;
-  soyad: string;
-  yetkiAdi: string;
-  eylemAdi: string;
-  yetkiBaslangicTarihi: Date | null;
-  yetkiBitisTarihi: string;
-  imzaAd: string;
-  imzaSoyad: string;
-  imzaTarihi: Date | null;
-  imzaDurumu: string;
+export interface IPreviousKisiYetkiEdit {
+  Ad: string;
+  Soyad: string;
+  YetkiAdi: string;
+  EylemAdi: string;
+  YetkiBaslangicTarihi: Date | null;
+  YetkiBitisTarihi: string;
+  ImzaAd: string;
+  ImzaSoyad: string;
+  ImzaTarihi: Date | null;
+  ImzaDurumu: string;
 }
 
-export interface PreviousKisiSayfaEditDetails {
-  kisiAdi: string; // Full name from CONCAT(k.Ad, ' ', k.Soyad)
-  sayfaRoute: string; // Route information from s.SayfaRoute
-  isPermitted: boolean; // Permission flag from kse.IsPermitted
-  baslangicTarihi: Date | null; // Start date from kse.BaslangicTarihi
-  bitisTarihi: Date | null; // End date from kse.BitisTarihi
+export interface IPreviousKisiSayfaEdit {
+  KisiAdi: string; // Full name from CONCAT(k.Ad, ' ', k.Soyad)
+  SayfaRoute: string; // Route information from s.SayfaRoute
+  IsPermitted: boolean; // Permission flag from kse.IsPermitted
+  BaslangicTarihi: Date | null; // Start date from kse.BaslangicTarihi
+  BitisTarihi: Date | null; // End date from kse.BitisTarihi
 }
 
+export interface IPreviousKisiSayfaAtama {
+  KisiAdi: string;
+  SayfaRoute: string;
+  BaslangicTarihi: string | null; // Nullable datetime as ISO string
+  BitisTarihi: string | null; // Nullable datetime as ISO string
+}
 //#endregion
 export interface TalepKayit {
   talep_Olusturulma_Tarihi: Date;
@@ -200,49 +216,6 @@ export interface TalepKayit {
   talepTipi: string;
 }
 
-// export interface RolAtamaTalepler {
-//   rolAdi: string;
-//   rolAtananAd: string;
-//   rolAtananSoyad: string;
-//   rolBaslangicTarihi: string;
-//   rolBitisTarihi: string;
-//   imzaAd: string;
-//   imzaSoyad: string;
-//   imzaDurumTarihi: string;
-//   durumAd: string;
-// }
-
-// export interface RolCikarmaTalepler {
-//   rolCikarilanAd: string;
-//   rolCikarilanSoyad: string;
-//   rolAdi: string;
-//   rolCikarmaTarihi: string;
-//   imzaAd: string;
-//   imzaSoyad: string;
-//   imzaTarihi: string;
-//   imzaDurumu: string;
-// }
-
-// export interface KisiYetkiEditTalepler {
-//   kisiYetkiEditId: number;
-//   ad: string;
-//   soyad: string;
-//   yetkiAdi: string;
-//   eylemAdi: string;
-//   yetkiBaslangicTarihi: string;
-//   yetkiBitisTarihi: string;
-//   imzaAd: string;
-//   imzaSoyad: string;
-//   imzaTarihi: string;
-//   imzaDurumu: string;
-// }
-// export interface kisiSayfaEdit {
-//   kisiAdi: string;
-//   sayfaRoute: string;
-//   isPermitted: boolean;
-//   sayfaBaslangicTarihi: string;
-//   sayfaBitisTarihi: string;
-// }
 export interface RolSayfa {
   rolId: string;
   rolAdi: string;

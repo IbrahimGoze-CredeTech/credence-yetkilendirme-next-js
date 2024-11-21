@@ -10,22 +10,21 @@ import { useStaticTablesContext } from '@/context';
 import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { TalepKisiSayfaEditSchema } from '@/schemas';
+import { TalepKisiSayfaAtamaSchema } from '@/schemas';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
-import { kisininSayfalar, kisiSayfaEditPost } from '@/actions/kisi-sayfa';
-import { KisiSayfaFromType } from '@/types';
+import { kisiAtanabilirSayfalar, kisiSayfaAtamaPost } from '@/actions/kisi-sayfa';
 
-export default function KisiSayfaEditForm() {
+export default function KisiSayfaAtamaForm() {
   const staticTablesContext = useStaticTablesContext();
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
 
-  const [sayfalar, setSayfalar] = useState<KisiSayfaFromType[]>([]);
+  const [sayfalar, setSayfalar] = useState<string[]>([]);
   const sayfalarOptions: Option[] = sayfalar.map((sayfa) =>
-    ({ label: sayfa.sayfaRoute, value: sayfa.sayfaRoute })) || [];
+    ({ label: sayfa, value: sayfa })) || [];
 
 
   const [isPending, startTransition] = useTransition();
@@ -38,8 +37,8 @@ export default function KisiSayfaEditForm() {
   // const [sayfalar, setSayfalar] = useState([])
 
 
-  const form = useForm<z.infer<typeof TalepKisiSayfaEditSchema>>({
-    resolver: zodResolver(TalepKisiSayfaEditSchema),
+  const form = useForm<z.infer<typeof TalepKisiSayfaAtamaSchema>>({
+    resolver: zodResolver(TalepKisiSayfaAtamaSchema),
     defaultValues: {
       SayfaRoute: '',
       kisiAdi: '',
@@ -50,13 +49,13 @@ export default function KisiSayfaEditForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof TalepKisiSayfaEditSchema>) => {
+  const onSubmit = (values: z.infer<typeof TalepKisiSayfaAtamaSchema>) => {
     // console.log('values: ', values);
     setError('');
     setSuccess('');
 
     startTransition(() => {
-      kisiSayfaEditPost(values).then((data) => {
+      kisiSayfaAtamaPost(values).then((data) => {
         if (data?.error) {
           form.reset();
           setError(data.error);
@@ -80,33 +79,19 @@ export default function KisiSayfaEditForm() {
 
   const onValueChange = (value: string) => {
     // console.log(value);
-
     startTransition(async () => {
-      const sayfalar = await kisininSayfalar(value);
+      const sayfalar = await kisiAtanabilirSayfalar(value);
       setSayfalar(sayfalar);
       setIsKisiSelected(true); // Update boolean based on whether there's a value
     });
   };
 
-  const onSayfaSelected = (value: string) => {
-    console.log(value);
-
-    // Find the yetki in kisiYetkiler array based on the value yetkiAdi
-    const sayfa = sayfalar.find(sayfa => sayfa.sayfaRoute === value);
-    const isPermitted = sayfa?.isPermitted;
-    if (isPermitted === undefined) {
-      return;
-    }
-    form.setValue('isPermitted', isPermitted);
-    form.setValue('SayfaRoute', value);
-  };
-
-  const onFormError: SubmitErrorHandler<z.infer<typeof TalepKisiSayfaEditSchema>> = (e) => {
+  const onFormError: SubmitErrorHandler<z.infer<typeof TalepKisiSayfaAtamaSchema>> = (e) => {
     console.error(e)
   }
 
   return (
-    <CardWrapper headerLabel={'Kişi Sayfa Edit'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
+    <CardWrapper headerLabel={'Kişi Sayfa Atama'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
           <div className='grid grid-cols-2 gap-8'>
@@ -122,28 +107,9 @@ export default function KisiSayfaEditForm() {
             <FormField control={form.control} name={'SayfaRoute'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Sayfa Adi</FormLabel>
-                <CustomCombobox onValueChange={(value) => { field.onChange(); onSayfaSelected(value) }} Options={sayfalarOptions} placeholder={'Sayfa Ara'} searchPlaceholder={'Sayfa Ara...'} disabled={isPending || !isKisiSelected} />
+                <CustomCombobox onValueChange={field.onChange} Options={sayfalarOptions} placeholder={'Sayfa Ara'} searchPlaceholder={'Sayfa Ara...'} disabled={isPending || !isKisiSelected} />
               </FormItem>
             )} />
-
-            <FormField control={form.control} name="isPermitted" render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                <div className="space-y-0.5">
-                  <FormLabel>İzin</FormLabel>
-                  <FormDescription>
-                    Kişi bu sayfayı kullanabilir mi?
-                  </FormDescription>
-                </div>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    disabled={isPending || !isKisiSelected}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-            />
 
             <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
               <FormItem>

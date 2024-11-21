@@ -1,9 +1,9 @@
-import { PreviousKisiSayfaEdit } from '@/actions/previous-demands';
+import { PreviousKisiSayfaAtama } from '@/actions/previous-demands';
 import { talepOnayla } from '@/actions/talep-onaylama';
-import { WaitingKisiSayfaEdit } from '@/actions/waiting-demands';
+import { WaitingKisiSayfaAtama } from '@/actions/waiting-demands';
 import { ToastAction } from '@/components/ui/toast';
 import { toast } from '@/hooks/use-toast';
-import { IPreviousKisiSayfaEdit, IWaitingKisiSayfaEdit } from '@/types';
+import { IPreviousKisiSayfaAtama, IWaitingKisiSayfaAtama } from '@/types';
 import DataGrid, {
   Button, Column, Editing,
   SearchPanel, Pager, Paging
@@ -12,24 +12,24 @@ import { ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
 import React, { useState } from 'react'
 
 interface Props {
-  data: IWaitingKisiSayfaEdit[];
-  previousKisiSayfaEdit: IPreviousKisiSayfaEdit[];
+  data: IWaitingKisiSayfaAtama[];
+  previousKisiSayfaAtama: IPreviousKisiSayfaAtama[];
 }
 
-export default function KisiSayfaEditOnay({ data, previousKisiSayfaEdit }: Props) {
+export default function KisiSayfaAtamaOnay({ data, previousKisiSayfaAtama }: Props) {
 
-  const [gridData, setGridData] = useState<IWaitingKisiSayfaEdit[]>(data);
-  const [previousGrid, setPreviousGrid] = useState<IPreviousKisiSayfaEdit[]>(previousKisiSayfaEdit);
+  const [gridData, setGridData] = useState<IWaitingKisiSayfaAtama[]>(data);
+  const [previousGrid, setPreviousGrid] = useState<IPreviousKisiSayfaAtama[]>(previousKisiSayfaAtama);
 
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
       // console.log('Onaylandı: ', item.row.data);
-      const response = await talepOnayla(true, item.row.data.KisiSayfaEditId);
+      const response = await talepOnayla(true, item.row.data.KisiSayfaAtamaId);
       if (!response) return;
-      const prevGrid = await PreviousKisiSayfaEdit();
+      const prevGrid = await PreviousKisiSayfaAtama();
       setPreviousGrid(prevGrid);
-      const grid = await WaitingKisiSayfaEdit();
+      const grid = await WaitingKisiSayfaAtama();
       setGridData(grid);
       // fetcher();
       toast({
@@ -45,11 +45,11 @@ export default function KisiSayfaEditOnay({ data, previousKisiSayfaEdit }: Props
     }
     else {
       // console.log('Reddedildi: ', item.row.data);
-      const response = await talepOnayla(false, item.row.data.KisiSayfaEditId);
+      const response = await talepOnayla(false, item.row.data.KisiSayfaAtamaId);
       if (!response) return;
-      const prevGrid = await PreviousKisiSayfaEdit();
+      const prevGrid = await PreviousKisiSayfaAtama();
       setPreviousGrid(prevGrid);
-      const grid = await WaitingKisiSayfaEdit();
+      const grid = await WaitingKisiSayfaAtama();
       setGridData(grid);
       toast({
         variant: "destructive",
@@ -73,17 +73,13 @@ export default function KisiSayfaEditOnay({ data, previousKisiSayfaEdit }: Props
             mode="row"
             useIcons={true}
           />
-          {/* <Column dataField="ad" caption="Ad" /> */}
-          {/* <Column dataField="soyad" caption="Soyad" /> */}
           <Column dataField="KisiAdi" caption="Kişi Adı" />
           <Column dataField="SayfaRoute" caption="Sayfa" />
-          <Column dataField="IsPermitted" caption="Izin" />
           <Column dataField="BaslangicTarihi" caption="Başlama Tarihi" />
           <Column dataField="BitisTarihi" caption="Bitiş Tarihi" />
           <Column type='buttons' width={120}>
             <Button hint='Onay' visible={true} onClick={(e) => onClick(true, e)} text='Onay' />
             <Button hint='Ret' visible={true} onClick={(e) => onClick(false, e)} text='Ret' />
-
           </Column>
         </DataGrid>
       </div>
