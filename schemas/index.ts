@@ -118,19 +118,48 @@ export const TalepRolCikarmaSchema = KisiFieldSchema.merge(
   });
 
 export const KisiSchema = z.object({
-  kisiAdi: z.string().min(1, { message: "Kisi adı boş olamaz" }),
+  kisiAdi: z
+    .string()
+    .min(1, { message: "Kisi adı boş olamaz" })
+    .max(20, { message: "Kisi adı 20 karakterden fazla olamaz" }),
   kisiSoyadi: z.string().min(1, { message: "Kisi soyadı boş olamaz" }),
   kullaniciAdi: z
     .string()
-    .max(20, { message: "Kullanıcı adı 20 karakterden fazla olamaz" }),
+    .max(20, { message: "Kullanıcı adı 20 karakterden fazla olamaz" })
+    .regex(/\./, { message: "Kullanıcı adı bir nokta içermelidir" }),
   kisiSifre: z.string().min(1, { message: "Kisi şifresi boş olamaz" }),
+});
+
+export const KisiSilmeSchema = z.object({
+  kullaniciAdi: z
+    .string()
+    .max(20, { message: "Kullanıcı adı 20 karakterden fazla olamaz" })
+    .regex(/\./, { message: "Kullanıcı adı bir nokta içermelidir" }),
 });
 
 export const RolSchema = z.object({
   rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
   supervizorRol: z.string().min(1, { message: "Supervizor rol boş olamaz" }),
+  riskWeight: z.string().refine((value) => {
+    if (value === "") return true;
+    return !isNaN(parseInt(value));
+  }),
+
+  // riskWeight: z
+  //   .number()
+  //   .int()
+  //   .min(0, { message: "Risk weight must be positive" })
+  //   .nullable(),
+});
+
+export const RolSilSchema = z.object({
+  rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
 });
 
 export const YetkiSchema = z.object({
   yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
+});
+
+export const SayfaSchema = z.object({
+  sayfaRoute: z.string().min(1, { message: "Yetki adı boş olamaz" }),
 });

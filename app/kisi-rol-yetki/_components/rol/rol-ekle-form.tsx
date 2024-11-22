@@ -6,7 +6,7 @@ import FormSuccess from '@/components/form-success';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import React, { useState, useTransition } from 'react'
-import { useForm } from 'react-hook-form';
+import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { RolSchema } from '@/schemas';
@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { useStaticTablesContext } from '@/context';
 import { rolYaratma } from '@/actions/rol-yaratma';
 
-export default function RolForm() {
+export default function RolEkleForm() {
   const staticTablesContext = useStaticTablesContext();
   const [isPending, startTransition] = useTransition();
 
@@ -29,7 +29,8 @@ export default function RolForm() {
     resolver: zodResolver(RolSchema),
     defaultValues: {
       rolAdi: '',
-      supervizorRol: ''
+      supervizorRol: '',
+      riskWeight: "",
     }
   });
 
@@ -40,7 +41,7 @@ export default function RolForm() {
 
     startTransition(() => {
       rolYaratma(values).then((data) => {
-        console.log('data: ', data);
+        // console.log('data: ', data);
 
         if (data?.error) {
           form.reset();
@@ -48,7 +49,7 @@ export default function RolForm() {
         }
         if (data?.success) {
           form.reset();
-          setSuccess(data.success)
+          setSuccess("Rol başarıyla oluşturuldu")
           toast({
             title: "Rol başarıyla oluşturuldu",
             description: "Rol başarıyla oluşturuldu",
@@ -63,15 +64,26 @@ export default function RolForm() {
     })
   }
 
+  const handleRiskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    // form.setValue('riskWeight', parseInt(value, 10));
+  }
+
+  const onFormError: SubmitErrorHandler<z.infer<typeof RolSchema>> = (e) => {
+    console.error(e);
+    setError(e.rolAdi?.message || e.supervizorRol?.message || e.riskWeight?.message);
+  }
+
   return (
     <CardWrapper className='!w-[500px]' headerLabel={'Rol Yaratma'} backButtonLabel={'Ana Sayfaya Geri Don'} backButtonHref={'/'}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
+        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
           <div className='grid grid-cols-2 gap-8'>
 
             <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Kişi Adı</FormLabel>
+                <FormLabel>Rol Adı</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Rol Adı" />
                 </FormControl>
@@ -81,11 +93,11 @@ export default function RolForm() {
 
             <FormField control={form.control} name={'supervizorRol'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Rol Adi</FormLabel>
+                <FormLabel>Supervisor Adi</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Supervizor Rol" />
+                      <SelectValue placeholder="Supervisor Rol" />
                     </SelectTrigger>
                   </FormControl>
 
@@ -93,11 +105,20 @@ export default function RolForm() {
                     <SelectGroup>
                       <SelectLabel>Roller</SelectLabel>
                       {staticTablesContext.roller.map((rol) => (
-                        <SelectItem key={rol.rolId} value={rol.rolAdi}>{rol.rolAdi}</SelectItem>
+                        <SelectItem key={rol.rolAdi} value={rol.rolAdi}>{rol.rolAdi}</SelectItem>
                       ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+              </FormItem>
+            )} />
+
+            <FormField control={form.control} name={'riskWeight'} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Risk</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Risk" type='number' />
+                </FormControl>
               </FormItem>
             )} />
 

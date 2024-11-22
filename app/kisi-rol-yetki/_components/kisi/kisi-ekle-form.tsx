@@ -6,7 +6,7 @@ import FormSuccess from '@/components/form-success';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import React, { useState, useTransition } from 'react'
-import { useForm } from 'react-hook-form';
+import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { KisiSchema } from '@/schemas';
@@ -16,7 +16,7 @@ import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 
 
-export default function KisiForm() {
+export default function KisiEkleForm() {
   const [isPending, startTransition] = useTransition();
 
   const [error, setError] = useState<string | undefined>("")
@@ -35,19 +35,19 @@ export default function KisiForm() {
   const onSubmit = (values: z.infer<typeof KisiSchema>) => {
     setError('');
     setSuccess('');
-    console.log('values: ', values);
+    // console.log('values: ', values);
 
     startTransition(() => {
       kisiYaratma(values).then((data) => {
-        console.log('data: ', data);
+        // console.log('data: ', data);
 
         if (data?.error) {
           form.reset();
           setError(data.error);
         }
         if (data?.success) {
-          form.reset();
-          setSuccess(data.success)
+          // form.reset();
+          setSuccess("Kişi başarıyla oluşturuldu")
           toast({
             title: "Kişi başarıyla oluşturuldu",
             description: "Kişi başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
@@ -62,10 +62,15 @@ export default function KisiForm() {
     })
   }
 
+  const onFormError: SubmitErrorHandler<z.infer<typeof KisiSchema>> = (e) => {
+    console.error(e);
+    setError(e.kullaniciAdi?.message || e.kisiAdi?.message || e.kisiSoyadi?.message || e.kisiSifre?.message);
+  }
+
   return (
     <CardWrapper className='!w-[500px]' headerLabel={'Kişi Yaratma'} backButtonLabel={'Ana Sayfaya Geri Don'} backButtonHref={'/'}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
+        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
           <div className='grid grid-cols-2 gap-8'>
 
             <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (

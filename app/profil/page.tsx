@@ -9,9 +9,9 @@ import React, {
 import { DataGrid } from "devextreme-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { ExtendedUser } from "@/next-auth";
-import TalepOnayDatagrid from "../anasayfa/talep-onay/TalepOnayDatagrid";
-import KisiDataGridOzet from "../anasayfa/KisiDataGridOzet";
-import TalepOzet from "../anasayfa/TalepOzet";
+import TalepOnayDatagrid from "../_anasayfa/talep-onay/TalepOnayDatagrid";
+import KisiDataGridOzet from "../_anasayfa/KisiDataGridOzet";
+import TalepOzet from "../_anasayfa/TalepOzet";
 import ImzaAtmaGrid from "./_components/imza-atma-grid";
 import { DataItem, fetcherGet, formatDataList } from "@/utils";
 import { useSession } from "next-auth/react";

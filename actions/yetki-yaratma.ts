@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { YetkiSchema } from "@/schemas";
+import { SayfaSchema, YetkiSchema } from "@/schemas";
 import { z } from "zod";
 import { fetcherPost } from "@/utils";
 
@@ -20,7 +20,27 @@ export async function yetkiYaratma(values: z.infer<typeof YetkiSchema>) {
     yetkiAdi: yetkiAdi,
   };
 
-  console.log("kisi: ", JSON.stringify(yetki));
+  // console.log("kisi: ", JSON.stringify(yetki));
 
   await fetcherPost("/Yetki", session?.token, JSON.stringify(yetki));
+}
+
+export async function SayfaYaratma(values: z.infer<typeof SayfaSchema>) {
+  const session = await auth();
+
+  const validateFields = YetkiSchema.safeParse(values);
+
+  if (!validateFields.success) {
+    return { success: "", error: validateFields.error.errors[0].message };
+  }
+
+  const { sayfaRoute } = values;
+
+  const yetki = {
+    sayfaRoute: sayfaRoute,
+  };
+
+  // console.log("sayfaRoute: ", JSON.stringify(yetki));
+
+  await fetcherPost("/Sayfa", session?.token, JSON.stringify(yetki));
 }

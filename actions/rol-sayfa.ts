@@ -126,7 +126,7 @@ export async function rolSayfaAtamaPost(
   );
   // console.log("response: ", response);
 
-  return { success: response.message, error: "" };
+  return { success: response.success, error: response.error };
 }
 
 export async function rolSayfaCikarmaPost(
@@ -172,6 +172,6 @@ export async function rolSayfaCikarmaPost(
   );
   // console.log("response: ", response);
 
-  return { success: response.message, error: "" };
+  return { success: response.success, error: response.error };
 }
 //#endregion

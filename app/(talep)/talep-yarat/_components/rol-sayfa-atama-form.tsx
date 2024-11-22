@@ -59,12 +59,12 @@ export default function RolSayfaAtamaForm() {
     startTransition(() => {
       rolSayfaAtamaPost(values).then((data) => {
         if (data?.error) {
-          form.reset();
+          // form.reset();
           setError(data.error);
         }
         if (data.success) {
           form.reset();
-          setSuccess(data.success)
+          setSuccess("Talep başarıyla oluşturuldu")
           toast({
             title: "Talep başarıyla oluşturuldu",
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",

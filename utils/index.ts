@@ -1,7 +1,7 @@
 import { YetkiRolOld } from "../types";
 import jwt from "jsonwebtoken";
 
-const isLocalHost: boolean = false;
+const isLocalHost: boolean = true;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isYetkiArray = (data: any): data is YetkiRolOld[] => {
@@ -88,19 +88,61 @@ export const fetcherPost = async (
   );
 
   if (!response.ok) {
-    switch (response.status) {
-      case 401:
-        throw new Error("Unauthorized");
-      case 403:
-        throw new Error("Forbidden");
-      default:
-        throw new Error(
-          `Network response was not ok, status: ${response.status}`
-        );
+    let errorMessage = `Network response was not ok, status: ${response.status}`;
+    try {
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const errorData = await response.json(); // Parse JSON error
+        if (errorData && errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } else {
+        const textData = await response.text(); // Fallback to plain text
+        if (textData) {
+          errorMessage = textData;
+        }
+      }
+    } catch (e) {
+      console.error("Failed to parse error response:", e);
     }
+
+    return {
+      success: false,
+      error: errorMessage,
+      status: response.status,
+    };
   }
 
-  return response.json();
+  const data = await response.json();
+  return {
+    success: true,
+    data,
+  };
+
+  // if (!response.ok) {
+  //   let errorMessage = `Network response was not ok, status: ${response.status}`;
+  //   try {
+  //     const errorData = await response.json(); // Parse the JSON response from the server
+  //     if (errorData && errorData.message) {
+  //       errorMessage = errorData.message; // Use the error message from the server
+  //     }
+  //   } catch (e) {
+  //     console.error("Failed to parse error response:", e);
+  //   }
+
+  //   switch (response.status) {
+  //     case 400:
+  //       throw new Error(errorMessage); // Throw the detailed error message
+  //     case 401:
+  //       throw new Error("Unauthorized");
+  //     case 403:
+  //       throw new Error("Forbidden");
+  //     default:
+  //       throw new Error(errorMessage);
+  //   }
+  // }
+
+  // return response.json();
 };
 
 /**

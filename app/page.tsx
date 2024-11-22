@@ -1,7 +1,7 @@
-import KisiDataGridOzet from "./anasayfa/KisiDataGridOzet";
-import TalepOnayDatagrid from "./anasayfa/talep-onay/TalepOnayDatagrid";
-import TalepOzet from "./anasayfa/TalepOzet";
-import YaklasanYetkiler from "./anasayfa/YaklasanYetkiler";
+import KisiDataGridOzet from "./_anasayfa/KisiDataGridOzet";
+import TalepOnayDatagrid from "./_anasayfa/talep-onay/TalepOnayDatagrid";
+import TalepOzet from "./_anasayfa/TalepOzet";
+import YaklasanYetkiler from "./_anasayfa/YaklasanYetkiler";
 import "devextreme/dist/css/dx.light.css";
 import config from "devextreme/core/config";
 
@@ -19,11 +19,11 @@ export default function Home() {
 
           <TalepOnayDatagrid />
         </div>
-       
+
         <div className="border rounded-xl p-4 shadow-lg overflow-auto">
-        <YaklasanYetkiler/>
+          <YaklasanYetkiler />
         </div>
-        
+
       </div>
 
 
