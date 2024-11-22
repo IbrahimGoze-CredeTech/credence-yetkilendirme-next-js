@@ -18,24 +18,37 @@ import {
 const chartConfig = {
   RolAtama: {
     label: "Rol Atama",
-    color: "hsl(var(--chart-1))",
+    color: "#FF5733",
   },
   RolCikarma: {
     label: "Rol Çıkarma",
-    color: "#3b82f6",
+    color: "#33FF57",
   },
   YetkiEdit: {
     label: "Yetki Edit",
-    color: "hsl(var(--chart-2))",
+    color: "#3357FF",
   },
   KisiSayfaEdit: {
     label: "Kişi Sayfa Edit",
-    color: "hsl(var(--chart-3))", 
+    color: "#F4D03F",
   },
   KisiSayfaAtama: {
     label: "Kişi Sayfa Atama",
-    color: "hsl(var(--chart-4))", 
-  }
+    color: "#A569BD",
+  },
+  RolSayfaAtama: {
+    label: "Rol Sayfa Atama ",
+    color: "#F1948A",
+  },
+  RolSayfaCikarma: {
+    label: "Rol Sayfa Çıkarma ",
+    color: "#FF0000",
+  },
+
+  KisiSayfaCikarma: {
+    label: "Kişi Sayfa Çıkarma ",
+    color: "#000080",
+  },
 } satisfies ChartConfig;
 
 type ChartKeys = keyof typeof chartConfig;
