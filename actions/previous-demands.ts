@@ -10,6 +10,7 @@ import {
   IPreviousRolAtama,
   IPreviousRolCikarma,
   IPreviousRolSayfaAtama,
+  IPreviousRolSayfaCikarma,
 } from "@/types";
 
 export async function PreviousRolAtama(): Promise<IPreviousRolAtama[]> {
@@ -187,6 +188,31 @@ export async function PreviousRolSayfaAtama(): Promise<
   try {
     const kisiSayfaEdit = await db.$queryRaw<IPreviousRolSayfaAtama[]>`
   EXEC PreviousRolSayfaAtamas @KisiId = ${+kisi.id}`;
+
+    return kisiSayfaEdit.map((item) => ({
+      RolAdi: item.RolAdi,
+      SayfaRoute: item.SayfaRoute,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}
+
+export async function PreviousRolSayfaCikarma(): Promise<
+  IPreviousRolSayfaCikarma[]
+> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  try {
+    const kisiSayfaEdit = await db.$queryRaw<IPreviousRolSayfaCikarma[]>`
+  EXEC PreviousRolSayfaCikarmas @KisiId = ${+kisi.id}`;
 
     return kisiSayfaEdit.map((item) => ({
       RolAdi: item.RolAdi,

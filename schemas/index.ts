@@ -91,6 +91,14 @@ export const TalepRolSayfaAtamaSchema = RolFieldSchema.merge(
   .merge(EkstraImzaFieldSchema)
   .merge(SayfaFieldSchema);
 
+export const TalepRolSayfaCikarmaSchema = RolFieldSchema.merge(
+  BaslamaTarihiFieldSchema
+)
+  .merge(BitisTarihiFieldSchema)
+  .merge(CiftImzaFieldSchema)
+  .merge(EkstraImzaFieldSchema)
+  .merge(SayfaFieldSchema);
+
 export const YetkiEditSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
   .merge(BitisTarihiFieldSchema)
   .merge(CiftImzaFieldSchema)

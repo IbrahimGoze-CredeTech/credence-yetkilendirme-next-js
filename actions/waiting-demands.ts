@@ -10,6 +10,7 @@ import {
   IWaitingRolAtama,
   IWaitingRolCikarma,
   IWaitingRolSayfaAtama,
+  IWaitingRolSayfaCikarma,
 } from "@/types";
 import { Imza, RolAtama, RolCikarma, Talep } from "@prisma/client";
 
@@ -222,6 +223,37 @@ export async function WaitingRolSayfaAtama(): Promise<IWaitingRolSayfaAtama[]> {
 
     return rolSayfaAtama.map((item) => ({
       RolSayfaAtamaId: item.RolSayfaAtamaId,
+      RolId: item.RolId,
+      RolAdi: item.RolAdi,
+      SayfaId: item.SayfaId,
+      SayfaRoute: item.SayfaRoute,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}
+
+export async function WaitingRolSayfaCikarma(): Promise<
+  IWaitingRolSayfaCikarma[]
+> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  try {
+    const rolSayfaAtama = await db.$queryRaw<IWaitingRolSayfaCikarma[]>`
+  EXEC WaitingRolSayfaCikarmas @KisiId = ${+kisi.id}
+`;
+
+    // console.log(rolSayfaAtama);
+
+    return rolSayfaAtama.map((item) => ({
+      RolSayfaCikarmaId: item.RolSayfaCikarmaId,
       RolId: item.RolId,
       RolAdi: item.RolAdi,
       SayfaId: item.SayfaId,

@@ -4,11 +4,12 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import RolAtamaGrid from "./_components/rol-atama-onay"
 import RolCikarmaGrid from "./_components/rol-cikarma-onay"
 import KisiYetkiOnay from "./_components/kisi-yetki-onay"
-import { IPreviousKisiSayfaAtama, IPreviousKisiSayfaCikarma, IPreviousKisiSayfaEdit, IPreviousKisiYetkiEdit, IPreviousRolAtama, IPreviousRolCikarma, IPreviousRolSayfaAtama, IWaitingKisiSayfaAtama, IWaitingKisiSayfaCikarma, IWaitingKisiSayfaEdit, IWaitingKisiYetkiEdit, IWaitingRolAtama, IWaitingRolCikarma, IWaitingRolSayfaAtama } from "@/types"
+import { IPreviousKisiSayfaAtama, IPreviousKisiSayfaCikarma, IPreviousKisiSayfaEdit, IPreviousKisiYetkiEdit, IPreviousRolAtama, IPreviousRolCikarma, IPreviousRolSayfaAtama, IPreviousRolSayfaCikarma, IWaitingKisiSayfaAtama, IWaitingKisiSayfaCikarma, IWaitingKisiSayfaEdit, IWaitingKisiYetkiEdit, IWaitingRolAtama, IWaitingRolCikarma, IWaitingRolSayfaAtama, IWaitingRolSayfaCikarma } from "@/types"
 import KisiSayfaEditOnay from "./_components/kisi-sayfa-edit-onay"
 import KisiSayfaAtamaOnay from "./_components/kisi-sayfa-atama-onay"
 import KisiSayfaCikarmaOnay from "./_components/kisi-sayfa-cikarma-onay"
 import RolSayfaAtamaOnay from "./_components/rol-sayfa-atama-onay"
+import RolSayfaCikarmaOnay from "./_components/rol-sayfa-cikarma-onay"
 
 interface Props {
   waitingRolAtamalar: IWaitingRolAtama[]
@@ -18,6 +19,7 @@ interface Props {
   waitingKisiSayfaCikarma: IWaitingKisiSayfaCikarma[]
   waitingKisiSayfaEdit: IWaitingKisiSayfaEdit[]
   waitingRolSayfaAtama: IWaitingRolSayfaAtama[]
+  waitingRolSayfaCikarma: IWaitingRolSayfaCikarma[]
   previousRolAtama: IPreviousRolAtama[]
   previousRolCikarma: IPreviousRolCikarma[]
   previousKisiYetkiEdit: IPreviousKisiYetkiEdit[]
@@ -25,6 +27,7 @@ interface Props {
   previousKisiSayfaCikarma: IPreviousKisiSayfaCikarma[]
   previousKisiSayfaEdit: IPreviousKisiSayfaEdit[]
   previousRolSayfaAtama: IPreviousRolSayfaAtama[]
+  previousRolSayfaCikarma: IPreviousRolSayfaCikarma[]
 }
 
 export function TalepOnayClient({
@@ -35,13 +38,15 @@ export function TalepOnayClient({
   waitingKisiSayfaCikarma,
   waitingKisiSayfaEdit,
   waitingRolSayfaAtama,
+  waitingRolSayfaCikarma,
   previousRolAtama,
   previousRolCikarma,
   previousKisiYetkiEdit,
   previousKisiSayfaAtama,
   previousKisiSayfaCikarma,
   previousKisiSayfaEdit,
-  previousRolSayfaAtama
+  previousRolSayfaAtama,
+  previousRolSayfaCikarma
 }: Props) {
 
   return (
@@ -54,6 +59,7 @@ export function TalepOnayClient({
         <TabsTrigger className='text-xl' value="kisi-sayfa-cikarma">Kişi Sayfa Cikarma</TabsTrigger>
         <TabsTrigger className='text-xl' value="kisi-sayfa-edit">Kişi Sayfa Edit</TabsTrigger>
         <TabsTrigger className='text-xl' value="rol-sayfa-atama">Rol Sayfa Atama</TabsTrigger>
+        <TabsTrigger className='text-xl' value="rol-sayfa-cikarma">Rol Sayfa Çıkarma</TabsTrigger>
       </TabsList>
       <TabsContent value="rol-atama"><RolAtamaGrid data={waitingRolAtamalar} rolAtamaTalepler={previousRolAtama} /></TabsContent>
       <TabsContent value="rol-cikarma"><RolCikarmaGrid data={waitingRolCikarmalar} rolCikarmaTalepler={previousRolCikarma} /></TabsContent>
@@ -62,6 +68,7 @@ export function TalepOnayClient({
       <TabsContent value="kisi-sayfa-cikarma"><KisiSayfaCikarmaOnay data={waitingKisiSayfaCikarma} previousKisiSayfaAtama={previousKisiSayfaCikarma} /></TabsContent>
       <TabsContent value="kisi-sayfa-edit"><KisiSayfaEditOnay data={waitingKisiSayfaEdit} previousKisiSayfaEdit={previousKisiSayfaEdit} /></TabsContent>
       <TabsContent value="rol-sayfa-atama"><RolSayfaAtamaOnay data={waitingRolSayfaAtama} previousKisiSayfaAtama={previousRolSayfaAtama} /></TabsContent>
+      <TabsContent value="rol-sayfa-cikarma"><RolSayfaCikarmaOnay data={waitingRolSayfaCikarma} previousKisiSayfaAtama={previousRolSayfaCikarma} /></TabsContent>
     </Tabs>
   )
 }

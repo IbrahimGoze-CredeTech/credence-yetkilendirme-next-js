@@ -162,6 +162,16 @@ export interface IWaitingRolSayfaAtama {
   BitisTarihi: string | null; // Adjust type if using Date objects in TypeScript
 }
 
+export interface IWaitingRolSayfaCikarma {
+  RolSayfaCikarmaId: number;
+  RolId: number;
+  RolAdi: string;
+  SayfaId: number;
+  SayfaRoute: string;
+  BaslangicTarihi: string | null; // Assuming datetime fields are returned as ISO strings, null for optional
+  BitisTarihi: string | null; // Adjust type if using Date objects in TypeScript
+}
+
 export interface IWaitingKisiSayfaCikarma {
   KisiSayfaCikarmaId: number;
   KisiId: number;
@@ -232,6 +242,13 @@ export interface IPreviousRolSayfaAtama {
   BitisTarihi: string | null; // Nullable datetime as ISO string
 }
 
+export interface IPreviousRolSayfaCikarma {
+  RolAdi: string;
+  SayfaRoute: string;
+  BaslangicTarihi: string | null; // Nullable datetime as ISO string
+  BitisTarihi: string | null; // Nullable datetime as ISO string
+}
+
 export interface IPreviousKisiSayfaCikarma {
   KisiAdi: string;
   SayfaRoute: string;
@@ -239,6 +256,7 @@ export interface IPreviousKisiSayfaCikarma {
   BitisTarihi: string | null; // Nullable datetime as ISO string
 }
 //#endregion
+
 export interface TalepKayit {
   talep_Olusturulma_Tarihi: Date;
   talep_Durum_Tarihi: string;

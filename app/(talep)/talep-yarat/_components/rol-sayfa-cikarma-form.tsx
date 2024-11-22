@@ -10,14 +10,14 @@ import { useStaticTablesContext } from '@/context';
 import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { TalepRolSayfaAtamaSchema } from '@/schemas';
+import { TalepRolSayfaCikarmaSchema } from '@/schemas';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
-import { RolAtanabilirSayfalar, rolSayfaAtamaPost } from '@/actions/rol-sayfa';
+import { RolCikarilabilirSayfalar, rolSayfaCikarmaPost } from '@/actions/rol-sayfa';
 
-export default function RolSayfaAtamaForm() {
+export default function RolSayfaCikarmaForm() {
   const staticTablesContext = useStaticTablesContext();
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
@@ -39,8 +39,8 @@ export default function RolSayfaAtamaForm() {
   const [isKisiSelected, setIsKisiSelected] = useState(false);
 
 
-  const form = useForm<z.infer<typeof TalepRolSayfaAtamaSchema>>({
-    resolver: zodResolver(TalepRolSayfaAtamaSchema),
+  const form = useForm<z.infer<typeof TalepRolSayfaCikarmaSchema>>({
+    resolver: zodResolver(TalepRolSayfaCikarmaSchema),
     defaultValues: {
       SayfaRoute: '',
       rolAdi: '',
@@ -51,13 +51,13 @@ export default function RolSayfaAtamaForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof TalepRolSayfaAtamaSchema>) => {
+  const onSubmit = (values: z.infer<typeof TalepRolSayfaCikarmaSchema>) => {
     setError('');
     setSuccess('');
     // console.log('values: ', values);
 
     startTransition(() => {
-      rolSayfaAtamaPost(values).then((data) => {
+      rolSayfaCikarmaPost(values).then((data) => {
         if (data?.error) {
           form.reset();
           setError(data.error);
@@ -81,21 +81,21 @@ export default function RolSayfaAtamaForm() {
   }
 
   const onValueChange = (value: string) => {
-    console.log(value);
+    // console.log(value);
 
     startTransition(async () => {
-      const sayfalar = await RolAtanabilirSayfalar(value);
+      const sayfalar = await RolCikarilabilirSayfalar(value);
       setSayfalar(sayfalar);
       setIsKisiSelected(true); // Update boolean based on whether there's a value
     });
   };
 
-  const onFormError: SubmitErrorHandler<z.infer<typeof TalepRolSayfaAtamaSchema>> = (e) => {
+  const onFormError: SubmitErrorHandler<z.infer<typeof TalepRolSayfaCikarmaSchema>> = (e) => {
     console.error(e)
   }
 
   return (
-    <CardWrapper headerLabel={'Rol Sayfa Atama'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
+    <CardWrapper headerLabel={'Rol Sayfa Çıkarma'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
           <div className='grid grid-cols-2 gap-8'>
@@ -175,7 +175,7 @@ export default function RolSayfaAtamaForm() {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Sayfa Atama Talebi Olustur</Button>
+          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Rol Sayfa Çıkarma Talebi Olustur</Button>
         </form>
       </Form>
     </CardWrapper>

@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { TalepOnayClient } from './talep-onay-client';
-import { PreviousKisiSayfaAtama, PreviousKisiSayfaCikarma, PreviousKisiSayfaEdit, PreviousKisiYetkiEdit, PreviousRolAtama, PreviousRolCikarma, PreviousRolSayfaAtama } from '@/actions/previous-demands';
-import { WaitingRolAtamalar, WaitingRolCikarmalar, WaitingKisiYetkiEdit, WaitingKisiSayfaAtama, WaitingKisiSayfaEdit, WaitingKisiSayfaCikarma, WaitingRolSayfaAtama } from '@/actions/waiting-demands';
+import { PreviousKisiSayfaAtama, PreviousKisiSayfaCikarma, PreviousKisiSayfaEdit, PreviousKisiYetkiEdit, PreviousRolAtama, PreviousRolCikarma, PreviousRolSayfaAtama, PreviousRolSayfaCikarma } from '@/actions/previous-demands';
+import { WaitingRolAtamalar, WaitingRolCikarmalar, WaitingKisiYetkiEdit, WaitingKisiSayfaAtama, WaitingKisiSayfaEdit, WaitingKisiSayfaCikarma, WaitingRolSayfaAtama, WaitingRolSayfaCikarma } from '@/actions/waiting-demands';
 
 
 async function TalepOnayData() {
@@ -13,13 +13,15 @@ async function TalepOnayData() {
     waitingKisiSayfaCikarma,
     waitingKisiSayfaEdit,
     waitingRolSayfaAtama,
+    waitingRolSayfaCikarma,
     previousRolAtama,
     previousRolCikarma,
     previousKisiYetkiEdit,
     previousKisiSayfaAtama,
     previousKisiSayfaCikarma,
     previousKisiSayfaEdit,
-    previousRolSayfaAtama
+    previousRolSayfaAtama,
+    previousRolSayfaCikarma
   ] = await Promise.all([
     WaitingRolAtamalar(),
     WaitingRolCikarmalar(),
@@ -28,13 +30,15 @@ async function TalepOnayData() {
     WaitingKisiSayfaCikarma(),
     WaitingKisiSayfaEdit(),
     WaitingRolSayfaAtama(),
+    WaitingRolSayfaCikarma(),
     PreviousRolAtama(),
     PreviousRolCikarma(),
     PreviousKisiYetkiEdit(),
     PreviousKisiSayfaAtama(),
     PreviousKisiSayfaCikarma(),
     PreviousKisiSayfaEdit(),
-    PreviousRolSayfaAtama()
+    PreviousRolSayfaAtama(),
+    PreviousRolSayfaCikarma()
   ]);
 
   return (
@@ -46,6 +50,7 @@ async function TalepOnayData() {
       waitingKisiSayfaCikarma={waitingKisiSayfaCikarma}
       waitingKisiSayfaEdit={waitingKisiSayfaEdit}
       waitingRolSayfaAtama={waitingRolSayfaAtama}
+      waitingRolSayfaCikarma={waitingRolSayfaCikarma}
       previousRolAtama={previousRolAtama}
       previousRolCikarma={previousRolCikarma}
       previousKisiYetkiEdit={previousKisiYetkiEdit}
@@ -53,6 +58,7 @@ async function TalepOnayData() {
       previousKisiSayfaCikarma={previousKisiSayfaCikarma}
       previousKisiSayfaEdit={previousKisiSayfaEdit}
       previousRolSayfaAtama={previousRolSayfaAtama}
+      previousRolSayfaCikarma={previousRolSayfaCikarma}
     />
   )
 }
