@@ -4,12 +4,15 @@ import TalepOzet from "./_anasayfa/TalepOzet";
 import YaklasanYetkiler from "./_anasayfa/YaklasanYetkiler";
 import "devextreme/dist/css/dx.light.css";
 import config from "devextreme/core/config";
+import { GetKisiAccessibleRoutes } from "@/actions/views";
 
-export default function Home() {
+export default async function Home() {
   config({
     forceIsoDateParsing: true,
     // ...
   });
+
+  await GetKisiAccessibleRoutes();
 
   return (
     <div className="h-screen w-full grid grid-rows-2 gap-4 p-4">

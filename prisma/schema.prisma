@@ -267,3 +267,14 @@ model RolSayfaCikarma {
   Sayfa             Sayfa     @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_RolSayfaCikarma_Sayfa")
   Talep             Talep     @relation(fields: [RolSayfaCikarmaId], references: [TalepId], onUpdate: NoAction, map: "FK_RolSayfaCikarma_Talep")
 }
+
+model KisiAccessibleRoutes {
+  KisiId      Int
+  KisiAd      String
+  KisiSoyad   String
+  SayfaRoute  String
+  IsPermitted Boolean
+
+  @@unique([KisiId, SayfaRoute]) // Unique constraint for Prisma
+  @@map("KisiAccessibleRoutes")
+}
