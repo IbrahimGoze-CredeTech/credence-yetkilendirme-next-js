@@ -6,16 +6,22 @@ import FormSuccess from '@/components/form-success';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import React, { useState, useTransition } from 'react'
-import { useForm } from 'react-hook-form';
+import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { YetkiSchema } from '@/schemas';
-import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
-import { yetkiYaratma } from '@/actions/yetki-yaratma';
+import { useStaticTablesContext } from '@/context';
+import CustomCombobox from '@/components/custom-combobox';
+import { yetkiSilme } from '@/actions/kisi-rol-yetki-sayfa-actions';
 
-export default function YetkiForm() {
+export default function YetkiSilForm() {
+  const staticTablesContext = useStaticTablesContext();
+  const yetkiOptions = staticTablesContext.yetkiler.map((yetki) => ({
+    label: yetki.yetkiAdi, // Roller sadece ad içeriyor
+    value: yetki.yetkiAdi,
+  })) || [];
   const [isPending, startTransition] = useTransition();
 
 
@@ -32,22 +38,21 @@ export default function YetkiForm() {
   const onSubmit = (values: z.infer<typeof YetkiSchema>) => {
     setError('');
     setSuccess('');
-    console.log('values: ', values);
+    // console.log('values: ', values);
 
     startTransition(() => {
-      yetkiYaratma(values).then((data) => {
-        console.log('data: ', data);
-
-        if (data?.error) {
-          form.reset();
-          setError(data.error);
+      yetkiSilme(values).then((data) => {
+        // console.log('data: ', data);
+        if (!data.success) {
+          // form.reset();
+          setError(data?.error + "");
         }
-        if (data?.success) {
+        if (data.success) {
           form.reset();
-          setSuccess(data.success)
+          setSuccess("Yetki başarıyla silindi");
           toast({
-            title: "Rol başarıyla oluşturuldu",
-            description: "Rol başarıyla oluşturuldu",
+            title: "Yetki başarıyla silindi",
+            description: "Yetki başarıyla silindi.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
                 console.log("undo clicked");
@@ -59,25 +64,29 @@ export default function YetkiForm() {
     })
   }
 
+  const onFormError: SubmitErrorHandler<z.infer<typeof YetkiSchema>> = (e) => {
+    console.error(e);
+    setError(e.yetkiAdi?.message);
+  }
+
   return (
-    <CardWrapper className='!w-[500px]' headerLabel={'Yetki Yaratma'} backButtonLabel={'Ana Sayfaya Geri Don'} backButtonHref={'/'}>
+    <CardWrapper className='!w-[500px]' headerLabel={'Yetki Sil'} backButtonLabel={'Ana Sayfaya Geri Don'} backButtonHref={'/'}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
-          <div className='grid gap-8'>
+        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
+          <div className=''>
 
             <FormField control={form.control} name={'yetkiAdi'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Yetki Adı</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Yetki Adı" />
+                  <CustomCombobox onValueChange={field.onChange} Options={yetkiOptions} placeholder={'Yetki Adı'} searchPlaceholder={'Yetki Adı İle Ara...'} />
                 </FormControl>
-
               </FormItem>
             )} />
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Yetki Yarat</Button>
+          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Yetki Sil</Button>
         </form>
       </Form>
     </CardWrapper>

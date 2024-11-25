@@ -1,5 +1,5 @@
 "use client";
-import { GetKullaniciAdlari } from "@/actions/kisi-yaratma";
+import { GetKullaniciAdlari } from "@/actions/kisi";
 import { bekleyenTalepler } from "@/actions/waiting-demands";
 import { Kisi, RolOld, Yetki } from "@/types";
 import { fetcherGet } from "@/utils";

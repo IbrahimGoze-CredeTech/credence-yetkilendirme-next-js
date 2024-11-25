@@ -11,11 +11,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { KisiSilmeSchema } from '@/schemas';
 import { Option } from '@/components/talep-ekran/multiple-selector';
-import { kisiSilme } from '@/actions/kisi-yaratma';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { useStaticTablesContext } from '@/context';
+import { kisiSilme } from '@/actions/kisi-rol-yetki-sayfa-actions';
 
 export default function KisiSilForm() {
   const staticTablesContext = useStaticTablesContext();

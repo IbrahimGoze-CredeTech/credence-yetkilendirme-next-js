@@ -158,8 +158,9 @@ model TalepTipiEnum {
 
 model Yetki {
   YetkiId       Int             @id(map: "PK__Yetki__3496142604F36FF5") @default(autoincrement())
-  YetkiAdi      String          @db.NVarChar(100)
+  YetkiAdi      String          @unique(map: "IX_Yetki") @db.NVarChar(100)
   RiskWeight    Int?
+  IsDeleted     Boolean         @default(false, map: "DF_Yetki_IsDeleted")
   KisiYetki     KisiYetki[]
   KisiYetkiEdit KisiYetkiEdit[]
   RolYetki      RolYetki[]
@@ -200,7 +201,8 @@ model RolSayfa {
 
 model Sayfa {
   SayfaId          Int                @id(map: "PK_Sayfa") @default(autoincrement())
-  SayfaRoute       String             @db.NVarChar(100)
+  SayfaRoute       String             @unique(map: "IX_Sayfa") @db.NVarChar(100)
+  IsDeleted        Boolean            @default(false, map: "DF_Sayfa_IsDeleted")
   KisiSayfa        KisiSayfa[]
   KisiSayfaAtama   KisiSayfaAtama[]
   KisiSayfaCikarma KisiSayfaCikarma[]

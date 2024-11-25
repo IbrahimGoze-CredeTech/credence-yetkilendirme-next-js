@@ -11,9 +11,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { KisiSchema } from '@/schemas';
 import { Input } from '@/components/ui/input';
-import { kisiYaratma } from '@/actions/kisi-yaratma';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
+import { kisiYaratma } from '@/actions/kisi-rol-yetki-sayfa-actions';
 
 
 export default function KisiEkleForm() {

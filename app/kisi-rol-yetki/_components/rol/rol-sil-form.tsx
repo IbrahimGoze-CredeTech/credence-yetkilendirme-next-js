@@ -13,8 +13,8 @@ import { RolSilSchema } from '@/schemas';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import { useStaticTablesContext } from '@/context';
-import { rolSilme } from '@/actions/rol-yaratma';
 import CustomCombobox from '@/components/custom-combobox';
+import { rolSilme } from '@/actions/kisi-rol-yetki-sayfa-actions';
 
 export default function RolSilForm() {
   const staticTablesContext = useStaticTablesContext();

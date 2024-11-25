@@ -1,9 +1,9 @@
 import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import YetkiForm from './_components/yetki-form'
-import SayfaForm from './_components/sayfa-form'
 import KisiTabs from './_components/kisi/kisi-tabs'
 import RolTabs from './_components/rol/rol-tabs'
+import YetkiTabs from './_components/yetki/yetki-tabs'
+import SayfaTabs from './_components/sayfa/sayfa-tabs'
 
 
 export default function KisiRolYetkiPage() {
@@ -20,8 +20,8 @@ export default function KisiRolYetkiPage() {
         </TabsList>
         <TabsContent value="kisi-form"><KisiTabs /></TabsContent>
         <TabsContent value="rol-form"><RolTabs /></TabsContent>
-        <TabsContent value="yetki-form"><YetkiForm /></TabsContent>
-        <TabsContent value="sayfa-form"><SayfaForm /></TabsContent>
+        <TabsContent value="yetki-form"><YetkiTabs /></TabsContent>
+        <TabsContent value="sayfa-form"><SayfaTabs /></TabsContent>
       </Tabs>
 
     </div>

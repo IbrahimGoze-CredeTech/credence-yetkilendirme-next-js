@@ -15,7 +15,7 @@ import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useStaticTablesContext } from '@/context';
-import { rolYaratma } from '@/actions/rol-yaratma';
+import { rolYaratma } from '@/actions/kisi-rol-yetki-sayfa-actions';
 
 export default function RolEkleForm() {
   const staticTablesContext = useStaticTablesContext();
@@ -37,14 +37,14 @@ export default function RolEkleForm() {
   const onSubmit = (values: z.infer<typeof RolSchema>) => {
     setError('');
     setSuccess('');
-    console.log('values: ', values);
+    // console.log('values: ', values);
 
     startTransition(() => {
       rolYaratma(values).then((data) => {
         // console.log('data: ', data);
 
         if (data?.error) {
-          form.reset();
+          // form.reset();
           setError(data.error);
         }
         if (data?.success) {
@@ -64,11 +64,11 @@ export default function RolEkleForm() {
     })
   }
 
-  const handleRiskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
+  // const handleRiskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = e.target;
 
-    // form.setValue('riskWeight', parseInt(value, 10));
-  }
+  //   // form.setValue('riskWeight', parseInt(value, 10));
+  // }
 
   const onFormError: SubmitErrorHandler<z.infer<typeof RolSchema>> = (e) => {
     console.error(e);
