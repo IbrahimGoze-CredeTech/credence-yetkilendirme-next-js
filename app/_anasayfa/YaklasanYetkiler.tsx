@@ -22,15 +22,15 @@ export default function YaklasanYetkiler() {
     setLoading(true); 
     
     const tumYetkiler: Yetki[] = [
-      { id: 1, ad: "Gurkan", soyad: "Erginer", rol: "Avukat", bitisTarihi: "2024-11-24T14:30:00" },
+      { id: 1, ad: "Gurkan", soyad: "Erginer", rol: "Yazılım Personeli", bitisTarihi: "2024-11-29T14:30:00" },
       { id: 2, ad: "Burak", soyad: "Pozut", rol: "sa", bitisTarihi: "2024-11-29T10:00:00" },
-      { id: 3, ad: "İbrahim Mert", soyad: "Goze", rol: "Muhasebe", bitisTarihi: "2024-11-25T18:15:00" },
+      { id: 3, ad: "İbrahim Mert", soyad: "Goze", rol: "Yazılım Personeli", bitisTarihi: "2024-11-25T18:15:00" },
       { id: 4, ad: "Ali", soyad: "Yılmaz", rol: "Yönetici", bitisTarihi: "2024-11-25T12:00:00" },
       { id: 5, ad: "Zeynep", soyad: "Kaya", rol: "İK", bitisTarihi: "2024-11-22T14:30:00" },
       { id: 6, ad: "Ahmet", soyad: "Demir", rol: "Finans", bitisTarihi: "2024-11-18T09:00:00" },
-      { id: 7, ad: "Emine", soyad: "Aydın", rol: "Pazarlama", bitisTarihi: "2024-11-30T16:00:00" },
-      { id: 8, ad: "Mehmet", soyad: "Şahin", rol: "Bilişim", bitisTarihi: "2024-11-23T18:30:00" },
-      { id: 9, ad: "Murat", soyad: "Kara", rol: "Tedarik", bitisTarihi: "2024-11-26T11:00:00" },
+      { id: 7, ad: "Emine", soyad: "Aydın", rol: "Avukat", bitisTarihi: "2024-11-30T16:00:00" },
+      { id: 8, ad: "Mehmet", soyad: "Şahin", rol: "IT", bitisTarihi: "2024-11-23T18:30:00" },
+      { id: 9, ad: "Murat", soyad: "Kara", rol: "IT", bitisTarihi: "2024-11-26T11:00:00" },
       { id: 10, ad: "Fatma", soyad: "Çelik", rol: "HR", bitisTarihi: "2024-11-27T15:45:00" },
     ];
 
