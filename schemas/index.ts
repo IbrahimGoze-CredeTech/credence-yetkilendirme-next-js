@@ -161,5 +161,5 @@ export const YetkiSchema = z.object({
 });
 
 export const SayfaSchema = z.object({
-  sayfaRoute: z.string().min(1, { message: "Yetki adı boş olamaz" }),
+  sayfaRoute: z.string().min(1, { message: "Sayfa adı boş olamaz" }),
 });

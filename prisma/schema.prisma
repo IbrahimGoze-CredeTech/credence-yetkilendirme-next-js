@@ -158,8 +158,9 @@ model TalepTipiEnum {
 
 model Yetki {
   YetkiId       Int             @id(map: "PK__Yetki__3496142604F36FF5") @default(autoincrement())
-  YetkiAdi      String          @db.NVarChar(100)
+  YetkiAdi      String          @unique(map: "IX_Yetki") @db.NVarChar(100)
   RiskWeight    Int?
+  IsDeleted     Boolean         @default(false, map: "DF_Yetki_IsDeleted")
   KisiYetki     KisiYetki[]
   KisiYetkiEdit KisiYetkiEdit[]
   RolYetki      RolYetki[]
@@ -200,7 +201,8 @@ model RolSayfa {
 
 model Sayfa {
   SayfaId          Int                @id(map: "PK_Sayfa") @default(autoincrement())
-  SayfaRoute       String             @db.NVarChar(100)
+  SayfaRoute       String             @unique(map: "IX_Sayfa") @db.NVarChar(100)
+  IsDeleted        Boolean            @default(false, map: "DF_Sayfa_IsDeleted")
   KisiSayfa        KisiSayfa[]
   KisiSayfaAtama   KisiSayfaAtama[]
   KisiSayfaCikarma KisiSayfaCikarma[]
@@ -264,4 +266,15 @@ model RolSayfaCikarma {
   Rol               Rol       @relation(fields: [RolId], references: [RolId], onUpdate: NoAction, map: "FK_RolSayfaCikarma_Rol")
   Sayfa             Sayfa     @relation(fields: [SayfaId], references: [SayfaId], onUpdate: NoAction, map: "FK_RolSayfaCikarma_Sayfa")
   Talep             Talep     @relation(fields: [RolSayfaCikarmaId], references: [TalepId], onUpdate: NoAction, map: "FK_RolSayfaCikarma_Talep")
+}
+
+model KisiAccessibleRoutes {
+  KisiId      Int
+  KisiAd      String
+  KisiSoyad   String
+  SayfaRoute  String
+  IsPermitted Boolean
+
+  @@unique([KisiId, SayfaRoute]) // Unique constraint for Prisma
+  @@map("KisiAccessibleRoutes")
 }

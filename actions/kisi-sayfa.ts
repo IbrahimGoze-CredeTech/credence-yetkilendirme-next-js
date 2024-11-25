@@ -214,7 +214,7 @@ export async function kisiSayfaAtamaPost(
   );
   // console.log("response: ", response);
 
-  return { success: response.message, error: "" };
+  return { success: response.success, error: response.error };
 }
 
 export async function kisiSayfaCikarmaPost(
@@ -269,6 +269,6 @@ export async function kisiSayfaCikarmaPost(
   );
   // console.log("response: ", response);
 
-  return { success: response.message, error: "" };
+  return { success: response.success, error: response.error };
 }
 //#endregion
