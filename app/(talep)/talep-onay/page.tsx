@@ -3,7 +3,6 @@ import { TalepOnayClient } from './talep-onay-client';
 import { PreviousKisiSayfaAtama, PreviousKisiSayfaCikarma, PreviousKisiSayfaEdit, PreviousKisiYetkiEdit, PreviousRolAtama, PreviousRolCikarma, PreviousRolSayfaAtama, PreviousRolSayfaCikarma } from '@/actions/previous-demands';
 import { WaitingRolAtamalar, WaitingRolCikarmalar, WaitingKisiYetkiEdit, WaitingKisiSayfaAtama, WaitingKisiSayfaEdit, WaitingKisiSayfaCikarma, WaitingRolSayfaAtama, WaitingRolSayfaCikarma } from '@/actions/waiting-demands';
 
-
 async function TalepOnayData() {
   const [
     waitingRolAtamalar,

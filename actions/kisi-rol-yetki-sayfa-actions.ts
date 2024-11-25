@@ -59,7 +59,7 @@ export async function yetkiSilme(values: z.infer<typeof YetkiSchema>) {
 export async function SayfaYaratma(values: z.infer<typeof SayfaSchema>) {
   const session = await auth();
 
-  const validateFields = YetkiSchema.safeParse(values);
+  const validateFields = SayfaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -71,9 +71,13 @@ export async function SayfaYaratma(values: z.infer<typeof SayfaSchema>) {
     sayfaRoute: sayfaRoute,
   };
 
-  // console.log("sayfaRoute: ", JSON.stringify(yetki));
+  const response = await fetcherPost(
+    "/Sayfa",
+    session?.token,
+    JSON.stringify(yetki)
+  );
 
-  await fetcherPost("/Sayfa", session?.token, JSON.stringify(yetki));
+  return { success: response.success, error: response.error };
 }
 
 export async function sayfaSilme(values: z.infer<typeof SayfaSchema>) {

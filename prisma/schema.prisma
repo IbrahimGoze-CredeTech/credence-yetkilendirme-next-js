@@ -278,3 +278,13 @@ model KisiAccessibleRoutes {
   @@unique([KisiId, SayfaRoute]) // Unique constraint for Prisma
   @@map("KisiAccessibleRoutes")
 }
+
+model RoleAccessibleRoutes {
+  RolId      Int
+  RolAdi     String
+  SayfaId    Int
+  SayfaRoute String
+
+  @@unique([RolId, SayfaRoute]) // Unique constraint for Prisma
+  @@map("RoleAccessibleRoutes")
+}

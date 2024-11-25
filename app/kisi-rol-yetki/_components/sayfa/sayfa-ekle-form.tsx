@@ -6,10 +6,10 @@ import FormSuccess from '@/components/form-success';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import React, { useState, useTransition } from 'react'
-import { useForm } from 'react-hook-form';
+import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { SayfaSchema, YetkiSchema } from '@/schemas';
+import { SayfaSchema } from '@/schemas';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
@@ -23,7 +23,7 @@ export default function SayfaEkleForm() {
   const [success, setSuccess] = useState<string | undefined>("");
 
   const form = useForm<z.infer<typeof SayfaSchema>>({
-    resolver: zodResolver(YetkiSchema),
+    resolver: zodResolver(SayfaSchema),
     defaultValues: {
       sayfaRoute: '',
     }
@@ -36,15 +36,15 @@ export default function SayfaEkleForm() {
 
     startTransition(() => {
       SayfaYaratma(values).then((data) => {
-        console.log('data: ', data);
+        // console.log('data: ', data);
 
-        if (data?.error) {
-          form.reset();
+        if (!data.success) {
+          // form.reset();
           setError(data.error);
         }
-        if (data?.success) {
+        if (data.success) {
           form.reset();
-          setSuccess(data.success)
+          setSuccess("Sayfa Başarıyla Oluşturuldu");
           toast({
             title: "Rol başarıyla oluşturuldu",
             description: "Rol başarıyla oluşturuldu",
@@ -59,18 +59,26 @@ export default function SayfaEkleForm() {
     })
   }
 
+  const onFormError: SubmitErrorHandler<z.infer<typeof SayfaSchema>> = (e) => {
+    console.error(e);
+    setError(e.sayfaRoute?.message);
+  }
+
   return (
     <CardWrapper className='!w-[500px]' headerLabel={'Sayfa Yaratma'} backButtonLabel={'Ana Sayfaya Geri Don'} backButtonHref={'/'}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
+        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
           <div className='grid gap-8'>
-
             <FormField control={form.control} name={'sayfaRoute'} render={({ field }) => (
               <FormItem>
                 <FormLabel>Sayfa Adı</FormLabel>
                 <FormControl>
                   <Input {...field}
-                    value={field.value.startsWith('/') ? field.value : `/${field.value}`} // Ensure starts with "/"
+                    // value={field.value.startsWith('/') ? field.value : `/${field.value}`} // Ensure starts with "/"
+                    // onChange={(e) => {
+                    //   const newValue = e.target.value; // Extract the new value from the event
+                    //   form.setValue('sayfaRoute', newValue.startsWith('/') ? newValue : `/${newValue}`); // Ensure new value starts with "/"
+                    // }}
                     placeholder="Sayfa Adı" />
                 </FormControl>
               </FormItem>
