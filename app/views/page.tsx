@@ -1,20 +1,21 @@
-import { GetKisiAccessibleRoutes, GetRoleAccessibleRoutes } from '@/actions/views'
+import { GetKisiAccessibleRoutes, GetRoleAccessibleRoutes, GetRoleYetkisView } from '@/actions/views'
 import React from 'react'
 import ViewsClient from './views-client';
 
 async function ViewsData() {
-  const [kisiAccessibleRoutes, roleAccessibleRoutes] = await Promise.all([
+  const [kisiAccessibleRoutes, roleAccessibleRoutes, rolYetkiView] = await Promise.all([
     GetKisiAccessibleRoutes(),
-    GetRoleAccessibleRoutes()
+    GetRoleAccessibleRoutes(),
+    GetRoleYetkisView()
   ]);
 
   return (
-    <ViewsClient kisiAccessibleRoutes={kisiAccessibleRoutes} roleAccessibleRoutes={roleAccessibleRoutes} />
+    <ViewsClient kisiAccessibleRoutes={kisiAccessibleRoutes} roleAccessibleRoutes={roleAccessibleRoutes} roleYetkiView={rolYetkiView} />
   )
 }
 
 export default async function ViewPage() {
-  await GetKisiAccessibleRoutes();
+  // await GetKisiAccessibleRoutes();
   return (
     <div>
       <ViewsData />

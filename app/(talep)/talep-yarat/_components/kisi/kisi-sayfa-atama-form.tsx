@@ -15,7 +15,7 @@ import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
-import { kisiCikarilabilirSayfalar, kisiSayfaAtamaPost } from '@/actions/kisi-sayfa';
+import { kisiAtanabilirSayfalar, kisiSayfaAtamaPost } from '@/actions/kisi-sayfa';
 
 export default function KisiSayfaCikarmaForm() {
   const staticTablesContext = useStaticTablesContext();
@@ -50,7 +50,6 @@ export default function KisiSayfaCikarmaForm() {
   });
 
   const onSubmit = (values: z.infer<typeof TalepKisiSayfaAtamaSchema>) => {
-    // console.log('values: ', values);
     setError('');
     setSuccess('');
 
@@ -62,7 +61,7 @@ export default function KisiSayfaCikarmaForm() {
         }
         if (data.success) {
           form.reset();
-          setSuccess(data.success)
+          setSuccess("Talep başarıyla oluşturuldu");
           toast({
             title: "Talep başarıyla oluşturuldu",
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
@@ -78,9 +77,8 @@ export default function KisiSayfaCikarmaForm() {
   }
 
   const onValueChange = (value: string) => {
-    // console.log(value);
     startTransition(async () => {
-      const sayfalar = await kisiCikarilabilirSayfalar(value);
+      const sayfalar = await kisiAtanabilirSayfalar(value);
       setSayfalar(sayfalar);
       setIsKisiSelected(true); // Update boolean based on whether there's a value
     });

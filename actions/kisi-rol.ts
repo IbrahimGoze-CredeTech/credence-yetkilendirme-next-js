@@ -87,7 +87,7 @@ export async function kisininYetkileri(kisiName: string): Promise<[]> {
     `/Kisi/yetkiler/${kisi?.KisiId}`,
     session?.token
   );
-  console.log("kisiYetkiler: ", kisiYetkiler);
+  // console.log("kisiYetkiler: ", kisiYetkiler);
 
   return kisiYetkiler;
 }

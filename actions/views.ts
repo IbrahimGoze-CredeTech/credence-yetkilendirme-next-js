@@ -1,5 +1,9 @@
 import { db } from "@/lib/db";
-import { KisiAccessibleRoutes, RoleAccessibleRoutes } from "@prisma/client";
+import {
+  KisiAccessibleRoutes,
+  RoleAccessibleRoutes,
+  RolYetkiView,
+} from "@prisma/client";
 
 export async function GetKisiAccessibleRoutes(): Promise<
   KisiAccessibleRoutes[]
@@ -20,4 +24,13 @@ export async function GetRoleAccessibleRoutes(): Promise<
   });
 
   return roleAccessibleRoutes;
+}
+
+export async function GetRoleYetkisView(): Promise<RolYetkiView[]> {
+  const roleYetkis = await db.rolYetkiView.findMany({
+    orderBy: { RolId: "asc" },
+  });
+
+  return roleYetkis;
+  // return [];
 }

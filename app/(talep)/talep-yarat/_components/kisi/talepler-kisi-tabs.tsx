@@ -9,48 +9,21 @@ import KisiSayfaEditForm from "./kisi-sayfa-edit-form";
 
 export default function TaleplerKisiTabs() {
   return (
-    <Tabs
-      defaultValue="rol-atama"
-      className="w-[95vw] flex flex-col items-center justify-center p-4"
-    >
+    <Tabs defaultValue="rol-atama" className="w-[95vw] flex flex-col items-center justify-center p-4">
       <TabsList className="bg-gray-200 p-2 py-6">
-        <TabsTrigger className="text-xl" value="rol-atama">
-          Rol Atama
-        </TabsTrigger>
-        <TabsTrigger className="text-xl" value="rol-cikarma">
-          Rol Çıkarma
-        </TabsTrigger>
-        <TabsTrigger className="text-xl" value="yetki">
-          Yetki
-        </TabsTrigger>
-        <TabsTrigger className="text-xl" value="kisi-sayfa-atama">
-          Kişi Sayfa Atama
-        </TabsTrigger>
-        <TabsTrigger className="text-xl" value="kisi-sayfa-cikarma">
-          Kişi Sayfa Çıkarma
-        </TabsTrigger>
-        <TabsTrigger className="text-xl" value="kisi-sayfa-edit">
-          Kişi Sayfa Edit
-        </TabsTrigger>
+        <TabsTrigger className="text-xl" value="rol-atama">Rol Atama</TabsTrigger>
+        <TabsTrigger className="text-xl" value="rol-cikarma">Rol Çıkarma</TabsTrigger>
+        <TabsTrigger className="text-xl" value="yetki">Yetki</TabsTrigger>
+        <TabsTrigger className="text-xl" value="kisi-sayfa-atama">Sayfa Atama</TabsTrigger>
+        <TabsTrigger className="text-xl" value="kisi-sayfa-cikarma">Sayfa Çıkarma</TabsTrigger>
+        <TabsTrigger className="text-xl" value="kisi-sayfa-edit">Sayfa Edit</TabsTrigger>
       </TabsList>
-      <TabsContent value="rol-atama">
-        <RolAtamaForm />
-      </TabsContent>
-      <TabsContent value="rol-cikarma">
-        <RolCikarmaForm />
-      </TabsContent>
-      <TabsContent value="yetki">
-        <YetkiEditForm />
-      </TabsContent>
-      <TabsContent value="kisi-sayfa-atama">
-        <KisiSayfaAtamaForm />
-      </TabsContent>
-      <TabsContent value="kisi-sayfa-cikarma">
-        <KisiSayfaCikarmaForm />
-      </TabsContent>
-      <TabsContent value="kisi-sayfa-edit">
-        <KisiSayfaEditForm />
-      </TabsContent>
+      <TabsContent value="rol-atama"><RolAtamaForm /></TabsContent>
+      <TabsContent value="rol-cikarma"><RolCikarmaForm /></TabsContent>
+      <TabsContent value="yetki"><YetkiEditForm /></TabsContent>
+      <TabsContent value="kisi-sayfa-atama"><KisiSayfaAtamaForm /></TabsContent>
+      <TabsContent value="kisi-sayfa-cikarma"><KisiSayfaCikarmaForm /></TabsContent>
+      <TabsContent value="kisi-sayfa-edit"><KisiSayfaEditForm /></TabsContent>
     </Tabs>
   );
 }
