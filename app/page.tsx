@@ -15,8 +15,6 @@ export default function Home() {
     // ...
   });
 
-  // await GetKisiAccessibleRoutes();
-
   async function TalepOnayData() {
     // wait 2 seconds
     // await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -41,7 +39,6 @@ export default function Home() {
           <Suspense fallback={<TalepOnaySkeleton />}>
             <TalepOnayData />
           </Suspense>
-          {/* <TalepOnayDatagrid /> */}
         </div>
         <div className="border rounded-xl p-4 shadow-lg overflow-auto">
           <YaklasanYetkiler />

@@ -302,3 +302,15 @@ model RolYetkiView {
   @@unique([RolId, YetkiId]) // Unique constraint for Prisma
   @@map("RolYetkiView")
 }
+
+model KisiYetkiView {
+  KisiId   Int
+  Ad       String
+  Soyad    String
+  YetkiId  Int
+  YetkiAdi String
+  EylemAdi String
+
+  @@unique([KisiId, YetkiId]) // Unique constraint for Prisma
+  @@map("KisiYetkiView")
+}

@@ -101,13 +101,7 @@ export default function Navbar() {
                   href="/rol"
                   className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
                 >
-                  {/* <Image
-                    src="/role.png"
-                    alt="Rol"
-                    width={24}
-                    height={24}
-                    className="mr-2"
-                  /> */}
+
                   Roller
                 </Link>
               </DropdownMenuItem>
