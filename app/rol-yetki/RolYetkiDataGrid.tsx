@@ -1,3 +1,6 @@
+/* eslint-disable prefer-rest-params */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-this-alias */
 "use client";
 
 import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
@@ -69,7 +72,7 @@ export default function RolYetkiDataGrid() {
 
 
   // TagBox için yetki listesi (çoklu seçim)
-  function calculateFilterExpression(filterValue: string, selectedFilterOperation: string | null = '=') {
+  function calculateFilterExpression(this: any, filterValue: string, selectedFilterOperation: string | null = '=') {
     const column = this;
 
     if (filterValue) {

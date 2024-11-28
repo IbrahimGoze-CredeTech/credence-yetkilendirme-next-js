@@ -53,6 +53,7 @@ export default function RolYetkiDetailModal() {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalContext?.isOpen]);
 
   useEffect(() => {
@@ -112,9 +113,8 @@ export default function RolYetkiDetailModal() {
   return (
     <div
       style={{ position: "fixed", zIndex: 2 }}
-      className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm min-h-[100vh] h-full overflow-auto ${
-        modalContext?.isOpen ? "visible" : "hidden"
-      }`}
+      className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm min-h-[100vh] h-full overflow-auto ${modalContext?.isOpen ? "visible" : "hidden"
+        }`}
       onPointerDown={(e) => {
         e.stopPropagation();
         modalContext.toggle();

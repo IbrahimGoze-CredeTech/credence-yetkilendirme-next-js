@@ -62,7 +62,7 @@ export default function KisiSayfaAtamaForm() {
         }
         if (data.success) {
           form.reset();
-          setSuccess(data.success)
+          setSuccess("Talep başarıyla oluşturuldu");
           toast({
             title: "Talep başarıyla oluşturuldu",
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",

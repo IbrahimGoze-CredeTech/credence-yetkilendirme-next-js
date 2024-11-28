@@ -1,9 +1,6 @@
 "use client";
-import { GetKullaniciAdlari } from "@/actions/kisi";
-import { bekleyenTalepler } from "@/actions/waiting-demands";
 import { Kisi, RolOld, Yetki } from "@/types";
 import { fetcherGet } from "@/utils";
-// import { set } from "date-fns";
 import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -90,10 +87,12 @@ export function StaticTablesContextWrapper({ children }: {
         const [rolData, kisiData, kullaniciAdlari, yetkiData, sayfaData, anyBekleyenTalep] = await Promise.all([
           fetcherGet(`/Rol`, session.data?.token),
           fetcherGet(`/Kisi`, session.data?.token),
-          GetKullaniciAdlari(),
+          fetcherGet(`/Kisi/kullanici-adlari`, session.data?.token),
+          // GetKullaniciAdlari(),
           fetcherGet(`/Yetki`, session.data?.token),
           fetcherGet(`/Sayfa`, session.data?.token),
-          bekleyenTalepler()
+          // bekleyenTalepler()
+          fetcherGet(`/Talep/bekleyen-talepler`, session.data?.token)
         ]);
 
         // console.log("anyBekleyenTalep: ", anyBekleyenTalep);

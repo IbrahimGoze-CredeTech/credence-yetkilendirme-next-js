@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Popup } from 'devextreme-react'
 import { Item } from 'devextreme-react/form';
 import React from 'react'

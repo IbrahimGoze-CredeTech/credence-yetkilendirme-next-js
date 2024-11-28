@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,7 +17,7 @@ export default function RaporPage() {
   const session = useSession();
 
   const [risk, setRisk] = useState<[]>([]);
-  const [verimlilik, setVerimlilik] = useState<[]>([]);
+  const [, setVerimlilik] = useState<[]>([]);
   const [yaratma, setYaratma] = useState<[]>([]);
   const [imzaAtma, setImzaAtma] = useState<[]>([]);
   const [imzaAtanan, setImzaAtanan] = useState<[]>([]);

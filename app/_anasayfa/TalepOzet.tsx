@@ -79,10 +79,10 @@ export default function TalepEkranPage() {
           Geçmiş Talepler
           <div className="flex gap-4">
             <button onClick={handleExportPDF} className="bg-blue-500 text-white text-xl px-4 py-2 rounded">
-              PDF'e Aktar
+              PDF&apos;e Aktar
             </button>
             <button onClick={handleExportExcel} className="bg-green-500 text-white text-xl px-4 py-2 rounded">
-              Excel'e Aktar
+              Excel&apos;e Aktar
             </button>
           </div>
         </h1>

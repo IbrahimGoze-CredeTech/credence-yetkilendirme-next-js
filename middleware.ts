@@ -14,14 +14,20 @@ const { auth } = NextAuth(authConfig);
 
 export default auth(async (req) => {
   // if(process.env.AUTH_SECRET = )
+  const secret = process.env.AUTH_SECRET;
+  if (!secret) {
+    throw new Error("AUTH_SECRET is not defined in the environment variables.");
+  }
 
   const token = await getToken({
     req,
     secret: process.env.AUTH_SECRET || "",
-    secureCookie: process.env.NODE_ENV === "production",
+    // TODO: Enable secureCookie in production environment (I disabled it cause right now in prod im in the http localhost)
+    // secureCookie: process.env.NODE_ENV === "production",
     salt:
       process.env.NODE_ENV === "production"
-        ? "__Secure-authjs.session-token"
+        ? // ? "__Secure-authjs.session-token"
+          "authjs.session-token"
         : "authjs.session-token",
   });
 

@@ -1,10 +1,14 @@
+/* eslint-disable prefer-rest-params */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-this-alias */
+
 "use client";
 import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
 import { useEffect, useState } from "react";
 import { KisiOzet } from "../types";
 import { roles, rollerAdi } from "../modals/roller";
 import { yetkilerAdi } from "../modals/yetkiler";
-import { useModalContext, useStaticTablesContext } from "../context";
+import { useModalContext } from "../context";
 import { fetcherGet } from "@/utils";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
@@ -54,7 +58,7 @@ export default function KisiDataGrid() {
       map: rolesToFilterItem
     }
   };
-  function calculateFilterExpression(filterValue: string, selectedFilterOperation: string | null = '=') {
+  function calculateFilterExpression(this: any, filterValue: string, selectedFilterOperation: string | null = '=') {
     const column = this;
 
     if (filterValue) {

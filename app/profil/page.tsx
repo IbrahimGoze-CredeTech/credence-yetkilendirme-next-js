@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, {
@@ -16,6 +18,7 @@ import ImzaAtmaGrid from "./_components/imza-atma-grid";
 import { DataItem, fetcherGet, formatDataList } from "@/utils";
 import { useSession } from "next-auth/react";
 import { PieChartComp } from "./_components/pie-chart";
+import Image from "next/image";
 
 export default function ProfilePage() {
   const kullanıcı = {
@@ -115,7 +118,7 @@ export default function ProfilePage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6 bg-gray-100 min-h-screen">
         <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col space-y-4">
           {/* Profil Resmi */}
-          <img
+          <Image
             className="w-24 h-24 rounded-full mx-auto"
             src="/user.png"
             alt="User Avatar"
@@ -187,7 +190,7 @@ export default function ProfilePage() {
         {/* Profilin altındaki gridler */}
         <div className="lg:col-span-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="bg-white shadow-lg rounded-lg p-6">
-            <TalepOnayDatagrid />
+            <TalepOnayDatagrid waitingRolAtamalar={[]} waitingRolCikarmalar={[]} waitingKisiYetkiEdit={[]} />
           </div>
           <div className="bg-white shadow-lg rounded-lg p-6">
             <KisiDataGridOzet />

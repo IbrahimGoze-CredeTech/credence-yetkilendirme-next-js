@@ -55,6 +55,8 @@ export async function sayfaAtama(
     sayfaRoute: SayfaRoute,
     sayfaBaslangicTarihi: baslamaTarihi.toISOString(),
     sayfaBitisTarihi: bitisTarihi.toISOString(),
+    rolId: "",
+    sayfaId: "",
   };
 
   const sayfaAtamaRequest: SayfaAtamaRequest = {

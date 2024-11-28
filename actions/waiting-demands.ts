@@ -21,27 +21,27 @@ export type ExpendedTalep = {
   rolCikarma?: RolCikarma[];
 };
 
-export async function bekleyenTalepler(): Promise<boolean> {
-  // let talepler:Talep[];
-  const kisi = await currentUser();
+// export async function bekleyenTalepler(): Promise<boolean> {
+//   // let talepler:Talep[];
+//   const kisi = await currentUser();
 
-  if (!kisi) {
-    return false;
-  }
+//   if (!kisi) {
+//     return false;
+//   }
 
-  // Get All the imza with the KisiId Only if imza has a DurumId of 1
-  const imzalar = await db.imza.findFirst({
-    where: {
-      KisiId: +kisi.id,
-      DurumId: 1,
-    },
-  });
+//   // Get All the imza with the KisiId Only if imza has a DurumId of 1
+//   const imzalar = await db.imza.findFirst({
+//     where: {
+//       KisiId: +kisi.id,
+//       DurumId: 1,
+//     },
+//   });
 
-  if (!imzalar) {
-    return false;
-  }
-  return true;
-}
+//   if (!imzalar) {
+//     return false;
+//   }
+//   return true;
+// }
 
 export async function WaitingRolAtamalar(): Promise<IWaitingRolAtama[]> {
   const kisi = await currentUser();
