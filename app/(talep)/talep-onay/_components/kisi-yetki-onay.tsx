@@ -1,5 +1,6 @@
 import { PreviousKisiYetkiEdit } from "@/actions/previous-demands";
 import { talepOnayla } from "@/actions/talep-onaylama";
+import { WaitingKisiYetkiEdit } from "@/actions/waiting-demands";
 import { ToastAction } from "@/components/ui/toast";
 // import { ekstraYetkilerDataGridConfig } from '@/configs/ekstra-yetkiler-data-grid-config';
 import { toast } from "@/hooks/use-toast";
@@ -40,16 +41,12 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
     if (item.row === undefined) return;
     if (approved) {
       // console.log('Onaylandı: ', item.row.data);
-      const response = await talepOnayla(true, item.row.data.kisiYetkiEditId);
+      const response = await talepOnayla(true, item.row.data.KisiYetkiEditId);
       if (!response) return;
-      setGridData((prevData) =>
-        prevData.filter(
-          (row) =>
-            item.row && row.KisiYetkiEditId !== item.row.data.kisiYetkiEditId
-        )
-      );
-      const responseJson = await PreviousKisiYetkiEdit();
-      setTalepGrid(responseJson);
+      const prevGrid = await PreviousKisiYetkiEdit();
+      setTalepGrid(prevGrid);
+      const grid = await WaitingKisiYetkiEdit();
+      setGridData(grid);
       toast({
         variant: "success",
         title: "Onaylandı",

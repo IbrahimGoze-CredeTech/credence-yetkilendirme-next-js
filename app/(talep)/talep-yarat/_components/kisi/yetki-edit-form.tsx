@@ -1,5 +1,5 @@
-import { kisininYetkileri } from '@/actions/kisi-rol';
-import { yetkiEdit } from '@/actions/yetki-edit';
+import { kisininYetkileri } from '@/actions/kisi-yetki';
+import { yetkiEdit } from '@/actions/yetki-post';
 import CardWrapper from '@/components/card-wrapper';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
@@ -14,7 +14,7 @@ import { ToastAction } from '@/components/ui/toast';
 import { useStaticTablesContext } from '@/context';
 import { toast } from '@/hooks/use-toast';
 import { EylemTuruEnum, eylemTuruStringArray } from '@/modals/eylemTuru';
-import { YetkiEditSchema } from '@/schemas';
+import { YetkiTalepSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form';
@@ -41,18 +41,17 @@ export default function YetkiEditForm() {
   const [isKisiSelected, setIsKisiSelected] = useState(false);
 
 
-  const form = useForm<z.infer<typeof YetkiEditSchema>>({
-    resolver: zodResolver(YetkiEditSchema),
+  const form = useForm<z.infer<typeof YetkiTalepSchema>>({
+    resolver: zodResolver(YetkiTalepSchema),
     defaultValues: {
       baslamaTarihi: new Date(),
       bitisTarihi: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
     }
   });
 
-  const onSubmit = (values: z.infer<typeof YetkiEditSchema>) => {
+  const onSubmit = (values: z.infer<typeof YetkiTalepSchema>) => {
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
       yetkiEdit(values).then((data) => {
@@ -88,15 +87,10 @@ export default function YetkiEditForm() {
     // Find the yetki in kisiYetkiler array based on the value yetkiAdi
     const yetki = kisiYetkiler.find(yetki => yetki.yetkiAdi === value);
     const eylemlerTuruId = yetki?.eylemTuruId;
-    // console.log("value: ", value);
 
-    // console.log("kisiYetki: ", kisiYetkiler);
-    // console.log("yetki: ", eylemlerTuruId);
     if (eylemlerTuruId) {
       // Convert eylemlerTuruId to the string representation from EylemTuruEnum
       const eylemTuruString = EylemTuruEnum[eylemlerTuruId];
-      // console.log("eylemTuruString: ", eylemTuruString);
-
 
       if (eylemTuruString) {
         form.setValue('eylemTuru', eylemTuruString); // Update the form's eylemTuru field

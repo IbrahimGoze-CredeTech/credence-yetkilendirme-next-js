@@ -99,7 +99,7 @@ export const TalepRolSayfaCikarmaSchema = RolFieldSchema.merge(
   .merge(EkstraImzaFieldSchema)
   .merge(SayfaFieldSchema);
 
-export const YetkiEditSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
+export const YetkiTalepSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
   .merge(BitisTarihiFieldSchema)
   .merge(CiftImzaFieldSchema)
   .merge(EkstraImzaFieldSchema)
@@ -107,6 +107,14 @@ export const YetkiEditSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
     yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
     eylemTuru: z.string().min(1, { message: "Eylem türü boş olamaz" }),
   });
+
+// export const YetkiAtamaSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
+//   .merge(BitisTarihiFieldSchema)
+//   .merge(CiftImzaFieldSchema)
+//   .merge(EkstraImzaFieldSchema)
+//   .extend({
+//     yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
+//   });
 
 export const TalepRolCikarmaSchema = KisiFieldSchema.merge(
   BitisTarihiFieldSchema
