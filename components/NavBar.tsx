@@ -232,6 +232,14 @@ export default function Navbar() {
             Kisi-Rol-Yetki
           </Link>
         </RoleGate>
+        <RoleGate allowedRole="sa" showError={false}>
+          <Link
+            href="/views"
+            className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+          >
+            Views
+          </Link>
+        </RoleGate>
 
         <div className="flex items-center space-x-4">
           <DropdownMenu>

@@ -119,9 +119,11 @@ export default function ProfilePage() {
         <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col space-y-4">
           {/* Profil Resmi */}
           <Image
-            className="w-24 h-24 rounded-full mx-auto"
+            className="rounded-full mx-auto"
             src="/user.png"
             alt="User Avatar"
+            width={96}
+            height={96}
           />
 
           {/* Temel Bilgiler */}
