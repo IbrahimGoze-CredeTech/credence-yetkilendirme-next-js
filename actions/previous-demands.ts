@@ -11,6 +11,7 @@ import {
   IPreviousRolCikarma,
   IPreviousRolSayfaAtama,
   IPreviousRolSayfaCikarma,
+  IPreviousRolYetkiEdit,
 } from "@/types";
 
 export async function PreviousRolAtama(): Promise<IPreviousRolAtama[]> {
@@ -226,3 +227,31 @@ export async function PreviousRolSayfaCikarma(): Promise<
   return [];
 }
 //#endregion
+
+export async function PreviousRolYetkiEdit(): Promise<IPreviousRolYetkiEdit[]> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  try {
+    const kisiSayfaEdit = await db.$queryRaw<IPreviousRolYetkiEdit[]>`
+  EXEC PreviousRolYetkiEdits @KisiId = ${+kisi.id}`;
+
+    return kisiSayfaEdit.map((item) => ({
+      RolAdi: item.RolAdi,
+      YetkiAdi: item.YetkiAdi,
+      EylemAdi: item.EylemAdi,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+      ImzaAd: item.ImzaAd,
+      ImzaSoyad: item.ImzaSoyad,
+      ImzaTarihi: item.ImzaTarihi,
+      ImzaDurumu: item.ImzaDurumu,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}

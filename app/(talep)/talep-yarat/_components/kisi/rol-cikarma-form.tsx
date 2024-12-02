@@ -1,4 +1,3 @@
-import { rolCikarma } from '@/actions/rol-cikarma';
 import CardWrapper from '@/components/card-wrapper';
 import FormError from '@/components/form-error';
 import FormSuccess from '@/components/form-success';
@@ -17,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { CustomDatePicker } from '@/components/custom-date-picker';
 import { kisininRolleri } from '@/actions/kisi-rol';
+import { rolCikarma } from '@/actions/rol-post';
 
 export default function RolCikarmaForm() {
   const staticTablesContext = useStaticTablesContext();

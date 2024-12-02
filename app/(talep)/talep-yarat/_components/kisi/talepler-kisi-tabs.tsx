@@ -6,7 +6,7 @@ import YetkiEditForm from "./yetki-edit-form";
 import KisiSayfaAtamaForm from "./kisi-sayfa-atama-form";
 import KisiSayfaCikarmaForm from "./kisi-sayfa-cikarma-form";
 import KisiSayfaEditForm from "./kisi-sayfa-edit-form";
-import KisiYetkiAtamaFrom from "./kisi-yetki-atama-form";
+// import KisiYetkiAtamaFrom from "./kisi-yetki-atama-form";
 
 export default function TaleplerKisiTabs() {
   return (
@@ -15,7 +15,7 @@ export default function TaleplerKisiTabs() {
         <TabsTrigger className="text-xl" value="rol-atama">Rol Atama</TabsTrigger>
         <TabsTrigger className="text-xl" value="rol-cikarma">Rol Çıkarma</TabsTrigger>
         <TabsTrigger className="text-xl" value="yetki-edit">Yetki</TabsTrigger>
-        <TabsTrigger className="text-xl" value="yetki-atama">Yetki Atama</TabsTrigger>
+        {/* <TabsTrigger className="text-xl" value="yetki-atama">Yetki Atama</TabsTrigger> */}
         <TabsTrigger className="text-xl" value="kisi-sayfa-atama">Sayfa Atama</TabsTrigger>
         <TabsTrigger className="text-xl" value="kisi-sayfa-cikarma">Sayfa Çıkarma</TabsTrigger>
         <TabsTrigger className="text-xl" value="kisi-sayfa-edit">Sayfa Edit</TabsTrigger>
@@ -23,7 +23,7 @@ export default function TaleplerKisiTabs() {
       <TabsContent value="rol-atama"><RolAtamaForm /></TabsContent>
       <TabsContent value="rol-cikarma"><RolCikarmaForm /></TabsContent>
       <TabsContent value="yetki-edit"><YetkiEditForm /></TabsContent>
-      <TabsContent value="yetki-atama"><KisiYetkiAtamaFrom /></TabsContent>
+      {/* <TabsContent value="yetki-atama"><KisiYetkiAtamaFrom /></TabsContent> */}
       <TabsContent value="kisi-sayfa-atama"><KisiSayfaAtamaForm /></TabsContent>
       <TabsContent value="kisi-sayfa-cikarma"><KisiSayfaCikarmaForm /></TabsContent>
       <TabsContent value="kisi-sayfa-edit"><KisiSayfaEditForm /></TabsContent>
