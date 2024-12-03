@@ -20,10 +20,7 @@ export default function TalepEkranPage() {
 
     const fetchData = async () => {
       const taleplerResponse = await fetcherGet('/Talep', session.data?.token);
-
-      console.log("talepler: ", taleplerResponse);
       setTalepler(taleplerResponse);
-
     }
 
     fetchData();
@@ -31,8 +28,6 @@ export default function TalepEkranPage() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function onFieldDataChanged(e: any) {
-    // console.log('called');
-    console.log(e.value);
     if (e.value === 1) {
       setIsRolAtama(true);
     }
@@ -68,7 +63,6 @@ export default function TalepEkranPage() {
         </Editing>
         <MasterDetail enabled={true}
           component={({ data }) => {
-            console.log("MasterDetail Data: ", data); // Add this line to inspect the data
             const detailData = data.data;
             return (
               <>

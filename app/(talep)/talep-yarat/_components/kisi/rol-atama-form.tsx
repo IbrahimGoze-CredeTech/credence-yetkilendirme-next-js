@@ -11,12 +11,12 @@ import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { TalepRolAtamaSchema } from '@/schemas';
-import { rolAtama } from '@/actions/rol-atama';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
 import { kisiAtanabilirRoller } from '@/actions/kisi-rol';
+import { rolAtama } from '@/actions/rol-post';
 
 export default function RolAtamaForm() {
   const staticTablesContext = useStaticTablesContext();

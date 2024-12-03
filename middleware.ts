@@ -33,10 +33,6 @@ export default auth(async (req) => {
 
   // const roles = token?.role;
   const pages = token?.pages;
-  // console.log("page: ", pages);
-  // console.log("nextUrl.pathname: ", req.nextUrl.pathname);
-
-  // console.log("---role: ", role);
 
   const { nextUrl } = req;
 
@@ -45,12 +41,6 @@ export default auth(async (req) => {
   const isAPiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isRestrictedRoute = !pages?.includes(nextUrl.pathname);
-  // console.log("isRestrictedRoute: ", isRestrictedRoute);
-
-  // const isRestrictedRoute = restrictedRoutes.some(
-  //   (route) => route.route === nextUrl.pathname && !roles?.includes(route.role)
-  // );
-  // console.log("isRestrictedRoute: ", roles?.includes("sa"));
 
   if (isAPiAuthRoute) {
     return;
@@ -68,7 +58,6 @@ export default auth(async (req) => {
   }
 
   if (isRestrictedRoute) {
-    // console.log("isRestrictedRoute: ", isRestrictedRoute);
     return NextResponse.redirect(new URL("/unauthorized", nextUrl));
   }
   return;

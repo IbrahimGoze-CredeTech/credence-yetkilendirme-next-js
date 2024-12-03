@@ -40,11 +40,9 @@ export async function login(values: z.infer<typeof LoginSchema>) {
           return { success: "", error: "Somethingg went wrong!" };
       }
     }
-    // console.log("-------error: ", error);
     console.error("Error in login Action: ", error);
     throw error;
   } finally {
-    // console.log("finally block");
     // redirect(DEFAULT_LOGIN_REDIRECT);
     // return { success: "logged in", error: "" };
   }

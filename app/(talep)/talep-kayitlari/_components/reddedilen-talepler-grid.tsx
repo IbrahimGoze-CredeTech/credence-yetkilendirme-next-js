@@ -18,7 +18,6 @@ export default function ReddedilenTaleplerGrid() {
           "/Talep/kisi-reddedilen-talepler",
           session.data?.token
         );
-        console.log("Data: ", response);
         setOnaylananTalepler(response);
       } catch (error) {
         console.error("Failed to fetch data: ", error);

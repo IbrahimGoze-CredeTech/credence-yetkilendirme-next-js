@@ -8,7 +8,6 @@ export async function talepOnayla(
   talepId: number
 ): Promise<boolean> {
   const session = await auth();
-  console.log("talepId: ", talepId);
 
   if (onaylandi) {
     const response = await fetcherPUT(

@@ -55,7 +55,6 @@ export default function YetkiSilForm() {
             description: "Yetki başarıyla silindi.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });

@@ -26,7 +26,6 @@ export async function kisininYetkileri(
     eylemTuruId: number;
     isDirect: boolean;
   }[] = await fetcherGet(`/Kisi/yetkiler/${kisi?.KisiId}`, session?.token);
-  // console.log("kisiYetkiler: ", kisiYetkiler);
 
   const allYetkiler = await db.yetki.findMany();
 
@@ -45,7 +44,6 @@ export async function kisininYetkileri(
     };
   });
 
-  // console.log("Enriched Yetkiler: ", enrichedYetkiler);
   return enrichedYetkiler;
 }
 
@@ -65,7 +63,6 @@ export async function kisiAtanabilirYetkiler(kisiName: string): Promise<[]> {
     `/Kisi/atanabilir-yetkiler/${kisi?.KisiId}`,
     session?.token
   );
-  // console.log("kisiYetkiler: ", kisiYetkiler);
 
   return kisiYetkiler;
 }

@@ -152,8 +152,6 @@ export async function kisiSayfaEditPost(
     ekstraImza: ekstraImzaArray,
   };
 
-  // console.log("values kisiSayfaEdit: ", sayfaAtamaRequest);
-
   await fetcherPost(
     "/Talep/kisi-sayfa-edit",
     session?.token,
@@ -212,7 +210,6 @@ export async function kisiSayfaAtamaPost(
     session?.token,
     JSON.stringify(kisiSayfaAtamaRequest)
   );
-  // console.log("response: ", response);
 
   return { success: response.success, error: response.error };
 }
@@ -267,7 +264,6 @@ export async function kisiSayfaCikarmaPost(
     session?.token,
     JSON.stringify(kisiSayfaAtamaRequest)
   );
-  // console.log("response: ", response);
 
   return { success: response.success, error: response.error };
 }

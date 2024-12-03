@@ -64,7 +64,7 @@ export async function WaitingRolAtamalar(): Promise<IWaitingRolAtama[]> {
       RolBitisTarihi: item.RolBitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -90,7 +90,7 @@ export async function WaitingRolCikarmalar(): Promise<IWaitingRolCikarma[]> {
       RolCikarmaTarihi: item.RolCikarmaTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -116,7 +116,7 @@ export async function WaitingKisiYetkiEdit(): Promise<IWaitingKisiYetkiEdit[]> {
       YetkiBitisTarihi: item.YetkiBitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -144,7 +144,7 @@ export async function WaitingKisiSayfaEdit(): Promise<IWaitingKisiSayfaEdit[]> {
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -173,7 +173,7 @@ export async function WaitingKisiSayfaAtama(): Promise<
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -202,7 +202,7 @@ export async function WaitingKisiSayfaCikarma(): Promise<
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -220,8 +220,6 @@ export async function WaitingRolSayfaAtama(): Promise<IWaitingRolSayfaAtama[]> {
   EXEC WaitingRolSayfaAtamas @KisiId = ${+kisi.id}
 `;
 
-    console.log(rolSayfaAtama);
-
     return rolSayfaAtama.map((item) => ({
       RolSayfaAtamaId: item.RolSayfaAtamaId,
       RolId: item.RolId,
@@ -232,7 +230,7 @@ export async function WaitingRolSayfaAtama(): Promise<IWaitingRolSayfaAtama[]> {
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -251,8 +249,6 @@ export async function WaitingRolSayfaCikarma(): Promise<
   EXEC WaitingRolSayfaCikarmas @KisiId = ${+kisi.id}
 `;
 
-    // console.log(rolSayfaAtama);
-
     return rolSayfaAtama.map((item) => ({
       RolSayfaCikarmaId: item.RolSayfaCikarmaId,
       RolId: item.RolId,
@@ -263,7 +259,7 @@ export async function WaitingRolSayfaCikarma(): Promise<
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -281,8 +277,6 @@ export async function WaitingRolYetkiEdit(): Promise<IWaitingRolYetkiEdit[]> {
   EXEC WaitingRolYetkiEdits @KisiId = ${+kisi.id}
 `;
 
-    // console.log(rolSayfaAtama);
-
     return rolYetkiEdit.map((item) => ({
       RolYetkiEditId: item.RolYetkiEditId,
       RolAdi: item.RolAdi,
@@ -292,7 +286,7 @@ export async function WaitingRolYetkiEdit(): Promise<IWaitingRolYetkiEdit[]> {
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }

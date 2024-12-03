@@ -15,6 +15,13 @@ import { Separator } from "@/components/ui/separator";
 
 import React, { useEffect, useState } from "react";
 import { PreviousRolYetkiEdit } from "@/actions/previous-demands";
+import { EylemTuruEnum } from "@/modals/eylemTuru";
+
+const eylemTuruLookup = [
+  { eylemTuruId: EylemTuruEnum.Oku, eylemAdi: "Oku" },
+  { eylemTuruId: EylemTuruEnum.Yaz, eylemAdi: "Yaz" },
+  { eylemTuruId: EylemTuruEnum.Engel, eylemAdi: "Engelle" },
+];
 
 interface Props {
   data: IWaitingRolYetkiEdit[];
@@ -53,7 +60,6 @@ export default function RolYetkiGrid({ data, rolYetkiEdits }: Props) {
           <ToastAction
             altText="Goto schedule to undo"
             onClick={() => {
-              console.log("undo clicked");
             }}
           >
             Iptal
@@ -102,7 +108,15 @@ export default function RolYetkiGrid({ data, rolYetkiEdits }: Props) {
           <Editing mode="row" useIcons={true} />
           <Column dataField="RolAdi" caption="Rol Adı" />
           <Column dataField="YetkiAdi" caption="Yetki Adı" />
-          <Column dataField="EylemTuruId" caption="Eylem Turu Id" />
+          <Column
+            dataField="EylemTuruId"
+            caption="Eylem Turu"
+            lookup={{
+              dataSource: eylemTuruLookup,
+              valueExpr: "eylemTuruId",
+              displayExpr: "eylemAdi",
+            }}
+          />
           <Column dataField="BaslangicTarihi" caption="Başlangıç Tarihi" />
           <Column dataField="BitisTarihi" caption="Bitiş Tarihi" />
           <Column type="buttons" width={120}>

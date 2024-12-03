@@ -73,7 +73,6 @@ export default function RaporPage() {
           imzaAtilanTalepSayısı: matchingItem?.imzaAtilanTalepSayısı,
         };
       });
-      console.log("Object 3: ", object3);
       setCombineArray(object3);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

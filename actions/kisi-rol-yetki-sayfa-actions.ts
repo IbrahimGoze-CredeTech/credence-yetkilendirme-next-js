@@ -29,8 +29,6 @@ export async function yetkiYaratma(values: z.infer<typeof YetkiSchema>) {
     yetkiAdi: yetkiAdi,
   };
 
-  // console.log("kisi: ", JSON.stringify(yetki));
-
   await fetcherPost("/Yetki", session?.token, JSON.stringify(yetki));
 }
 
@@ -113,7 +111,6 @@ export async function rolYaratma(values: z.infer<typeof RolSchema>) {
   }
 
   const { rolAdi, supervizorRol, riskWeight } = values;
-  // console.log("kisiAdi: ", kisiAdi);
   // Find the rolId of the supervizorRol
   const supervizorRolObject = await db.rol.findFirst({
     where: {
@@ -126,8 +123,6 @@ export async function rolYaratma(values: z.infer<typeof RolSchema>) {
     supervizorRolId: supervizorRolObject?.RolId,
     riskWeight: riskWeight,
   };
-
-  // console.log("kisi: ", JSON.stringify(rol));
 
   const response = await fetcherPost(
     "/Rol",
@@ -172,7 +167,6 @@ export async function kisiYaratma(values: z.infer<typeof KisiSchema>) {
   }
 
   const { kisiAdi, kisiSifre, kisiSoyadi, kullaniciAdi } = values;
-  // console.log("kisiAdi: ", kisiAdi);
 
   const hashedPassword = await bcrypt.hash(kisiSifre, 10);
   const kisi = {
@@ -181,14 +175,12 @@ export async function kisiYaratma(values: z.infer<typeof KisiSchema>) {
     kullaniciAdi: kullaniciAdi,
     sifre: hashedPassword,
   };
-  // console.log("kisi: ", JSON.stringify(kisi));
 
   const response = await fetcherPost(
     "/Kisi",
     session?.token,
     JSON.stringify(kisi)
   );
-  console.log("---response: ", response);
 
   return { success: response.success, error: response.error };
 }

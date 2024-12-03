@@ -29,8 +29,6 @@ export default function KisiPage() {
       try {
         const [bilgilerData] = await Promise.all([bilgilerFetch]);
         if (bilgilerData) {
-          console.log(bilgilerData);
-
           setEmployee(bilgilerData);
         }
       } catch (error) {

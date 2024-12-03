@@ -18,7 +18,6 @@ export default function YaratilanTaleplerGrid() {
           "/Talep/kisi-yaratilan-talepler",
           session.data?.token
         );
-        console.log("Data: ", response);
         setOnaylananTalepler(response);
       } catch (error) {
         console.error("Failed to fetch data: ", error);

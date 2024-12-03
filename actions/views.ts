@@ -13,7 +13,6 @@ export async function GetKisiAccessibleRoutes(): Promise<
     orderBy: { KisiId: "asc" },
   });
 
-  // console.log("kisiAccessibleRoutes: ", kisiAccessibleRoutes);
   return kisiAccessibleRoutes;
 }
 
@@ -40,8 +39,6 @@ export async function GetKisiYetkisView(): Promise<KisiYetkiView[]> {
   const roleYetkis = await db.kisiYetkiView.findMany({
     orderBy: { KisiId: "asc" },
   });
-
-  // console.log("roleYetkis: ", roleYetkis);
 
   return roleYetkis;
   // return [];

@@ -7,8 +7,6 @@ import { fetcherPost } from "@/utils";
 import { z } from "zod";
 
 type SayfaAtamaRequest = {
-  // talepEdenKisiId: number;
-  // talep: Talep;
   sayfaAtama: RolSayfa;
   ciftImza: boolean;
   ekstraImza: string[];
@@ -41,15 +39,6 @@ export async function sayfaAtama(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  // const talep: Talep = {
-  //   // talepEdenKisiId: 1,
-  //   // talepId: 0,
-  //   olusturulmaTarihi: "2024-10-14T09:13:38.191Z",
-  //   durum: "",
-  //   durumTarihi: "2024-10-14T09:13:38.191Z",
-  //   talepEdenKisiAdi: "",
-  // };
-
   const sayfaAtama: RolSayfa = {
     rolAdi,
     sayfaRoute: SayfaRoute,
@@ -60,14 +49,10 @@ export async function sayfaAtama(
   };
 
   const sayfaAtamaRequest: SayfaAtamaRequest = {
-    // talepEdenKisiId: session?.user.id,
-    // talep,
     sayfaAtama,
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
-
-  // console.log("session?.token: ", session?.user.id);
 
   await fetcherPost(
     "/Sayfa/rol-sayfa",

@@ -38,11 +38,9 @@ export default function RolSilForm() {
   const onSubmit = (values: z.infer<typeof RolSilSchema>) => {
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
       rolSilme(values).then((data) => {
-        // console.log('data: ', data);
         if (!data.success) {
           // form.reset();
           setError(data?.error + "");
@@ -55,7 +53,6 @@ export default function RolSilForm() {
             description: "Rol başarıyla silindi.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });

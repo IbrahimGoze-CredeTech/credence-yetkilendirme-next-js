@@ -24,7 +24,6 @@ export default function KisiSayfaCikarmaOnay({ data, previousKisiSayfaAtama }: P
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
-      // console.log('Onaylandı: ', item.row.data);
       const response = await talepOnayla(true, item.row.data.KisiSayfaCikarmaId);
       if (!response) return;
       const prevGrid = await PreviousKisiSayfaCikarma();
@@ -38,13 +37,11 @@ export default function KisiSayfaCikarmaOnay({ data, previousKisiSayfaAtama }: P
         description: "Talebiniz başarıyla onaylandı",
         action: (
           <ToastAction altText="Goto schedule to undo" onClick={() => {
-            console.log("undo clicked");
           }}>Iptal</ToastAction>
         )
       });
     }
     else {
-      // console.log('Reddedildi: ', item.row.data);
       const response = await talepOnayla(false, item.row.data.KisiSayfaCikarmaId);
       if (!response) return;
       const prevGrid = await PreviousKisiSayfaCikarma();
@@ -57,7 +54,6 @@ export default function KisiSayfaCikarmaOnay({ data, previousKisiSayfaAtama }: P
         description: "Talebiniz başarıyla reddedildi ve supervisor onayı beklemektedir.",
         action: (
           <ToastAction altText="Goto schedule to undo" onClick={() => {
-            console.log("undo clicked");
           }}>Iptal</ToastAction>
         )
       });

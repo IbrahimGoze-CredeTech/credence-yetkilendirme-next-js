@@ -6,7 +6,6 @@ import YetkiEditForm from "./yetki-edit-form";
 import KisiSayfaAtamaForm from "./kisi-sayfa-atama-form";
 import KisiSayfaCikarmaForm from "./kisi-sayfa-cikarma-form";
 import KisiSayfaEditForm from "./kisi-sayfa-edit-form";
-// import KisiYetkiAtamaFrom from "./kisi-yetki-atama-form";
 
 export default function TaleplerKisiTabs() {
   return (
