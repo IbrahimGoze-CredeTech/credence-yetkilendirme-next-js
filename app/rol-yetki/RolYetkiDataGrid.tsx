@@ -111,8 +111,6 @@ export default function RolYetkiDataGrid() {
         showRowLines={true}
         showBorders={true}
         onRowClick={(e) => {
-          console.log('e: ', e.data);
-
           modalContext.setId(e.data.id);
           modalContext.toggle();
         }}

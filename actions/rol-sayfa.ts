@@ -124,7 +124,6 @@ export async function rolSayfaAtamaPost(
     session?.token,
     JSON.stringify(rolSayfaAtamaRequest)
   );
-  // console.log("response: ", response);
 
   return { success: response.success, error: response.error };
 }
@@ -170,7 +169,6 @@ export async function rolSayfaCikarmaPost(
     session?.token,
     JSON.stringify(rolSayfaCikarmaRequest)
   );
-  // console.log("response: ", response);
 
   return { success: response.success, error: response.error };
 }

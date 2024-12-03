@@ -20,8 +20,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user }) {
-      // console.log("user: ", user);
-      // console.log("account: ", account);
       const existingUser = await getUserById(user.id);
       if (!existingUser) return false;
       // TODO: Verify user
@@ -32,15 +30,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.id = token.sub;
       }
 
-      // console.log("token: ", token);
       if (token.role && session.user) {
         // session.user.role = token.role;
         // session.role = typeof token.role === "string" ? token.role : "";
         session.user.role = typeof token.role === "string" ? token.role : "";
-        // console.log("session.user.role: ", session.user.role);
       }
       session.token = createToken(session.user.id);
-      // console.log("session in auth: ", session);
 
       return {
         ...session,
@@ -61,7 +56,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (!role) return token;
       token.role = role;
       token.pages = pages;
-      // console.log("token.role: ", token.role);
 
       // token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       return token;

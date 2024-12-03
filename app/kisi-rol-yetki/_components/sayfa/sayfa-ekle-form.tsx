@@ -32,7 +32,6 @@ export default function SayfaEkleForm() {
   const onSubmit = (values: z.infer<typeof SayfaSchema>) => {
     setError('');
     setSuccess('');
-    console.log('values: ', values);
 
     startTransition(() => {
       SayfaYaratma(values).then((data) => {
@@ -50,7 +49,6 @@ export default function SayfaEkleForm() {
             description: "Rol başarıyla oluşturuldu",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });

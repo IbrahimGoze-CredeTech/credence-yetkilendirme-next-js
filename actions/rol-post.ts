@@ -99,8 +99,6 @@ export async function rolCikarma(
     ekstraImza: ekstraImzaArray,
   };
 
-  console.log("rolCikarmaRequest: ", JSON.stringify(rolCikarmaRequest));
-
   await fetcherPost(
     "/Talep/rol-cikarma",
     session?.token,

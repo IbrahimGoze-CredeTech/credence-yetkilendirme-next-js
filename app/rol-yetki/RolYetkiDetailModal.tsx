@@ -80,22 +80,7 @@ export default function RolYetkiDetailModal() {
   };
 
   const handleSaveChanges = async () => {
-    console.log(JSON.stringify(insertedRolYetki));
-
     try {
-      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Rol/rol-yetki`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json', // JSON formatında veri gönderiyoruz
-      //   },
-      //   body: JSON.stringify(insertedRolYetki), // `insertedRolYetki`'yi API'ye gönderiyoruz
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error('Verileri kaydetme işlemi sırasında bir hata oluştu.');
-      // }
-
-      // const result = await response.json();
       const result = await fetcherPost(
         "/Rol/rol-yetki",
         session.data?.token,

@@ -37,7 +37,7 @@ export async function PreviousRolAtama(): Promise<IPreviousRolAtama[]> {
       DurumAd: item.DurumAd,
     }));
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return [];
   }
 }
@@ -64,7 +64,7 @@ export async function PreviousRolCikarma(): Promise<IPreviousRolCikarma[]> {
       ImzaDurumu: item.ImzaDurumu,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -95,7 +95,7 @@ export async function PreviousKisiYetkiEdit(): Promise<
       ImzaDurumu: item.ImzaDurumu,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -121,7 +121,7 @@ export async function PreviousKisiSayfaEdit(): Promise<
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -146,7 +146,7 @@ export async function PreviousKisiSayfaAtama(): Promise<
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -171,7 +171,7 @@ export async function PreviousKisiSayfaCikarma(): Promise<
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -197,7 +197,7 @@ export async function PreviousRolSayfaAtama(): Promise<
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -222,7 +222,7 @@ export async function PreviousRolSayfaCikarma(): Promise<
       BitisTarihi: item.BitisTarihi,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }
@@ -251,7 +251,7 @@ export async function PreviousRolYetkiEdit(): Promise<IPreviousRolYetkiEdit[]> {
       ImzaDurumu: item.ImzaDurumu,
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return [];
 }

@@ -84,11 +84,8 @@ export default function ProfilePage() {
       setVerimlilik(verimlilik);
       setRisk(risk);
       setKisiselRoller(kisiselRoller);
-      console.log("Kişisel Roller:", kisiselRoller);
-      // console.log(risk);
 
       const roller = kisiselRoller[0]?.roller || [];
-      // console.log("Roller:", roller);
       setKisiselRoller(roller);
 
       const formattedGunlukTalepYaratma = formatDataList(gunlukTalepYaratma);
@@ -106,7 +103,6 @@ export default function ProfilePage() {
           imzaAtilanTalepSayısı: matchingItem?.imzaAtilanTalepSayısı,
         };
       });
-      console.log("Object 3: ", object3);
       setCombineArray(object3);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -37,11 +37,9 @@ export default function RolEkleForm() {
   const onSubmit = (values: z.infer<typeof RolSchema>) => {
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
       rolYaratma(values).then((data) => {
-        // console.log('data: ', data);
 
         if (data?.error) {
           // form.reset();
@@ -55,7 +53,6 @@ export default function RolEkleForm() {
             description: "Rol başarıyla oluşturuldu",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });
@@ -63,12 +60,6 @@ export default function RolEkleForm() {
       }).catch(() => setError('Something went wrong!'));
     })
   }
-
-  // const handleRiskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { value } = e.target;
-
-  //   // form.setValue('riskWeight', parseInt(value, 10));
-  // }
 
   const onFormError: SubmitErrorHandler<z.infer<typeof RolSchema>> = (e) => {
     console.error(e);

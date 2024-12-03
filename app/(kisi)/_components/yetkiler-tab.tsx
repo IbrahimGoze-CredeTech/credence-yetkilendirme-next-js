@@ -10,7 +10,6 @@ interface Props {
 }
 
 export default function YetkilerTab({ yetkiler }: Props) {
-  console.log("yetkiler: ", yetkiler);
 
   return (
     <DataGrid
