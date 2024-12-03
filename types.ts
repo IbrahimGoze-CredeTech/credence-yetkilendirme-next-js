@@ -181,6 +181,15 @@ export interface IWaitingKisiSayfaCikarma {
   BaslangicTarihi: string | null; // Assuming datetime fields are returned as ISO strings, null for optional
   BitisTarihi: string | null; // Adjust type if using Date objects in TypeScript
 }
+
+export interface IWaitingRolYetkiEdit {
+  RolYetkiEditId: number;
+  RolAdi: string;
+  YetkiAdi: string;
+  EylemTuruId: number;
+  BaslangicTarihi: Date | null;
+  BitisTarihi: Date | null;
+}
 //#endregion
 
 //#region PreviousTalepGridTypes
@@ -202,6 +211,18 @@ export interface IPreviousRolCikarma {
   RolAdi: string;
   RolCikarmaTarihi: string; // Since the value is a string representing a date, we keep it as string type.
   ImzaAd: string;
+  ImzaSoyad: string;
+  ImzaTarihi: Date | null; // Date or null, because imzaTarihi could be null.
+  ImzaDurumu: string;
+}
+
+export interface IPreviousRolYetkiEdit {
+  RolAdi: string;
+  YetkiAdi: string;
+  EylemAdi: string;
+  ImzaAd: string;
+  BaslangicTarihi: Date | null; // Date or null, because baslangicTarihi could be null.
+  BitisTarihi: Date | null; // Date or null, because bitisTarihi could be null.
   ImzaSoyad: string;
   ImzaTarihi: Date | null; // Date or null, because imzaTarihi could be null.
   ImzaDurumu: string;

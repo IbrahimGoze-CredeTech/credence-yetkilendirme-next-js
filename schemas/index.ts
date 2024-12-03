@@ -108,6 +108,15 @@ export const YetkiTalepSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
     eylemTuru: z.string().min(1, { message: "Eylem türü boş olamaz" }),
   });
 
+export const RolYetkiSchema = RolFieldSchema.merge(BaslamaTarihiFieldSchema)
+  .merge(BitisTarihiFieldSchema)
+  .merge(CiftImzaFieldSchema)
+  .merge(EkstraImzaFieldSchema)
+  .extend({
+    yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
+    eylemTuru: z.string().min(1, { message: "Eylem türü boş olamaz" }),
+  });
+
 // export const YetkiAtamaSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
 //   .merge(BitisTarihiFieldSchema)
 //   .merge(CiftImzaFieldSchema)

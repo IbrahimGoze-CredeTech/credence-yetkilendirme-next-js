@@ -18,19 +18,36 @@ import {
 const chartConfig = {
   RolAtama: {
     label: "Rol Atama",
-    color: "hsl(var(--chart-1))",
+    color: "#FF5733",
   },
   RolCikarma: {
     label: "Rol Çıkarma",
-    color: "#3b82f6",
+    color: "#33FF57",
   },
   YetkiEdit: {
     label: "Yetki Edit",
-    color: "hsl(var(--chart-2))",
+    color: "#3357FF",
   },
-  kisiSayfaEdit: {
+  KisiSayfaEdit: {
     label: "Kişi Sayfa Edit",
-    color: "hsl(var(--chart-3))",
+    color: "#F4D03F",
+  },
+  KisiSayfaAtama: {
+    label: "Kişi Sayfa Atama",
+    color: "#A569BD",
+  },
+  RolSayfaAtama: {
+    label: "Rol Sayfa Atama ",
+    color: "#F1948A",
+  },
+  RolSayfaCikarma: {
+    label: "Rol Sayfa Çıkarma ",
+    color: "#FF0000",
+  },
+
+  KisiSayfaCikarma: {
+    label: "Kişi Sayfa Çıkarma ",
+    color: "#000080",
   },
 } satisfies ChartConfig;
 
@@ -83,9 +100,9 @@ export function PieChartComp({ data }: Props) {
             </Pie>
           </PieChart>
         </ChartContainer>
-        <div className="flex justify-center mt-4 space-x-4">
+        <div className="grid grid-cols-3">
           {Object.keys(chartConfig).map((key) => (
-            <div key={key} className="flex items-center space-x-2">
+            <div key={key} className="flex  items-center space-x-2">
               <span
                 className="w-4 h-4 rounded"
                 style={{ backgroundColor: chartConfig[key as ChartKeys].color }}

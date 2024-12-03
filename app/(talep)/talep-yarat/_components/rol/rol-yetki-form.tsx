@@ -10,23 +10,39 @@ import { useStaticTablesContext } from '@/context';
 import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { TalepRolAtamaSchema } from '@/schemas';
+import { RolYetkiSchema, TalepRolSayfaAtamaSchema } from '@/schemas';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
-import { kisiAtanabilirRoller } from '@/actions/kisi-rol';
-import { rolAtama } from '@/actions/rol-post';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { EylemTuruEnum, eylemTuruStringArray } from '@/modals/eylemTuru';
+import { rolunYetkileri } from '@/actions/rol-yetki';
+import { rolYetkiPost } from '@/actions/rol-post';
 
-export default function RolAtamaForm() {
+
+type RolYetki = { yetkiAdi: string, eylemTuruId: number };
+
+export default function RolYetkiForm() {
   const staticTablesContext = useStaticTablesContext();
+
+  const yetkilerOptions: Option[] = staticTablesContext.yetkiler.map((yetki) =>
+    ({ label: yetki.yetkiAdi, value: yetki.yetkiAdi })) || [];
+
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
-  const [roller, setRoller] = useState<string[]>([]);
-  const rollerOptions: Option[] = roller.map((rol) =>
-    ({ label: rol, value: rol })) || [];
+  const rollerOptions: Option[] = staticTablesContext.roller.map((rol) => ({
+    label: rol.rolAdi, // Roller sadece ad içeriyor
+    value: rol.rolAdi,
+  })) || [];
 
+  const [rolYetkiler, setRolYetkiler] = useState<RolYetki[]>([]);
 
+  // const [sayfalar, setSayfalar] = useState<string[]>([]);
+  // const sayfalarOptions = sayfalar.map((sayfa) => ({
+  //   label: sayfa,
+  //   value: sayfa,
+  // })) || [];
   const [isPending, startTransition] = useTransition();
 
   const [error, setError] = useState<string | undefined>("")
@@ -36,11 +52,12 @@ export default function RolAtamaForm() {
   const [isKisiSelected, setIsKisiSelected] = useState(false);
 
 
-  const form = useForm<z.infer<typeof TalepRolAtamaSchema>>({
-    resolver: zodResolver(TalepRolAtamaSchema),
+  const form = useForm<z.infer<typeof RolYetkiSchema>>({
+    resolver: zodResolver(RolYetkiSchema),
     defaultValues: {
       rolAdi: '',
-      kisiAdi: '',
+      yetkiAdi: '',
+      eylemTuru: '',
       baslamaTarihi: new Date(),
       bitisTarihi: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
       ciftImza: false,
@@ -48,20 +65,20 @@ export default function RolAtamaForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof TalepRolAtamaSchema>) => {
+  const onSubmit = (values: z.infer<typeof RolYetkiSchema>) => {
     setError('');
     setSuccess('');
     // console.log('values: ', values);
 
     startTransition(() => {
-      rolAtama(values).then((data) => {
+      rolYetkiPost(values).then((data) => {
         if (data?.error) {
-          form.reset();
+          // form.reset();
           setError(data.error);
         }
         if (data.success) {
           form.reset();
-          setSuccess(data.success)
+          setSuccess("Talep başarıyla oluşturuldu")
           toast({
             title: "Talep başarıyla oluşturuldu",
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
@@ -78,41 +95,84 @@ export default function RolAtamaForm() {
   }
 
   const onValueChange = (value: string) => {
+    console.log(value);
+
     startTransition(async () => {
-      const roller = await kisiAtanabilirRoller(value);
-      setRoller(roller);
+      // const sayfalar = await RolAtanabilirSayfalar(value);
+      const yetkiler = await rolunYetkileri(value);
+      setRolYetkiler(yetkiler);
+
+      // setSayfalar(sayfalar);
       setIsKisiSelected(true); // Update boolean based on whether there's a value
     });
   };
 
-  const onFormError: SubmitErrorHandler<z.infer<typeof TalepRolAtamaSchema>> = (e) => {
+  const onYetkiSelected = (value: string) => {
+    // Find the yetki in kisiYetkiler array based on the value yetkiAdi
+    const yetki = rolYetkiler.find(yetki => yetki.yetkiAdi === value);
+    const eylemlerTuruId = yetki?.eylemTuruId;
+
+    if (eylemlerTuruId) {
+      // Convert eylemlerTuruId to the string representation from EylemTuruEnum
+      const eylemTuruString = EylemTuruEnum[eylemlerTuruId];
+
+      if (eylemTuruString) {
+        form.setValue('eylemTuru', eylemTuruString); // Update the form's eylemTuru field
+        return;
+      }
+    }
+    form.setValue('eylemTuru', ''); // Update the form's eylemTuru field
+  }
+
+  const onFormError: SubmitErrorHandler<z.infer<typeof TalepRolSayfaAtamaSchema>> = (e) => {
     console.error(e)
   }
 
   return (
-    <CardWrapper headerLabel={'Rol Atama'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
+    <CardWrapper headerLabel={'Yetki Değiştirme'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
           <div className='grid grid-cols-2 gap-8'>
-            <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
+            <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Kisi Adi</FormLabel>
+                <FormLabel>Rol Adi</FormLabel>
                 <FormControl>
-                  <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
+                  <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={rollerOptions} placeholder={'Rol Ara'} searchPlaceholder={'Rol Ara...'} />
                 </FormControl>
               </FormItem>
             )} />
 
-            <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
+            <FormField control={form.control} name={'yetkiAdi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Rol Adi</FormLabel>
-                <CustomCombobox onValueChange={field.onChange} Options={rollerOptions} placeholder={'Rol Ara'} searchPlaceholder={'Rol Ara...'} disabled={isPending || !isKisiSelected} />
+                <FormLabel>Yetki Adi</FormLabel>
+                <CustomCombobox onValueChange={(value) => { field.onChange(value); onYetkiSelected(value) }} Options={yetkilerOptions} placeholder={'Yetki Ara'} searchPlaceholder={'Yetki Ara...'} disabled={isPending || !isKisiSelected} />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name='eylemTuru' render={({ field }) => (
+              <FormItem>
+                <FormLabel>Eylem Türü</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending || !isKisiSelected} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Eylem Türü Seç" />
+                    </SelectTrigger>
+                  </FormControl>
+
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Eylem Türleri</SelectLabel>
+                      {eylemTuruStringArray.map((eylem) => (
+                        <SelectItem key={eylem} value={eylem}>{eylem}</SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </FormItem>
             )} />
 
             <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Rol Başlangıç Tarihi</FormLabel>
+                <FormLabel>Sayfa Başlangıç Tarihi</FormLabel>
                 <CustomDatePicker
                   selectedDate={field.value}
                   onDateChange={field.onChange}
@@ -125,7 +185,7 @@ export default function RolAtamaForm() {
 
             <FormField control={form.control} name={'bitisTarihi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Rol Bitiş Tarihi</FormLabel>
+                <FormLabel>Sayfa Bitiş Tarihi</FormLabel>
                 <CustomDatePicker
                   selectedDate={field.value}
                   onDateChange={field.onChange}
@@ -170,7 +230,7 @@ export default function RolAtamaForm() {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Rol Atama Talebi Olustur</Button>
+          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Rol Yetki Değiştirme Talebi Olustur</Button>
         </form>
       </Form>
     </CardWrapper>
