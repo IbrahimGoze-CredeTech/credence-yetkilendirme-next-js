@@ -101,7 +101,6 @@ export default function Navbar() {
                   href="/rol"
                   className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
                 >
-
                   Roller
                 </Link>
               </DropdownMenuItem>
@@ -113,13 +112,6 @@ export default function Navbar() {
                   href="/yetki"
                   className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
                 >
-                  {/* <Image
-                    src="/yetkiler.png"
-                    alt="Yetki"
-                    width={24}
-                    height={24}
-                    className="mr-2"
-                  /> */}
                   Yetkiler
                 </Link>
               </DropdownMenuItem>
@@ -132,13 +124,6 @@ export default function Navbar() {
                   href="/kisi"
                   className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
                 >
-                  {/* <Image
-                    src="/people.png"
-                    alt="Kişi"
-                    width={24}
-                    height={24}
-                    className="mr-2"
-                  /> */}
                   Kişiler
                 </Link>
               </DropdownMenuItem>

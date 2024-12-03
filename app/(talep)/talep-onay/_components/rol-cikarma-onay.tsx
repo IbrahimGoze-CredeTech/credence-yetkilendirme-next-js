@@ -22,7 +22,6 @@ interface Props {
 }
 
 export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
-
   const [gridData, setGridData] = useState<IWaitingRolCikarma[]>(data);
   const [talepGrid, setTalepGrid] = useState<IPreviousRolCikarma[]>([]);
 
