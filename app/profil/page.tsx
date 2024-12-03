@@ -8,7 +8,6 @@ import React, {
   useState,
   useTransition,
 } from "react";
-import { DataGrid } from "devextreme-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { ExtendedUser } from "@/next-auth";
 import TalepOnayDatagrid from "../_anasayfa/talep-onay/TalepOnayDatagrid";
@@ -119,9 +118,11 @@ export default function ProfilePage() {
         <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col space-y-4">
           {/* Profil Resmi */}
           <Image
-            className="w-24 h-24 rounded-full mx-auto"
+            className="rounded-full mx-auto"
             src="/user.png"
             alt="User Avatar"
+            width={96}
+            height={96}
           />
 
           {/* Temel Bilgiler */}
@@ -190,7 +191,11 @@ export default function ProfilePage() {
         {/* Profilin altındaki gridler */}
         <div className="lg:col-span-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="bg-white shadow-lg rounded-lg p-6">
-            <TalepOnayDatagrid waitingRolAtamalar={[]} waitingRolCikarmalar={[]} waitingKisiYetkiEdit={[]} />
+            <TalepOnayDatagrid
+              waitingRolAtamalar={[]}
+              waitingRolCikarmalar={[]}
+              waitingKisiYetkiEdit={[]}
+            />
           </div>
           <div className="bg-white shadow-lg rounded-lg p-6">
             <KisiDataGridOzet />
