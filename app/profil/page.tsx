@@ -88,7 +88,7 @@ export default function ProfilePage() {
       // console.log(risk);
 
       const roller = kisiselRoller[0]?.roller || [];
-      console.log("Roller:", roller);
+      // console.log("Roller:", roller);
       setKisiselRoller(roller);
 
       const formattedGunlukTalepYaratma = formatDataList(gunlukTalepYaratma);

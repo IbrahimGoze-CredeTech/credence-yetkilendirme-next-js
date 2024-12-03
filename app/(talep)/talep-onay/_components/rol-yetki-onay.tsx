@@ -1,11 +1,7 @@
-import { PreviousKisiYetkiEdit } from "@/actions/previous-demands";
 import { talepOnayla } from "@/actions/talep-onaylama";
-import { WaitingKisiYetkiEdit } from "@/actions/waiting-demands";
 import { ToastAction } from "@/components/ui/toast";
-// import { ekstraYetkilerDataGridConfig } from '@/configs/ekstra-yetkiler-data-grid-config';
 import { toast } from "@/hooks/use-toast";
-import { EylemTuruEnum } from "@/modals/eylemTuru";
-import { IPreviousKisiYetkiEdit, IWaitingKisiYetkiEdit } from "@/types";
+import { IPreviousRolYetkiEdit, IWaitingRolYetkiEdit } from "@/types";
 import DataGrid, {
   Button,
   Column,
@@ -15,38 +11,40 @@ import DataGrid, {
   Paging,
 } from "devextreme-react/data-grid";
 import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import React, { useEffect, useState } from "react";
+import { Separator } from "@/components/ui/separator";
 
-const eylemTuruLookup = [
-  { eylemTuruId: EylemTuruEnum.Oku, eylemAdi: "Oku" },
-  { eylemTuruId: EylemTuruEnum.Yaz, eylemAdi: "Yaz" },
-  { eylemTuruId: EylemTuruEnum.Engel, eylemAdi: "Engelle" },
-];
+import React, { useEffect, useState } from "react";
+import { PreviousRolYetkiEdit } from "@/actions/previous-demands";
 
 interface Props {
-  data: IWaitingKisiYetkiEdit[];
-  kisiYetkiEditTalepler: IPreviousKisiYetkiEdit[];
+  data: IWaitingRolYetkiEdit[];
+  rolYetkiEdits: IPreviousRolYetkiEdit[];
 }
 
-export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
-  const [gridData, setGridData] = useState<IWaitingKisiYetkiEdit[]>(data);
-  const [talepGrid, setTalepGrid] = useState<IPreviousKisiYetkiEdit[]>([]);
+export default function RolYetkiGrid({ data, rolYetkiEdits }: Props) {
+
+  const [gridData, setGridData] = useState<IWaitingRolYetkiEdit[]>(data);
+  const [talepGrid, setTalepGrid] = useState<IPreviousRolYetkiEdit[]>([]);
 
   useEffect(() => {
     setGridData(data);
-    setTalepGrid(kisiYetkiEditTalepler);
-  }, [data, kisiYetkiEditTalepler]);
+    setTalepGrid(rolYetkiEdits);
+  }, [data, rolYetkiEdits]);
 
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
       // console.log('Onaylandı: ', item.row.data);
-      const response = await talepOnayla(true, item.row.data.KisiYetkiEditId);
+      const response = await talepOnayla(true, item.row.data.RolYetkiEditId);
+      // If response is successful these will update the datagrids
       if (!response) return;
-      const prevGrid = await PreviousKisiYetkiEdit();
-      setTalepGrid(prevGrid);
-      const grid = await WaitingKisiYetkiEdit();
-      setGridData(grid);
+      setGridData((prevData) =>
+        prevData.filter(
+          (row) => item.row && row.RolYetkiEditId !== item.row.data.RolYetkiEditId
+        )
+      );
+      const responseJson = await PreviousRolYetkiEdit();
+      setTalepGrid(responseJson);
       toast({
         variant: "success",
         title: "Onaylandı",
@@ -64,20 +62,20 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
       });
     } else {
       // console.log('Reddedildi: ', item.row.data);
-      const response = await talepOnayla(false, item.row.data.kisiYetkiEditId);
+      const response = await talepOnayla(false, item.row.data.RolYetkiEditId);
       if (!response) return;
       setGridData((prevData) =>
         prevData.filter(
-          (row) =>
-            item.row && row.KisiYetkiEditId !== item.row.data.kisiYetkiEditId
+          (row) => item.row && row.RolYetkiEditId !== item.row.data.RolYetkiEditId
         )
       );
-      const responseJson = await PreviousKisiYetkiEdit();
+      const responseJson = await PreviousRolYetkiEdit();
       setTalepGrid(responseJson);
       toast({
         variant: "destructive",
         title: "Reddedildi",
-        description: "Talebiniz başarıyla reddedildi.",
+        description:
+          "Talebiniz başarıyla reddedildi ve supervisor onayı beklemektedir.",
         action: (
           <ToastAction
             altText="Goto schedule to undo"
@@ -91,31 +89,22 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
       });
     }
   }
+
   return (
     <>
-      <div className="border-2 p-2 rounded-md">
+      <div className="p-2 rounded-md">
         <DataGrid
           dataSource={gridData}
+          showBorders
           noDataText="Şu anda bekleyen talep bulunmamaktadır."
         >
           <SearchPanel visible={true} placeholder="Arama Yapın..." />
           <Editing mode="row" useIcons={true} />
+          <Column dataField="RolAdi" caption="Rol Adı" />
           <Column dataField="YetkiAdi" caption="Yetki Adı" />
-          <Column dataField="KisiAdi" caption="Kişi Ad" />
-          <Column
-            dataField="EylemTuruId"
-            caption="Eylem Turu"
-            lookup={{
-              dataSource: eylemTuruLookup,
-              valueExpr: "eylemTuruId",
-              displayExpr: "eylemAdi",
-            }}
-          />
-          <Column
-            dataField="YetkiBaslamaTarihi"
-            caption="Yetki Başlama Tarihi"
-          />
-          <Column dataField="YetkiBitisTarihi" caption="Yetki Bitiş Tarihi" />
+          <Column dataField="EylemTuruId" caption="Eylem Turu Id" />
+          <Column dataField="BaslangicTarihi" caption="Başlangıç Tarihi" />
+          <Column dataField="BitisTarihi" caption="Bitiş Tarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"
@@ -132,8 +121,11 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
           </Column>
         </DataGrid>
       </div>
+      <Separator className="h-1" />
       <div className="w-full mt-8">
-        <p className="font-semibold text-xl mb-4">Kisi Yetki Geçmiş Talepler</p>
+        <p className="font-semibold text-xl mb-4">
+          Rol Çıkarma Geçmiş Talepler
+        </p>
         <DataGrid
           dataSource={talepGrid}
           noDataText="Şu anda geçmiş talep bulunmamaktadır."

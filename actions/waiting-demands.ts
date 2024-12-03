@@ -11,6 +11,7 @@ import {
   IWaitingRolCikarma,
   IWaitingRolSayfaAtama,
   IWaitingRolSayfaCikarma,
+  IWaitingRolYetkiEdit,
 } from "@/types";
 import { Imza, RolAtama, RolCikarma, Talep } from "@prisma/client";
 
@@ -267,3 +268,31 @@ export async function WaitingRolSayfaCikarma(): Promise<
   return [];
 }
 //#endregion
+
+export async function WaitingRolYetkiEdit(): Promise<IWaitingRolYetkiEdit[]> {
+  const kisi = await currentUser();
+
+  if (!kisi) {
+    return [];
+  }
+
+  try {
+    const rolYetkiEdit = await db.$queryRaw<IWaitingRolYetkiEdit[]>`
+  EXEC WaitingRolYetkiEdits @KisiId = ${+kisi.id}
+`;
+
+    // console.log(rolSayfaAtama);
+
+    return rolYetkiEdit.map((item) => ({
+      RolYetkiEditId: item.RolYetkiEditId,
+      RolAdi: item.RolAdi,
+      YetkiAdi: item.YetkiAdi,
+      EylemTuruId: item.EylemTuruId,
+      BaslangicTarihi: item.BaslangicTarihi,
+      BitisTarihi: item.BitisTarihi,
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}

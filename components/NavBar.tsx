@@ -101,13 +101,7 @@ export default function Navbar() {
                   href="/rol"
                   className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
                 >
-                  {/* <Image
-                    src="/role.png"
-                    alt="Rol"
-                    width={24}
-                    height={24}
-                    className="mr-2"
-                  /> */}
+
                   Roller
                 </Link>
               </DropdownMenuItem>
@@ -236,6 +230,14 @@ export default function Navbar() {
             className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
           >
             Kisi-Rol-Yetki
+          </Link>
+        </RoleGate>
+        <RoleGate allowedRole="sa" showError={false}>
+          <Link
+            href="/views"
+            className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+          >
+            Views
           </Link>
         </RoleGate>
 

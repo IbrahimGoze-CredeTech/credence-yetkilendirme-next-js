@@ -1,119 +1,152 @@
+import { kisiAtanabilirYetkiler } from '@/actions/kisi-yetki';
+import { yetkiEdit } from '@/actions/yetki-post';
 import CardWrapper from '@/components/card-wrapper';
-import FormError from '@/components/form-error';
-import FormSuccess from '@/components/form-success';
-import { Button } from '@/components/ui/button';
-import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Switch } from '@/components/ui/switch';
-import React, { useState, useTransition } from 'react'
-import { useStaticTablesContext } from '@/context';
-import { SubmitErrorHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { TalepKisiSayfaAtamaSchema } from '@/schemas';
-import { toast } from '@/hooks/use-toast';
-import { ToastAction } from '@/components/ui/toast';
 import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
-import { kisiAtanabilirSayfalar, kisiSayfaAtamaPost } from '@/actions/kisi-sayfa';
+import FormError from '@/components/form-error';
+import FormSuccess from '@/components/form-success';
+import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { ToastAction } from '@/components/ui/toast';
+import { useStaticTablesContext } from '@/context';
+import { toast } from '@/hooks/use-toast';
+import { eylemTuruStringArray } from '@/modals/eylemTuru';
+import { YetkiTalepSchema } from '@/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState, useTransition } from 'react'
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-export default function KisiSayfaCikarmaForm() {
+type KisiYetki = { yetkiAdi: string, eylemTuruId: number };
+
+export default function KisiYetkiAtamaFrom() {
   const staticTablesContext = useStaticTablesContext();
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
 
-  const [sayfalar, setSayfalar] = useState<string[]>([]);
-  const sayfalarOptions: Option[] = sayfalar.map((sayfa) =>
-    ({ label: sayfa, value: sayfa })) || [];
-
+  const [kisiYetkiler, setKisiYetkiler] = useState<KisiYetki[]>([]);
+  const yetkilerOptions: Option[] = kisiYetkiler.map((yetki) =>
+    ({ label: yetki.yetkiAdi, value: yetki.yetkiAdi })) || [];
 
   const [isPending, startTransition] = useTransition();
 
   const [error, setError] = useState<string | undefined>("")
   const [success, setSuccess] = useState<string | undefined>("");
+
   const [isBaslangicOpen, setIsBaslangicOpen] = useState(false);
   const [isBitisOpen, setIsBitisOpen] = useState(false);
   const [isKisiSelected, setIsKisiSelected] = useState(false);
-  // const [sayfalar, setSayfalar] = useState([])
 
 
-  const form = useForm<z.infer<typeof TalepKisiSayfaAtamaSchema>>({
-    resolver: zodResolver(TalepKisiSayfaAtamaSchema),
+  const form = useForm<z.infer<typeof YetkiTalepSchema>>({
+    resolver: zodResolver(YetkiTalepSchema),
     defaultValues: {
-      SayfaRoute: '',
-      kisiAdi: '',
       baslamaTarihi: new Date(),
       bitisTarihi: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-      ciftImza: false,
-      ekstraImza: [],
-    },
+      eylemTuru: 'Oku',
+    }
   });
 
-  const onSubmit = (values: z.infer<typeof TalepKisiSayfaAtamaSchema>) => {
-    // console.log('values: ', values);
+  const onSubmit = (values: z.infer<typeof YetkiTalepSchema>) => {
     setError('');
     setSuccess('');
 
     startTransition(() => {
-      kisiSayfaAtamaPost(values).then((data) => {
+      yetkiEdit(values).then((data) => {
         if (data?.error) {
           form.reset();
           setError(data.error);
         }
         if (data.success) {
           form.reset();
-          setSuccess("Kişi Sayfa Atama Talebi Başarıyla Oluşturuldu");
+          setSuccess(data.success)
           toast({
             title: "Talep başarıyla oluşturuldu",
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
+                // console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });
         }
+
       }).catch(() => setError('Something went wrong!'));
-    })
+    });
   }
 
-  const onValueChange = (value: string) => {
-    // console.log(value);
-    startTransition(async () => {
-      const sayfalar = await kisiAtanabilirSayfalar(value);
-      setSayfalar(sayfalar);
-      setIsKisiSelected(true); // Update boolean based on whether there's a value
-    });
+  const onValueChange = async (value: string) => {
+    const yetkiler = await kisiAtanabilirYetkiler(value);
+    setKisiYetkiler(yetkiler);
+    setIsKisiSelected(true); // Update boolean based on whether there's a value
   };
 
-  const onFormError: SubmitErrorHandler<z.infer<typeof TalepKisiSayfaAtamaSchema>> = (e) => {
-    console.error(e)
-  }
+  // const onYetkiSelected = (value: string) => {
+  //   // Find the yetki in kisiYetkiler array based on the value yetkiAdi
+  //   const yetki = kisiYetkiler.find(yetki => yetki.yetkiAdi === value);
+  //   const eylemlerTuruId = yetki?.eylemTuruId;
+
+  //   if (eylemlerTuruId) {
+  //     // Convert eylemlerTuruId to the string representation from EylemTuruEnum
+  //     const eylemTuruString = EylemTuruEnum[eylemlerTuruId];
+
+  //     if (eylemTuruString) {
+  //       form.setValue('eylemTuru', eylemTuruString); // Update the form's eylemTuru field
+  //     }
+  //   }
+  // }
 
   return (
-    <CardWrapper headerLabel={'Kişi Sayfa Atama'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
+    <CardWrapper headerLabel={'Yetki Değiştirme'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
           <div className='grid grid-cols-2 gap-8'>
+
+            {/* Kisi Filed */}
             <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Kisi Adi</FormLabel>
-                <FormControl>
-                  <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
-                </FormControl>
+                <FormLabel>Kisi</FormLabel>
+                <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
               </FormItem>
             )} />
 
-            <FormField control={form.control} name={'SayfaRoute'} render={({ field }) => (
+            {/* Yetki Field */}
+            <FormField control={form.control} name={'yetkiAdi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Sayfa Adi</FormLabel>
-                <CustomCombobox onValueChange={field.onChange} Options={sayfalarOptions} placeholder={'Sayfa Ara'} searchPlaceholder={'Sayfa Ara...'} disabled={isPending || !isKisiSelected} />
+                <FormLabel>Yetki</FormLabel>
+                <CustomCombobox onValueChange={(value) => { field.onChange(value) }} Options={yetkilerOptions} placeholder={'Yetki Ara'} searchPlaceholder={'Yetki Ara...'} disabled={isPending || !isKisiSelected} />
               </FormItem>
             )} />
 
+            <FormField control={form.control} name='eylemTuru' render={({ field }) => (
+              <FormItem>
+                <FormLabel>Eylem Türü</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending || !isKisiSelected} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Eylem Türü Seç" />
+                    </SelectTrigger>
+                  </FormControl>
+
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Eylem Türleri</SelectLabel>
+                      {eylemTuruStringArray.map((eylem) => (
+                        <SelectItem key={eylem} value={eylem}>{eylem}</SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )} />
+
+            {/* Yetki baslama Tarihi */}
             <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Sayfa Başlangıç Tarihi</FormLabel>
+                <FormLabel>Yetki Başlangıç Tarihi</FormLabel>
                 <CustomDatePicker
                   selectedDate={field.value}
                   onDateChange={field.onChange}
@@ -124,9 +157,10 @@ export default function KisiSayfaCikarmaForm() {
               </FormItem>
             )} />
 
+            {/* Yetki Bitis Tarihi */}
             <FormField control={form.control} name={'bitisTarihi'} render={({ field }) => (
               <FormItem>
-                <FormLabel>Sayfa Bitiş Tarihi</FormLabel>
+                <FormLabel>Yetki Bitiş Tarihi</FormLabel>
                 <CustomDatePicker
                   selectedDate={field.value}
                   onDateChange={field.onChange}
@@ -171,9 +205,9 @@ export default function KisiSayfaCikarmaForm() {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Sayfa Atama Talebi Olustur</Button>
+          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Yetki Değiştirme Talebi Olustur</Button>
         </form>
       </Form>
-    </CardWrapper>
+    </CardWrapper >
   )
 }

@@ -1,0 +1,46 @@
+model KisiAccessibleRoutes {
+  KisiId      Int
+  KisiAd      String
+  KisiSoyad   String
+  SayfaRoute  String
+  IsPermitted Boolean
+
+  @@unique([KisiId, SayfaRoute]) // Unique constraint for Prisma
+  @@map("KisiAccessibleRoutes")
+}
+
+model RoleAccessibleRoutes {
+  RolId      Int
+  RolAdi     String
+  SayfaId    Int
+  SayfaRoute String
+
+  @@unique([RolId, SayfaRoute]) // Unique constraint for Prisma
+  @@map("RoleAccessibleRoutes")
+}
+
+model RolYetkiView {
+  RolId           Int
+  RolAdi          String
+  SupervizorRolId Int?
+  RolRisk         Int
+  YetkiId         Int
+  YetkiAdi        String
+  EylemlerTuruId  Int
+  YetkiRisk       Int
+
+  @@unique([RolId, YetkiId]) // Unique constraint for Prisma
+  @@map("RolYetkiView")
+}
+
+model KisiYetkiView {
+  KisiId   Int
+  Ad       String
+  Soyad    String
+  YetkiId  Int
+  YetkiAdi String
+  EylemAdi String
+
+  @@unique([KisiId, YetkiId]) // Unique constraint for Prisma
+  @@map("KisiYetkiView")
+}
