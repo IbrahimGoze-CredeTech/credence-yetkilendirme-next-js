@@ -1,6 +1,6 @@
 "use client";
 
-import { Cell, Pie, PieChart } from "recharts";
+import { Pie, PieChart, Cell } from "recharts";
 import {
   Card,
   CardContent,
@@ -15,67 +15,38 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
+// Grafik yapılandırması
 const chartConfig = {
-  RolAtama: {
-    label: "Rol Atama",
-    color: "#FF5733",
-  },
-  RolCikarma: {
-    label: "Rol Çıkarma",
-    color: "#33FF57",
-  },
-  YetkiEdit: {
-    label: "Yetki Edit",
-    color: "#3357FF",
-  },
-  KisiSayfaEdit: {
-    label: "Kişi Sayfa Edit",
-    color: "#F4D03F",
-  },
-  KisiSayfaAtama: {
-    label: "Kişi Sayfa Atama",
-    color: "#A569BD",
-  },
-  RolSayfaAtama: {
-    label: "Rol Sayfa Atama ",
-    color: "#F1948A",
-  },
-  RolSayfaCikarma: {
-    label: "Rol Sayfa Çıkarma ",
-    color: "#FF0000",
-  },
-
-  KisiSayfaCikarma: {
-    label: "Kişi Sayfa Çıkarma ",
-    color: "#000080",
-  },
-  RolYetkiEdit: {
-    label: "Rol Yetki Edit ",
-    color: "#206020",
-  },
+  EgitimGrubu: { label: "Egitim Grubu", color: "#0088FE" },
+  Operator: { label: "Operator", color: "#00C49F" },
+  Sa: { label: "sa", color: "#FFBB28" },
+  HukukBilgilendirme: { label: "Hukuk Bilgilendirme", color: "#FF8042" },
+  YazilimMuduru: { label: "Yazılım Muduru", color: "#FF6384" },
+  Avukat: { label: "Avukat", color: "#33FF57" },
+  DepartmanMuduru: { label: "Departman Muduru", color: "#F1948A" },
+  YazilimCalisani: { label: "Yazilim Calisani", color: "#FF0000" },
 } satisfies ChartConfig;
 
 type ChartKeys = keyof typeof chartConfig;
 
 interface DataItem {
-  talepTipi: ChartKeys;
-  talepCount: number;
+  rolAdi: ChartKeys; // Rol tipi adı
+  kisiCount: number; // Rol tipine göre talep sayısı
 }
 
 interface Props {
-  data: DataItem[];
+  data: DataItem[]; // Grafik için kullanılan veri
 }
 
-export function PieChartComp({ data }: Props) {
+export function RolDagilimiPieChart({ data }: Props) {
+  // Pie grafiğinde kullanılan verinin konsola yazdırılması
   console.log(data);
 
   return (
     <Card className="flex flex-col p-4">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Talep Tipi</CardTitle>
-        <CardDescription>
-          Yaratılan son 100 talebin tiplerine göre grafiği
-        </CardDescription>
+        <CardTitle>Rol Dağılımı</CardTitle>
+        <CardDescription>Rol Dağılım Grafiği</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -89,8 +60,8 @@ export function PieChartComp({ data }: Props) {
             />
             <Pie
               data={data}
-              dataKey="talepCount"
-              nameKey="talepTipi"
+              dataKey="kisiCount"
+              nameKey="rolAdi"
               innerRadius={60}
               outerRadius={80}
               paddingAngle={3}
@@ -98,7 +69,7 @@ export function PieChartComp({ data }: Props) {
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={chartConfig[entry.talepTipi]?.color}
+                  fill={chartConfig[entry.rolAdi]?.color}
                 />
               ))}
             </Pie>
@@ -123,3 +94,5 @@ export function PieChartComp({ data }: Props) {
     </Card>
   );
 }
+
+export default RolDagilimiPieChart;
