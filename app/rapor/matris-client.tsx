@@ -3,7 +3,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { PieChartComp } from "./_components/pie-chart";
 import { AreaChartComp } from "./_components/area-chart";
 import RiskGrid from "./_components/risk-grid";
@@ -12,8 +12,7 @@ import ImzaOraniGrid from "./_components/imza-orani-grid";
 import RolDagilimiPieChart from "./_components/rol-dagilimi-piechart";
 import TalepYaratmaGrid from "./_components/talep-yaratma-grid";
 import ImzaAtmaGrid from "./_components/imza-atma-grid";
-import { MultipleBarChartData } from "./_components/bar-chart-multiple";
-import { IImzaOraniMatris, ImzaAtmaKisi } from "@/types";
+import { IImzaOraniMatris } from "@/types";
 import VerimlilikGrid from "./_components/verimlilik-grid";
 
 interface Props {
@@ -41,25 +40,6 @@ export default function MatrisClient({
   imzaOrani,
   kisiVerimlilik,
 }: Props) {
-  const [combinedArray, setCombinedArray] = useState<MultipleBarChartData[]>(
-    []
-  );
-
-  useEffect(() => {
-    // Imza atma ve atanma kombinasyonu
-    const combined = imzaAtanan.map((item1: { id: number }) => {
-      const matchingItem = imzaAtma.find(
-        (item2: { id: number }) => item2.id === item1.id
-      );
-      return {
-        ...item1,
-        imzaAtilanTalepSayısı: matchingItem?.imzaAtilanTalepSayısı || 0,
-      };
-    });
-
-    setCombinedArray(combined);
-  }, [imzaAtanan, imzaAtma]);
-
   return (
     <Tabs
       defaultValue="gunluk"
