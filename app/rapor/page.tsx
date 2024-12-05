@@ -35,9 +35,97 @@ export default function MatrisPage() {
   return (
     <div className="flex flex-col items-center justify-center w-full p-4 space-y-8">
       <h1 className="font-bold text-4xl">Matrisler</h1>
-      <Suspense fallback={<p className='text-2xl font-bold'>Yükleniyor...</p>}>
-        <MatrisData />
-      </Suspense>
+      <Tabs
+        defaultValue="ozet"
+        className="w-[95vw] flex flex-col items-center justify-center p-4"
+      >
+        <TabsList className="bg-gray-200 p-2 py-6">
+          <TabsTrigger
+            value="talep-yaratma"
+            className="text-xl"
+            disabled={isPending}
+          >
+            Talep Yaratma
+          </TabsTrigger>
+          <TabsTrigger
+            value="imza-atma"
+            className="text-xl"
+            disabled={isPending}
+          >
+            İmza Atma
+          </TabsTrigger>
+          <TabsTrigger
+            value="imza-atanan"
+            className="text-xl"
+            disabled={isPending}
+          >
+            İmza Atanan
+          </TabsTrigger>
+          <TabsTrigger
+            value="imza-atma-oranı"
+            className="text-xl"
+            disabled={isPending}
+          >
+            İmza Oranı
+          </TabsTrigger>
+          <TabsTrigger value="risk" className="text-xl" disabled={isPending}>
+            Risk
+          </TabsTrigger>
+          <TabsTrigger value="gunluk" className="text-xl" disabled={isPending}>
+            Günlük
+          </TabsTrigger>
+          <TabsTrigger
+            value="talep-tipleri"
+            className="text-xl"
+            disabled={isPending}
+          >
+            Talep Tipleri
+          </TabsTrigger>
+          <TabsTrigger
+            value="rol-dagilimi"
+            className="text-xl"
+            disabled={isPending}
+          >
+            Rol Dağılımı
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="talep-yaratma">
+          <TalepYaratmaGrid data={yaratma} />
+        </TabsContent>
+        <TabsContent value="imza-atma">
+          <ImzaAtmaGrid data={imzaAtma} />
+        </TabsContent>
+        <TabsContent value="imza-atanan">
+          <ImzaAtananGrid data={imzaAtanan} />
+        </TabsContent>
+        <TabsContent value="imza-atma-oranı">
+          <ImzaOranıGrid data={combineArray} />
+        </TabsContent>
+        <TabsContent value="risk">
+          <RiskGrid data={risk} />
+        </TabsContent>
+        <TabsContent value="gunluk" className="flex gap-4">
+          <AreaChartComp
+            data={gunlukTalepYaratma}
+            chartLabel="Günlük Talep Yaratma"
+            quantityValue="talepSayisi"
+            quantityLabel="Talep Sayısı"
+          />
+          <AreaChartComp
+            data={gunlukImzaAtma}
+            chartLabel="Günlük İmza Atma"
+            quantityValue="imzaSayisi"
+            quantityLabel="İmza Sayısı"
+          />
+        </TabsContent>
+        <TabsContent value="talep-tipleri">
+          <PieChartComp data={talepTipi} />
+        </TabsContent>
+        <TabsContent value="rol-dagilimi">
+          <RolDagilimiPieChart data={rolDagilimi} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
