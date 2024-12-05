@@ -14,6 +14,7 @@ import TalepYaratmaGrid from './_components/talep-yaratma-grid'
 import ImzaAtmaGrid from './_components/imza-atma-grid'
 import { MultipleBarChartData } from './_components/bar-chart-multiple'
 import { IImzaOraniMatris, ImzaAtmaKisi } from '@/types'
+import VerimlilikGrid from './_components/verimlilik-grid'
 
 interface Props {
   talepYaratma: [],
@@ -24,7 +25,8 @@ interface Props {
   talepTipi: [],
   kisiRisk: [],
   rolDagilimi: [],
-  imzaOrani: IImzaOraniMatris[]
+  imzaOrani: IImzaOraniMatris[],
+  kisiVerimlilik: []
 }
 
 export default function MatrisClient({
@@ -36,7 +38,8 @@ export default function MatrisClient({
   talepTipi,
   kisiRisk,
   rolDagilimi,
-  imzaOrani
+  imzaOrani,
+  kisiVerimlilik
 }: Props) {
   const [combinedArray, setCombinedArray] = useState<MultipleBarChartData[]>([]);
 
@@ -66,6 +69,7 @@ export default function MatrisClient({
         <TabsTrigger value="gunluk" className="text-xl">Günlük</TabsTrigger>
         <TabsTrigger value="talep-tipleri" className="text-xl">Talep Tipleri</TabsTrigger>
         <TabsTrigger value="rol-dagilimi" className="text-xl">Rol Dağılımı</TabsTrigger>
+        <TabsTrigger value="kisi-verimlilik" className="text-xl">Kişi Verimlilik</TabsTrigger>
       </TabsList>
 
       <TabsContent value="talep-yaratma">
@@ -102,6 +106,9 @@ export default function MatrisClient({
       </TabsContent>
       <TabsContent value="rol-dagilimi">
         <RolDagilimiPieChart data={rolDagilimi} />
+      </TabsContent>
+      <TabsContent value="kisi-verimlilik">
+        <VerimlilikGrid data={kisiVerimlilik} />
       </TabsContent>
     </Tabs>
   )

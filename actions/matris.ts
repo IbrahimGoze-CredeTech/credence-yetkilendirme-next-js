@@ -145,3 +145,18 @@ export async function ImzaOraniMatris(): Promise<IImzaOraniMatris[]> {
     return [];
   }
 }
+
+export async function KisiVerimlilikMatris() {
+  const session = await auth();
+  if (!session) {
+    console.error("Session not found");
+    return { error: "Session not found" };
+  }
+
+  const responseData = await fetcherGet(
+    "/Matris/kisi-verimlilik-matris",
+    session.token
+  );
+
+  return responseData;
+}

@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import MatrisClient from "./matris-client";
-import { TalepYaratmaMatris, ImzaAtmaMatris, ImzaAtananMatris, TalepYaratmaGunlukMatris, TalepTipiMatris, KisiRiskMatris, RolDagilimiMatris, ImzaAtmaGunlukMatris, ImzaOraniMatris } from "@/actions/matris";
+import { TalepYaratmaMatris, ImzaAtmaMatris, ImzaAtananMatris, TalepYaratmaGunlukMatris, TalepTipiMatris, KisiRiskMatris, RolDagilimiMatris, ImzaAtmaGunlukMatris, ImzaOraniMatris, KisiVerimlilikMatris } from "@/actions/matris";
 
 async function MatrisData() {
   const [
@@ -15,6 +15,7 @@ async function MatrisData() {
     kisiRisk,
     rolDagilimi,
     imzaOrani,
+    kisiVerimlilik
   ] = await Promise.all([
     TalepYaratmaMatris(),
     ImzaAtmaMatris(),
@@ -25,9 +26,10 @@ async function MatrisData() {
     KisiRiskMatris(),
     RolDagilimiMatris(),
     ImzaOraniMatris(),
+    KisiVerimlilikMatris()
   ]);
   return (
-    <MatrisClient talepYaratma={talepYaratma} imzaAtma={imzaAtma} imzaAtanan={imzaAtanan} talepYaratmaGunluk={talepYaratmaGunluk} imzaAtmaGunluk={imzaAtmaGunluk} talepTipi={talepTipi} kisiRisk={kisiRisk} rolDagilimi={rolDagilimi} imzaOrani={imzaOrani} />
+    <MatrisClient talepYaratma={talepYaratma} imzaAtma={imzaAtma} imzaAtanan={imzaAtanan} talepYaratmaGunluk={talepYaratmaGunluk} imzaAtmaGunluk={imzaAtmaGunluk} talepTipi={talepTipi} kisiRisk={kisiRisk} rolDagilimi={rolDagilimi} imzaOrani={imzaOrani} kisiVerimlilik={kisiVerimlilik} />
   )
 }
 
