@@ -47,7 +47,7 @@ export default function Navbar() {
     <nav className="bg-azure-radiance-500 p-5 h-full flex flex-col items-center text-sm">
       <button onClick={onClickToken}>Token</button>
       <h1 className="text-white text-2xl font-bold text-center">
-        YETKİLENDİRME PANELİ
+        <Link href="/"> YETKİLENDİRME PANELİ </Link>
       </h1>
 
       <div className="w-full flex items-center justify-between mt-4">
@@ -214,7 +214,14 @@ export default function Navbar() {
             href="/kisi-rol-yetki"
             className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
           >
-            Kisi-Rol-Yetki
+            <Image
+              src="/ekle-sil.png"
+              alt="Ekle-Sil"
+              width={24}
+              height={24}
+              className="mr-2"
+            />
+            Ekle-Sil
           </Link>
         </RoleGate>
         <RoleGate allowedRole="sa" showError={false}>
@@ -222,7 +229,14 @@ export default function Navbar() {
             href="/views"
             className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
           >
-            Views
+            <Image
+              src="/eye.png"
+              alt="Views"
+              width={24}
+              height={24}
+              className="mr-2"
+            />
+            Erişimler
           </Link>
         </RoleGate>
 
