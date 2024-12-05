@@ -17,14 +17,14 @@ import {
 
 // Grafik yapılandırması
 const chartConfig = {
-  EgitimGrubu: { label: "Egitim Grubu", color: "#0088FE" },
-  Operator: { label: "Operator", color: "#00C49F" },
-  Sa: { label: "sa", color: "#FFBB28" },
-  HukukBilgilendirme: { label: "Hukuk Bilgilendirme", color: "#FF8042" },
-  YazilimMuduru: { label: "Yazılım Muduru", color: "#FF6384" },
+  "Egitim Grubu": { label: "Eğitim Grubu", color: "#0088FE" },
+  Operator: { label: "Operatör", color: "#00C49F" },
+  sa: { label: "sa", color: "#FFBB28" },
+  "Hukuk Bilgilendirme": { label: "Hukuk Bilgilendirme", color: "#FF8042" },
+  "Yazilim Muduru": { label: "Yazilim Muduru", color: "#FF6384" },
   Avukat: { label: "Avukat", color: "#33FF57" },
-  DepartmanMuduru: { label: "Departman Muduru", color: "#F1948A" },
-  YazilimCalisani: { label: "Yazilim Calisani", color: "#FF0000" },
+  "Departman Muduru": { label: "Departman Müdürü", color: "#F1948A" },
+  "Yazilim Calisani": { label: "Yazılım Çalışanı", color: "#FF0000" },
 } satisfies ChartConfig;
 
 type ChartKeys = keyof typeof chartConfig;
