@@ -29,19 +29,20 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export interface BarChartData {
-  ad: string;
-  soyad: string;
-  quantityData: number;
-  imzaSayısı?: string;
-  averageResponseTime?: number;
-  imzaAtilanTalepSayısı?: string;
+interface MultipleBarChartData {
+  Ad: string;
+  Soyad: string;
+  [key: string]: string | number | undefined; // Allow additional dynamic properties
+  // quantityData: number;
+  // imzaSayısı?: string;
+  // averageResponseTime?: number;
+  // imzaAtilanTalepSayısı?: string;
 }
 
-interface ChartData {
+interface ChartData<T extends MultipleBarChartData = MultipleBarChartData> {
   chartLabel: string;
   chartDescription?: string;
-  data: BarChartData[];
+  data: T[];
   firstQuantityValue: string;
   secondQuantityValue: string;
   firstQuantityLabel: string;
@@ -83,7 +84,7 @@ export function MultipleBarChartComp({
               axisLine={false}
               tickFormatter={(value, index) => {
                 const item = data[index];
-                return `${item.ad} ${item.soyad}`;
+                return `${item.Ad} ${item.Soyad}`;
               }}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />

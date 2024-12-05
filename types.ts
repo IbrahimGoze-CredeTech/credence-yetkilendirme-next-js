@@ -298,4 +298,26 @@ export interface RolSayfa {
   sayfaBitisTarihi: string;
 }
 
+export interface ImzaAtananKisi {
+  id: number;
+  ad: string;
+  soyad: string;
+  imzaSayisi: number;
+}
+
+export interface ImzaAtmaKisi {
+  id: number;
+  ad: string;
+  soyad: string;
+  imzaAtilanTalepSayısı: number;
+}
+
+export interface IImzaOraniMatris {
+  KisiId: number;
+  Ad: string;
+  Soyad: string;
+  ImzaAtma: number;
+  ImzaAtanma: number;
+}
+
 export type KisiSayfaFromType = { sayfaRoute: string; isPermitted: boolean };

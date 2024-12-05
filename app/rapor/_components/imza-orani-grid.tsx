@@ -1,13 +1,14 @@
 import { DataGrid } from "devextreme-react";
 import React from "react";
-import { BarChartData } from "./bar-chart";
 import { MultipleBarChartComp } from "./bar-chart-multiple";
+import { IImzaOraniMatris } from "@/types";
 
 interface Props {
-  data: BarChartData[];
+  // data: MultipleBarChartData[];
+  data: IImzaOraniMatris[];
 }
 
-export default function ImzaOranıGrid({ data }: Props) {
+export default function ImzaOraniGrid({ data }: Props) {
   return (
     <>
       <div>
@@ -18,9 +19,9 @@ export default function ImzaOranıGrid({ data }: Props) {
           chartLabel={"İmza Atma Oranı"}
           chartDescription="Gelen taleplerin kaçına imza atıldığını gösterir. "
           data={data}
-          firstQuantityValue="imzaSayısı"
-          firstQuantityLabel="Gelen İmza Sayısı"
-          secondQuantityValue="imzaAtilanTalepSayısı"
+          firstQuantityValue="ImzaAtanma"
+          firstQuantityLabel="Atanan Imza Sayısı"
+          secondQuantityValue="ImzaAtma"
           secondQuantityLabel="Atılan İmza Sayısı"
         />
       </div>
