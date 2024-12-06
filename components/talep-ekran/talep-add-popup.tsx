@@ -5,7 +5,6 @@ import React from 'react'
 
 export default function TalepAddPopup({ onClose }: { onClose: () => void }) {
   // function onFieldDataChanged(e: any) {
-  //   console.log(e.value);
   // }
   return (
     <Popup title="Talep Yarat" showTitle={true} width={700} height={525}
