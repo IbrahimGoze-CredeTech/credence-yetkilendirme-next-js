@@ -35,10 +35,7 @@ export default function SayfaEkleForm() {
 
     startTransition(() => {
       SayfaYaratma(values).then((data) => {
-        // console.log('data: ', data);
-
         if (!data.success) {
-          // form.reset();
           setError(data.error);
         }
         if (data.success) {
@@ -72,11 +69,6 @@ export default function SayfaEkleForm() {
                 <FormLabel>Sayfa Adı</FormLabel>
                 <FormControl>
                   <Input {...field}
-                    // value={field.value.startsWith('/') ? field.value : `/${field.value}`} // Ensure starts with "/"
-                    // onChange={(e) => {
-                    //   const newValue = e.target.value; // Extract the new value from the event
-                    //   form.setValue('sayfaRoute', newValue.startsWith('/') ? newValue : `/${newValue}`); // Ensure new value starts with "/"
-                    // }}
                     placeholder="Sayfa Adı" />
                 </FormControl>
               </FormItem>

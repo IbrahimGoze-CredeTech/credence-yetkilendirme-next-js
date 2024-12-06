@@ -56,7 +56,6 @@ export function BarChartComp({
   quantityLabel,
   barColor = "#3b82f6",
 }: ChartData) {
-  // console.log("data in bar chart comp: ", data);
 
   return (
     <Card>
@@ -87,7 +86,7 @@ export function BarChartComp({
                 return `${item.ad} ${item.soyad}`;
               }}
 
-              // tickFormatter={(value) => value}
+            // tickFormatter={(value) => value}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Bar

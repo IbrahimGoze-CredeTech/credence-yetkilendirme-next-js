@@ -51,7 +51,6 @@ export default function KisiSayfaEditForm() {
   });
 
   const onSubmit = (values: z.infer<typeof TalepKisiSayfaEditSchema>) => {
-    // console.log('values: ', values);
     setError('');
     setSuccess('');
 
@@ -69,7 +68,6 @@ export default function KisiSayfaEditForm() {
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });
@@ -79,7 +77,6 @@ export default function KisiSayfaEditForm() {
   }
 
   const onValueChange = (value: string) => {
-    // console.log(value);
 
     startTransition(async () => {
       const sayfalar = await kisininSayfalar(value);
@@ -89,8 +86,6 @@ export default function KisiSayfaEditForm() {
   };
 
   const onSayfaSelected = (value: string) => {
-    console.log(value);
-
     // Find the yetki in kisiYetkiler array based on the value yetkiAdi
     const sayfa = sayfalar.find(sayfa => sayfa.sayfaRoute === value);
     const isPermitted = sayfa?.isPermitted;
@@ -196,7 +191,6 @@ export default function KisiSayfaEditForm() {
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
                   <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
-                    // console.log("onChange", e);
                     form.setValue('ekstraImza', e);
                   }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
                 ) : (<span>Yükleniyor...</span>)}

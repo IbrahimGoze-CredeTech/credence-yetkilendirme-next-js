@@ -37,7 +37,6 @@ export default function KisiSilForm() {
   const onSubmit = (values: z.infer<typeof KisiSilmeSchema>) => {
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
       kisiSilme(values).then((data) => {
@@ -51,7 +50,6 @@ export default function KisiSilForm() {
             description: "Kişi başarıyla silindi",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });

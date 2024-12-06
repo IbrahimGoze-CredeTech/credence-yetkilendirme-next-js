@@ -76,7 +76,6 @@ export default function ProfilePage() {
         fetcherGet("/Matris/kisi-risk-matris", session.data?.token),
         fetcherGet("/Kisi/ozet-bilgi", session.data?.token),
       ]);
-      // console.log(talepTipi);
       setTalepTipi(talepTipi);
       setYaratma(rolAtamalar);
       setImzaAtma(imzaAtma);

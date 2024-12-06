@@ -69,7 +69,6 @@ export default function KisiDataGrid() {
           if (op === "endswith") return arg1.endsWith(arg2);
         };
 
-        // console.log('v: ', v);
         const values = column.calculateCellValue(data);
         return (
           values &&
@@ -91,7 +90,6 @@ export default function KisiDataGrid() {
         showRowLines={true}
         showBorders={true}
         onRowClick={(e) => {
-          // console.log('e: ', e.data);
 
           modalContext.setId(e.data.id);
           // modalContext.toggle();

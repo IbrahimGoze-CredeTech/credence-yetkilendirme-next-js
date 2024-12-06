@@ -81,6 +81,9 @@ export function StaticTablesContextWrapper({ children }: {
   const [sayfalar, setSayfalar] = useState<string[]>([]);
   const [anyBekleyenTalep, setAnyBekleyenTalep] = useState<boolean>(false);
   useEffect(() => {
+    if (!session.data?.token) {
+      return;
+    }
     const fetchData = async () => {
       try {
         // Use Promise.all to fetch both resources in parallel
@@ -94,8 +97,6 @@ export function StaticTablesContextWrapper({ children }: {
           // bekleyenTalepler()
           fetcherGet(`/Talep/bekleyen-talepler`, session.data?.token)
         ]);
-
-        // console.log("anyBekleyenTalep: ", anyBekleyenTalep);
 
         // Set state with the data
         setRoller(rolData);

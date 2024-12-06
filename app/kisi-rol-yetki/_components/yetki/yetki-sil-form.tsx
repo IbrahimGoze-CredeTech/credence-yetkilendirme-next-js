@@ -38,11 +38,9 @@ export default function YetkiSilForm() {
   const onSubmit = (values: z.infer<typeof YetkiSchema>) => {
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
       yetkiSilme(values).then((data) => {
-        // console.log('data: ', data);
         if (!data.success) {
           // form.reset();
           setError(data?.error + "");

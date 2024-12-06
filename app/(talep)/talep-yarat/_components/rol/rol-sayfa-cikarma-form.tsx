@@ -54,7 +54,6 @@ export default function RolSayfaCikarmaForm() {
   const onSubmit = (values: z.infer<typeof TalepRolSayfaCikarmaSchema>) => {
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
       rolSayfaCikarmaPost(values).then((data) => {
@@ -70,7 +69,6 @@ export default function RolSayfaCikarmaForm() {
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });
@@ -81,7 +79,6 @@ export default function RolSayfaCikarmaForm() {
   }
 
   const onValueChange = (value: string) => {
-    // console.log(value);
 
     startTransition(async () => {
       const sayfalar = await RolCikarilabilirSayfalar(value);
@@ -166,7 +163,6 @@ export default function RolSayfaCikarmaForm() {
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
                   <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
-                    console.log("onChange", e);
                     form.setValue('ekstraImza', e);
                   }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
                 ) : (<span>Yükleniyor...</span>)}

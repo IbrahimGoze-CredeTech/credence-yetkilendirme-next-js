@@ -40,7 +40,6 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
-      // console.log('Onaylandı: ', item.row.data);
       const response = await talepOnayla(true, item.row.data.KisiYetkiEditId);
       if (!response) return;
       const prevGrid = await PreviousKisiYetkiEdit();
@@ -55,7 +54,6 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
           <ToastAction
             altText="Goto schedule to undo"
             onClick={() => {
-              console.log("undo clicked");
             }}
           >
             Iptal
@@ -63,7 +61,6 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
         ),
       });
     } else {
-      // console.log('Reddedildi: ', item.row.data);
       const response = await talepOnayla(false, item.row.data.kisiYetkiEditId);
       if (!response) return;
       setGridData((prevData) =>
@@ -82,7 +79,6 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
           <ToastAction
             altText="Goto schedule to undo"
             onClick={() => {
-              console.log("undo clicked");
             }}
           >
             Iptal

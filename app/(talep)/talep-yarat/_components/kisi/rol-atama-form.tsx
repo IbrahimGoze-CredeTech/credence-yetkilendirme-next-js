@@ -51,7 +51,6 @@ export default function RolAtamaForm() {
   const onSubmit = (values: z.infer<typeof TalepRolAtamaSchema>) => {
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
       rolAtama(values).then((data) => {
@@ -67,7 +66,6 @@ export default function RolAtamaForm() {
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });
@@ -161,7 +159,6 @@ export default function RolAtamaForm() {
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
                   <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
-                    console.log("onChange", e);
                     form.setValue('ekstraImza', e);
                   }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
                 ) : (<span>Yükleniyor...</span>)}

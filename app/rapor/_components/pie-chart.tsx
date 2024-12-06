@@ -67,7 +67,6 @@ interface Props {
 }
 
 export function PieChartComp({ data }: Props) {
-  console.log(data);
 
   return (
     <Card className="flex flex-col p-4">

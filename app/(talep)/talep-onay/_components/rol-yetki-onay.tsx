@@ -41,7 +41,6 @@ export default function RolYetkiGrid({ data, rolYetkiEdits }: Props) {
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
-      // console.log('Onaylandı: ', item.row.data);
       const response = await talepOnayla(true, item.row.data.RolYetkiEditId);
       // If response is successful these will update the datagrids
       if (!response) return;
@@ -67,7 +66,6 @@ export default function RolYetkiGrid({ data, rolYetkiEdits }: Props) {
         ),
       });
     } else {
-      // console.log('Reddedildi: ', item.row.data);
       const response = await talepOnayla(false, item.row.data.RolYetkiEditId);
       if (!response) return;
       setGridData((prevData) =>
@@ -86,7 +84,6 @@ export default function RolYetkiGrid({ data, rolYetkiEdits }: Props) {
           <ToastAction
             altText="Goto schedule to undo"
             onClick={() => {
-              console.log("undo clicked");
             }}
           >
             Iptal

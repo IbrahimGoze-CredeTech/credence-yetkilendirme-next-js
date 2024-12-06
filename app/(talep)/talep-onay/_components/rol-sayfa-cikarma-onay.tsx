@@ -32,7 +32,6 @@ export default function RolSayfaCikarmaOnay({
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
-      // console.log('Onaylandı: ', item.row.data);
       const response = await talepOnayla(true, item.row.data.RolSayfaCikarmaId);
       if (!response) return;
       const prevGrid = await PreviousRolSayfaCikarma();
@@ -48,7 +47,6 @@ export default function RolSayfaCikarmaOnay({
           <ToastAction
             altText="Goto schedule to undo"
             onClick={() => {
-              console.log("undo clicked");
             }}
           >
             Iptal
@@ -56,7 +54,6 @@ export default function RolSayfaCikarmaOnay({
         ),
       });
     } else {
-      // console.log('Reddedildi: ', item.row.data);
       const response = await talepOnayla(
         false,
         item.row.data.RolSayfaCikarmaId
@@ -75,7 +72,6 @@ export default function RolSayfaCikarmaOnay({
           <ToastAction
             altText="Goto schedule to undo"
             onClick={() => {
-              console.log("undo clicked");
             }}
           >
             Iptal

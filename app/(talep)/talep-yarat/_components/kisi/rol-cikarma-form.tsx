@@ -51,7 +51,6 @@ export default function RolCikarmaForm() {
   const onSubmit = (values: z.infer<typeof TalepRolCikarmaSchema>) => {
     setError('');
     setSuccess('');
-    console.log('values: ', values);
 
     startTransition(() => {
       rolCikarma(values).then((data) => {
@@ -67,7 +66,6 @@ export default function RolCikarmaForm() {
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });
@@ -142,7 +140,6 @@ export default function RolCikarmaForm() {
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
                   <MultipleSelector disabled={isPending || !isKisiSelected} defaultOptions={kisilerOptions} onChange={(e) => {
-                    // console.log("onChange", e);
                     form.setValue('ekstraImza', e);
                   }} placeholder="Imza atacak kişileri seçin" />
                 ) : (<span>Yükleniyor...</span>)}

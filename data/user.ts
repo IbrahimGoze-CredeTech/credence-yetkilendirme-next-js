@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/lib/db";
 
 export async function getUserByUserName(KullaniciAdi: string) {
@@ -95,7 +97,6 @@ export async function getUserPages(KisiId: number): Promise<string[]> {
     const combinedRoutes = Array.from(
       new Set([...rolePageRoutes, ...kisiPageRoutes.map((p) => p.route)])
     );
-    // console.log("combinedRoutes: ", combinedRoutes);
 
     // Now, filter out any routes that are denied in KisiSayfa (where IsPermitted = false)
     const permittedRoutes = combinedRoutes.filter((route) => {

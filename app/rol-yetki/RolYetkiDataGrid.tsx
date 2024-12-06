@@ -36,7 +36,6 @@ export default function RolYetkiDataGrid() {
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
 
   function rolesToFilterItem(item: string) {
-    //console.log('item: ', item);
     return {
       text: item,
       value: item

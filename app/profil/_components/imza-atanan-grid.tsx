@@ -7,7 +7,6 @@ interface Props {
 }
 
 export default function ImzaAtananGrid({ data }: Props) {
-  // console.log("data in imza atanan grid: ", data);
 
   return (
     <>

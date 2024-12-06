@@ -68,7 +68,6 @@ export default function RolYetkiForm() {
   const onSubmit = (values: z.infer<typeof RolYetkiSchema>) => {
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
       rolYetkiPost(values).then((data) => {
@@ -84,7 +83,6 @@ export default function RolYetkiForm() {
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });
@@ -95,7 +93,6 @@ export default function RolYetkiForm() {
   }
 
   const onValueChange = (value: string) => {
-    console.log(value);
 
     startTransition(async () => {
       // const sayfalar = await RolAtanabilirSayfalar(value);
@@ -221,7 +218,6 @@ export default function RolYetkiForm() {
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
                   <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
-                    console.log("onChange", e);
                     form.setValue('ekstraImza', e);
                   }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
                 ) : (<span>Yükleniyor...</span>)}

@@ -32,7 +32,6 @@ export default function KisiSayfaEditOnay({
   async function onClick(approved: boolean, item: ColumnButtonClickEvent) {
     if (item.row === undefined) return;
     if (approved) {
-      // console.log('Onaylandı: ', item.row.data);
       const response = await talepOnayla(true, item.row.data.KisiSayfaEditId);
       if (!response) return;
       const prevGrid = await PreviousKisiSayfaEdit();
@@ -48,7 +47,6 @@ export default function KisiSayfaEditOnay({
           <ToastAction
             altText="Goto schedule to undo"
             onClick={() => {
-              console.log("undo clicked");
             }}
           >
             Iptal
@@ -56,7 +54,6 @@ export default function KisiSayfaEditOnay({
         ),
       });
     } else {
-      // console.log('Reddedildi: ', item.row.data);
       const response = await talepOnayla(false, item.row.data.KisiSayfaEditId);
       if (!response) return;
       const prevGrid = await PreviousKisiSayfaEdit();
@@ -72,7 +69,6 @@ export default function KisiSayfaEditOnay({
           <ToastAction
             altText="Goto schedule to undo"
             onClick={() => {
-              console.log("undo clicked");
             }}
           >
             Iptal

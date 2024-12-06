@@ -68,7 +68,6 @@ export default function KisiYetkiAtamaFrom() {
             description: "Talebiniz başarıyla oluşturuldu ve supervisor onayı beklemektedir.",
             action: (
               <ToastAction altText="Goto schedule to undo" onClick={() => {
-                // console.log("undo clicked");
               }}>Iptal</ToastAction>
             )
           });
@@ -83,21 +82,6 @@ export default function KisiYetkiAtamaFrom() {
     setKisiYetkiler(yetkiler);
     setIsKisiSelected(true); // Update boolean based on whether there's a value
   };
-
-  // const onYetkiSelected = (value: string) => {
-  //   // Find the yetki in kisiYetkiler array based on the value yetkiAdi
-  //   const yetki = kisiYetkiler.find(yetki => yetki.yetkiAdi === value);
-  //   const eylemlerTuruId = yetki?.eylemTuruId;
-
-  //   if (eylemlerTuruId) {
-  //     // Convert eylemlerTuruId to the string representation from EylemTuruEnum
-  //     const eylemTuruString = EylemTuruEnum[eylemlerTuruId];
-
-  //     if (eylemTuruString) {
-  //       form.setValue('eylemTuru', eylemTuruString); // Update the form's eylemTuru field
-  //     }
-  //   }
-  // }
 
   return (
     <CardWrapper headerLabel={'Yetki Değiştirme'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
@@ -196,7 +180,6 @@ export default function KisiYetkiAtamaFrom() {
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
                   <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
-                    // console.log("onChange", e);
                     form.setValue('ekstraImza', e);
                   }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
                 ) : (<span>Yükleniyor...</span>)}

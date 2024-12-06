@@ -40,7 +40,6 @@ export default function KisiDataGrid() {
 
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
   function rolesToFilterItem(item: string) {
-    // console.log('item: ', item);
     return {
       text: item,
       value: item,
@@ -55,15 +54,7 @@ export default function KisiDataGrid() {
       map: rolesToFilterItem,
     },
   };
-  // const yetkilerHeaderFilter = {
-  //   dataSource: {
-  //     store: {
-  //       type: "array",
-  //       data: yetkilerAdi,
-  //     },
-  //     map: rolesToFilterItem,
-  //   },
-  // };
+
   function calculateFilterExpression(
     this: any,
     filterValue: string,
@@ -80,7 +71,6 @@ export default function KisiDataGrid() {
           if (op === "endswith") return arg1.endsWith(arg2);
         };
 
-        // console.log('v: ', v);
         const values = column.calculateCellValue(data);
         return (
           values &&
@@ -111,8 +101,6 @@ export default function KisiDataGrid() {
         showRowLines={true}
         showBorders={true}
         onRowClick={(e) => {
-          // console.log('e: ', e.data);
-
           modalContext.setId(e.data.id);
           modalContext.toggle();
         }}

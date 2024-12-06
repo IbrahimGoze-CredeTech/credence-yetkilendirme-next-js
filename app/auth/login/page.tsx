@@ -53,7 +53,6 @@ export default function LoginPage() {
 
     startTransition(() => {
       login(values).then((data) => {
-        // console.log('data: ', data);
         if (!data) {
           setError("Something went wrong! Please try again.");
           return;
@@ -64,18 +63,17 @@ export default function LoginPage() {
         } else if (data.success) {
           form.reset();
           setSuccess(data.success);
+
           window.location.replace('/');
         }
       }).catch((e) => {
-        console.log('error: ', e);
-        setError('Something went wrong!')
+        setError('Something went wrong! ' + e.message);
       });
     })
   }
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`Şifre sıfırlama e-postası ${email} adresine gönderildi.`);
     setShowResetPassword(false);
     setEmail("");
     alert("E-posta adresinize yeni bir şifre belirlemek için bir bağlantı gönderildi.");

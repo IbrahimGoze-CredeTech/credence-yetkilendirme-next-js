@@ -12,6 +12,7 @@ import { Button } from "devextreme-react"; // Buton bileşenini içe aktar
 import { rolYetkiDataGridConfig } from "../../configs/rol-yetki-data-grid-config";
 import { fetcherGet, fetcherPost } from "@/utils";
 import { useSession } from "next-auth/react";
+import { console } from "inspector";
 
 type RolYetkiInsertType = {
   rolAdi: string;
@@ -86,10 +87,12 @@ export default function RolYetkiDetailModal() {
         session.data?.token,
         JSON.stringify(insertedRolYetki)
       );
-      console.log("Kaydedilen veri: ", result);
 
+      if (result) {
+        modalContext.toggle();
+      }
       // Veriler kaydedildikten sonra modal'ı kapatma veya ek bir işlem yapabilirsiniz
-      modalContext.toggle();
+      console.error("Kaydetme işlemi başarısız oldu: ", result.error);
     } catch (error) {
       console.error("Kaydetme işlemi başarısız oldu: ", error);
     }

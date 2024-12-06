@@ -38,11 +38,9 @@ export default function SayfaSilForm() {
   const onSubmit = (values: z.infer<typeof SayfaSchema>) => {
     setError('');
     setSuccess('');
-    // console.log('values: ', values);
 
     startTransition(() => {
       sayfaSilme(values).then((data) => {
-        // console.log('data: ', data);
         if (!data.success) {
           // form.reset();
           setError(data?.error + "");
@@ -79,9 +77,6 @@ export default function SayfaSilForm() {
                 <FormLabel>Sayfa Adı</FormLabel>
                 <FormControl>
                   <CustomCombobox onValueChange={field.onChange} Options={sayfaOptions} placeholder={'Sayfa Adı'} searchPlaceholder={'Sayfa Adı İle Ara...'} />
-                  {/* <Input {...field}
-                    value={field.value.startsWith('/') ? field.value : `/${field.value}`} // Ensure starts with "/"
-                    placeholder="Sayfa Adı" /> */}
                 </FormControl>
               </FormItem>
             )} />

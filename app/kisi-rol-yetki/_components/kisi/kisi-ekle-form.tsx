@@ -40,13 +40,10 @@ export default function KisiEkleForm() {
   const onSubmit = (values: z.infer<typeof KisiSchema>) => {
     setError("");
     setSuccess("");
-    // console.log('values: ', values);
 
     startTransition(() => {
       kisiYaratma(values)
         .then((data) => {
-          // console.log('data: ', data);
-
           if (data?.error) {
             form.reset();
             setError(data.error);
@@ -62,7 +59,6 @@ export default function KisiEkleForm() {
                 <ToastAction
                   altText="Goto schedule to undo"
                   onClick={() => {
-                    console.log("undo clicked");
                   }}
                 >
                   Iptal
@@ -79,9 +75,9 @@ export default function KisiEkleForm() {
     console.error(e);
     setError(
       e.kullaniciAdi?.message ||
-        e.kisiAdi?.message ||
-        e.kisiSoyadi?.message ||
-        e.kisiSifre?.message
+      e.kisiAdi?.message ||
+      e.kisiSoyadi?.message ||
+      e.kisiSifre?.message
     );
   };
 

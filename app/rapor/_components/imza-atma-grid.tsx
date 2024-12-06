@@ -8,7 +8,6 @@ interface Props {
 }
 
 export default function ImzaAtmaGrid({ data }: Props) {
-  // console.log("data in imza atma grid: ", data);
 
   return (
     <>

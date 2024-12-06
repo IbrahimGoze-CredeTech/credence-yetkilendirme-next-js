@@ -40,7 +40,6 @@ interface Props {
 
 export function RolDagilimiPieChart({ data }: Props) {
   // Pie grafiğinde kullanılan verinin konsola yazdırılması
-  console.log(data);
 
   return (
     <Card className="flex flex-col p-4">
