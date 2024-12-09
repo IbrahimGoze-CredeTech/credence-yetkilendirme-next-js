@@ -9,7 +9,6 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/toaster";
 
-
 export const metadata: Metadata = {
   title: "Credence Yetkilendirme Paneli", // Uygulamanız için uygun bir başlık belirleyin
   description: "A brief description of your app.", // Uygulamanız için bir açıklama girin

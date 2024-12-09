@@ -23,6 +23,7 @@ const config: Config = {
           "900": "#1e478a",
           "950": "#172e54",
         },
+
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
