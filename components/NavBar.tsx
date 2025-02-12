@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { logout } from "@/actions/logout";
 import { ExtendedUser } from "@/next-auth";
 import {
   DropdownMenu,
@@ -22,11 +21,6 @@ export default function Navbar() {
   const userHook = useCurrentUser();
   const StaticTablesContext = useStaticTablesContext();
   const [user, setUser] = useState<ExtendedUser | undefined>(undefined);
-
-  const onClick = async () => {
-    await logout();
-    window.location.replace("/auth/login");
-  };
 
   useEffect(() => {
     setUser(userHook);
@@ -241,56 +235,6 @@ export default function Navbar() {
         </RoleGate>
 
         <div className="flex items-center space-x-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center cursor-pointer text-white">
-              <div className="flex items-center">
-                <Image
-                  src="/user.png"
-                  alt="Kullanıcı"
-                  width={24}
-                  height={24}
-                  className="mr-2"
-                />
-                <span className="text-sm font-bold">
-                  {user?.name} ({user?.role[0]})
-                </span>
-              </div>
-              <ChevronDownIcon className="w-4 h-4 ml-2" />
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md mt-2 py-1 transition-transform duration-150 ease-in-out">
-              <DropdownMenuItem>
-                <Link
-                  className="block w-full text-left px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150 rounded"
-                  href={"/profil"}
-                >
-                  <Image
-                    src="/user.png"
-                    alt="Profil"
-                    width={24}
-                    height={24}
-                    className="inline mr-2"
-                  />
-                  Profil
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <button
-                  onClick={onClick}
-                  className="block w-full text-left px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150 rounded"
-                >
-                  <Image
-                    src="/logout.png"
-                    alt="Çıkış"
-                    width={24}
-                    height={24}
-                    className="inline mr-2"
-                  />
-                  Çıkış Yap
-                </button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
           <Link
             href="/talep-onay"
             className="relative flex items-center  py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"

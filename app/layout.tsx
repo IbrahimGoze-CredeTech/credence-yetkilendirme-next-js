@@ -4,10 +4,13 @@ import "./globals.css";
 import { ModalContextWrapper, StaticTablesContextWrapper } from "../context";
 import "devextreme/dist/css/dx.light.css";
 import { ReactNode } from "react";
-import NavBar from "@/components/NavBar";
+// import NavBar from "@/components/NavBar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/toaster";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+// import NavBar from "@/components/NavBar";
 
 
 export const metadata: Metadata = {
@@ -31,13 +34,17 @@ export default async function RootLayout({
         <body className="3xl:overflow-x-clip bg-gray-100 dx-device-desktop dx-device-generic">
           <ModalContextWrapper>
             <StaticTablesContextWrapper>
-              <main>
-                <div className="w-full">
-                  <NavBar />
-                </div>
-                {children}
-              </main>
-              <Toaster />
+              <SidebarProvider>
+                <AppSidebar />
+                <main>
+                  {/* <div className="w-full">
+                    <NavBar />
+                  </div> */}
+                  <SidebarTrigger />
+                  {children}
+                </main>
+                <Toaster />
+              </SidebarProvider>
             </StaticTablesContextWrapper>
           </ModalContextWrapper>
         </body>
