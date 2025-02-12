@@ -12,7 +12,6 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 // import NavBar from "@/components/NavBar";
 
-
 export const metadata: Metadata = {
   title: "Credence Yetkilendirme Paneli", // Uygulamanız için uygun bir başlık belirleyin
   description: "A brief description of your app.", // Uygulamanız için bir açıklama girin

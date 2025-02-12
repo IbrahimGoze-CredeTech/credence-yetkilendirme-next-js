@@ -15,8 +15,12 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useStaticTablesContext } from "@/context";
 import { RoleGate } from "./role-gate";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname(); // pathname'i alın
+  const showNavbar = pathname !== "/auth/login"; // Navbar'ı göstermeyi kontrol edin
+
   const session = useSession();
   const userHook = useCurrentUser();
   const StaticTablesContext = useStaticTablesContext();
@@ -29,6 +33,11 @@ export default function Navbar() {
   const onClickToken = async () => {
     console.log(session.data?.token);
   };
+
+  if (!showNavbar) {
+    // Eğer showNavbar false ise sadece basit bir layout döndürün
+    return null;
+  }
 
   if (!user)
     return (
