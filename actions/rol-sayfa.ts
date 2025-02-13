@@ -1,13 +1,13 @@
 "use server";
 
+import type { z } from "zod";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import {
-  TalepRolSayfaAtamaSchema,
-  TalepRolSayfaCikarmaSchema,
+  talepRolSayfaAtamaSchema,
+  talepRolSayfaCikarmaSchema,
 } from "@/schemas";
-import { fetcherPost } from "@/utils";
-import { z } from "zod";
+import { FetcherPost } from "@/utils";
 
 // Rolleri ve ilişkili sayfa yollarını getiren bir fonksiyon
 export async function RolAtanabilirSayfalar(rolAdi: string): Promise<string[]> {
@@ -74,8 +74,8 @@ export async function RolCikarilabilirSayfalar(
   return rolSayfaRoutes;
 }
 
-//#region Post Requests
-type RolSayfaRequest = {
+// #region Post Requests
+type RolSayfaRequestType = {
   rolAdi: string;
   sayfaRoute: string;
   baslangicTarihi: string;
@@ -84,11 +84,11 @@ type RolSayfaRequest = {
   ekstraImza: string[];
 };
 export async function rolSayfaAtamaPost(
-  values: z.infer<typeof TalepRolSayfaAtamaSchema>
+  values: z.infer<typeof talepRolSayfaAtamaSchema>
 ) {
   const session = await auth();
 
-  const validateFields = TalepRolSayfaAtamaSchema.safeParse(values);
+  const validateFields = talepRolSayfaAtamaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -96,7 +96,7 @@ export async function rolSayfaAtamaPost(
 
   const {
     rolAdi,
-    SayfaRoute,
+    sayfaRoute,
     baslamaTarihi,
     bitisTarihi,
     ciftImza,
@@ -110,16 +110,16 @@ export async function rolSayfaAtamaPost(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const rolSayfaAtamaRequest: RolSayfaRequest = {
+  const rolSayfaAtamaRequest: RolSayfaRequestType = {
     rolAdi: rolAdi,
-    sayfaRoute: SayfaRoute,
+    sayfaRoute: sayfaRoute,
     baslangicTarihi: baslamaTarihi.toISOString(),
     bitisTarihi: bitisTarihi.toISOString(),
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  const response = await fetcherPost(
+  const response = await FetcherPost(
     "/Talep/rol-sayfa-atama",
     session?.token,
     JSON.stringify(rolSayfaAtamaRequest)
@@ -129,11 +129,11 @@ export async function rolSayfaAtamaPost(
 }
 
 export async function rolSayfaCikarmaPost(
-  values: z.infer<typeof TalepRolSayfaCikarmaSchema>
+  values: z.infer<typeof talepRolSayfaCikarmaSchema>
 ) {
   const session = await auth();
 
-  const validateFields = TalepRolSayfaCikarmaSchema.safeParse(values);
+  const validateFields = talepRolSayfaCikarmaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -141,7 +141,7 @@ export async function rolSayfaCikarmaPost(
 
   const {
     rolAdi,
-    SayfaRoute,
+    sayfaRoute,
     baslamaTarihi,
     bitisTarihi,
     ciftImza,
@@ -155,16 +155,16 @@ export async function rolSayfaCikarmaPost(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const rolSayfaCikarmaRequest: RolSayfaRequest = {
+  const rolSayfaCikarmaRequest: RolSayfaRequestType = {
     rolAdi: rolAdi,
-    sayfaRoute: SayfaRoute,
+    sayfaRoute,
     baslangicTarihi: baslamaTarihi.toISOString(),
     bitisTarihi: bitisTarihi.toISOString(),
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  const response = await fetcherPost(
+  const response = await FetcherPost(
     "/Talep/rol-sayfa-cikarma",
     session?.token,
     JSON.stringify(rolSayfaCikarmaRequest)
@@ -172,4 +172,4 @@ export async function rolSayfaCikarmaPost(
 
   return { success: response.success, error: response.error };
 }
-//#endregion
+// #endregion

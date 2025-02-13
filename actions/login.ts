@@ -1,20 +1,20 @@
 "use server";
 
-import { z } from "zod";
-import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
-// import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import type { z } from "zod";
 import { signIn } from "@/auth";
+import { loginSchema } from "@/schemas";
+// import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 // import { redirect } from "next/navigation";
 
-export async function login(values: z.infer<typeof LoginSchema>) {
-  const validatedFields = LoginSchema.safeParse(values);
+export async function login(values: z.infer<typeof loginSchema>) {
+  const validatedFields = loginSchema.safeParse(values);
   if (!validatedFields.success) {
     return { success: "", error: "Invalid Credentials!" };
   }
 
   const { name, password } = validatedFields.data;
-  //dummy wait 2 seconds
+  // dummy wait 2 seconds
   // await new Promise((resolve) => setTimeout(resolve, 2000));
   try {
     const res = await signIn("credentials", {

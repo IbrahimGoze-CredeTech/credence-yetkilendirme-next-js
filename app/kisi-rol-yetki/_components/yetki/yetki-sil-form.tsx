@@ -1,20 +1,20 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState, useTransition } from 'react'
+import { type SubmitErrorHandler, useForm } from 'react-hook-form';
+import type { z } from 'zod';
+import { yetkiSilme } from '@/actions/kisi-rol-yetki-sayfa-actions';
 import CardWrapper from '@/components/card-wrapper';
+import CustomCombobox from '@/components/custom-combobox';
 import FormError from '@/components/form-error';
 import FormSuccess from '@/components/form-success';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import React, { useState, useTransition } from 'react'
-import { SubmitErrorHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { YetkiSchema } from '@/schemas';
-import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import { useStaticTablesContext } from '@/context';
-import CustomCombobox from '@/components/custom-combobox';
-import { yetkiSilme } from '@/actions/kisi-rol-yetki-sayfa-actions';
+import { toast } from '@/hooks/use-toast';
+import { yetkiSchema } from '@/schemas';
 
 export default function YetkiSilForm() {
   const staticTablesContext = useStaticTablesContext();
@@ -28,14 +28,14 @@ export default function YetkiSilForm() {
   const [error, setError] = useState<string | undefined>("")
   const [success, setSuccess] = useState<string | undefined>("");
 
-  const form = useForm<z.infer<typeof YetkiSchema>>({
-    resolver: zodResolver(YetkiSchema),
+  const form = useForm<z.infer<typeof yetkiSchema>>({
+    resolver: zodResolver(yetkiSchema),
     defaultValues: {
       yetkiAdi: '',
     }
   });
 
-  const onSubmit = (values: z.infer<typeof YetkiSchema>) => {
+  const onSubmit = (values: z.infer<typeof yetkiSchema>) => {
     setError('');
     setSuccess('');
 
@@ -61,29 +61,29 @@ export default function YetkiSilForm() {
     })
   }
 
-  const onFormError: SubmitErrorHandler<z.infer<typeof YetkiSchema>> = (e) => {
+  const onFormError: SubmitErrorHandler<z.infer<typeof yetkiSchema>> = (e) => {
     console.error(e);
     setError(e.yetkiAdi?.message);
   }
 
   return (
-    <CardWrapper className='!w-[500px]' headerLabel={'Yetki Sil'} backButtonLabel={'Ana Sayfaya Geri Don'} backButtonHref={'/'}>
+    <CardWrapper backButtonHref="/" backButtonLabel="Ana Sayfaya Geri Don" className='!w-[500px]' headerLabel="Yetki Sil">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
+        <form className='flex flex-col items-center justify-center' onSubmit={form.handleSubmit(onSubmit, onFormError)}>
           <div className=''>
 
-            <FormField control={form.control} name={'yetkiAdi'} render={({ field }) => (
+            <FormField control={form.control} name="yetkiAdi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Yetki Adı</FormLabel>
                 <FormControl>
-                  <CustomCombobox onValueChange={field.onChange} Options={yetkiOptions} placeholder={'Yetki Adı'} searchPlaceholder={'Yetki Adı İle Ara...'} />
+                  <CustomCombobox Options={yetkiOptions} onValueChange={field.onChange} placeholder="Yetki Adı" searchPlaceholder="Yetki Adı İle Ara..." />
                 </FormControl>
               </FormItem>
             )} />
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Yetki Sil</Button>
+          <Button className='w-[85%] mt-4' disabled={isPending} type='submit'>Yetki Sil</Button>
         </form>
       </Form>
     </CardWrapper>

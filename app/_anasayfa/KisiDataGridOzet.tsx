@@ -8,25 +8,25 @@ import DataGrid, {
   HeaderFilter,
   Pager, Paging, Scrolling
 } from "devextreme-react/data-grid";
-import { useEffect, useState } from "react";
-import { KisiOzet } from "../../types";
-import { roles, rollerAdi } from "../../modals/roller";
-// import { yetkilerAdi } from "../../modals/yetkiler";
-import { useModalContext } from "../../context";
 import { useRouter } from "next/navigation";
-import { fetcherGet } from "@/utils";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { FetcherGet } from "@/utils";
+import { useModalContext } from "../../context";
+import { roles, rollerAdi } from "../../modals/roller";
+import type { KisiOzetType } from "../../types";
+// import { yetkilerAdi } from "../../modals/yetkiler";
 
 export default function KisiDataGrid() {
   const session = useSession();
 
   const modalContext = useModalContext();
   const router = useRouter();
-  const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([]);
+  const [kisiOzet, setKisiOzet] = useState<KisiOzetType[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetcherGet(
+      const response = await FetcherGet(
         "/Kisi/ozet-bilgi",
         session.data?.token
       );
@@ -36,7 +36,7 @@ export default function KisiDataGrid() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  ///-----
+  // /-----
 
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
   function rolesToFilterItem(item: string) {
@@ -63,7 +63,7 @@ export default function KisiDataGrid() {
     const column = this;
 
     if (filterValue) {
-      const selector = (data: KisiOzet) => {
+      const selector = (data: KisiOzetType) => {
         const applyOperation = (arg1: string, arg2: string, op: string) => {
           if (op === "=") return arg1 === arg2;
           if (op === "contains") return arg1.includes(arg2);
@@ -95,46 +95,46 @@ export default function KisiDataGrid() {
         Kişi Bilgileri
       </h1>
       <DataGrid
+        dataSource={kisiOzet}
         id="kisiOzet"
         keyExpr="id"
-        dataSource={kisiOzet}
-        showRowLines={true}
-        showBorders={true}
         onRowClick={(e) => {
           modalContext.setId(e.data.id);
           modalContext.toggle();
         }}
+        showBorders={true}
+        showRowLines={true}
       >
-        <Scrolling rowRenderingMode='virtual'></Scrolling>
+        <Scrolling rowRenderingMode='virtual' />
         <Paging defaultPageSize={6} />
         <Pager
+          allowedPageSizes="auto"
+          displayMode="compact"
           visible={true}
-          allowedPageSizes={"auto"}
-          displayMode={"compact"}
         />
 
 
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
         <Column
-          caption="Ad Soyad"
-          calculateCellValue={(rowData) => `${rowData.ad} ${rowData.soyad}`}
           allowFiltering={true}
           allowHeaderFiltering={false}
+          calculateCellValue={(rowData) => `${rowData.ad} ${rowData.soyad}`}
+          caption="Ad Soyad"
         />
         <Column
-          dataField="departman"
-          caption="Departman"
-          allowHeaderFiltering={false}
           allowFiltering={false}
+          allowHeaderFiltering={false}
+          caption="Departman"
+          dataField="departman"
         />
         <Column
-          dataField="roller"
-          caption="Rol"
-          dataType="string"
-          headerFilter={rolesHeaderFilter}
           calculateFilterExpression={calculateFilterExpression}
+          caption="Rol"
+          dataField="roller"
+          dataType="string"
           filterOperations={rolesFilterOperations}
+          headerFilter={rolesHeaderFilter}
         >
           <HeaderFilter dataSource={roles} />
         </Column>

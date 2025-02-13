@@ -1,5 +1,5 @@
+import type { IDataGridOptions } from "devextreme-react/data-grid";
 import { TalepTipiEnum } from "@/enums";
-import { IDataGridOptions } from "devextreme-react/data-grid";
 
 const talepTipiLookup = Object.keys(TalepTipiEnum)
   .filter((key) => isNaN(Number(key))) // Get only string keys (names)

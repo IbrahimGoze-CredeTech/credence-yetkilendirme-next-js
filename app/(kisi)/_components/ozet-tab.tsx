@@ -1,17 +1,17 @@
+import type { KisiYetki, Rol, RolYetki } from '@prisma/client'
+import DataGrid, { Pager, Paging, Scrolling } from 'devextreme-react/data-grid';
+import React from 'react'
 import { ekstraYetkilerDataGridConfig } from '@/configs/ekstra-yetkiler-data-grid-config'
 import { rolDataGridConfig } from '@/configs/rol-data-grid-config'
 import { yetkiDataGridConfig } from '@/configs/yetki-data-grid-config'
-import { KisiYetki, Rol, RolYetki } from '@prisma/client'
-import DataGrid, { Pager, Paging, Scrolling } from 'devextreme-react/data-grid';
-import React from 'react'
 
-interface Props {
+interface IProps {
   roller: Rol[] | undefined
   yetkiler: RolYetki[] | undefined;
   ekstraYetkiler: KisiYetki[] | undefined;
 }
 
-export default function OzetTab({ roller, yetkiler, ekstraYetkiler }: Props) {
+export default function OzetTab({ roller, yetkiler, ekstraYetkiler }: IProps) {
   return (
     <div className='grid grid-cols-2 grid-rows-2 gap-4'>
 
@@ -22,12 +22,12 @@ export default function OzetTab({ roller, yetkiler, ekstraYetkiler }: Props) {
           showBorders={true}
           {...rolDataGridConfig}
         >
-          <Scrolling rowRenderingMode='virtual'></Scrolling>
+          <Scrolling rowRenderingMode='virtual' />
           <Paging defaultPageSize={7} />
           <Pager
+            allowedPageSizes="auto"
+            displayMode="compact"
             visible={true}
-            allowedPageSizes={"auto"}
-            displayMode={"compact"}
           />
         </DataGrid>
       </div>
@@ -38,12 +38,12 @@ export default function OzetTab({ roller, yetkiler, ekstraYetkiler }: Props) {
           showBorders={true}
           {...yetkiDataGridConfig}
         >
-          <Scrolling rowRenderingMode='virtual'></Scrolling>
+          <Scrolling rowRenderingMode='virtual' />
           <Paging defaultPageSize={7} />
           <Pager
+            allowedPageSizes="auto"
+            displayMode="compact"
             visible={true}
-            allowedPageSizes={"auto"}
-            displayMode={"compact"}
           />
         </DataGrid>
       </div>
@@ -54,12 +54,12 @@ export default function OzetTab({ roller, yetkiler, ekstraYetkiler }: Props) {
           showBorders={true}
           {...ekstraYetkilerDataGridConfig}
         >
-          <Scrolling rowRenderingMode='virtual'></Scrolling>
+          <Scrolling rowRenderingMode='virtual' />
           <Paging defaultPageSize={7} />
           <Pager
+            allowedPageSizes="auto"
+            displayMode="compact"
             visible={true}
-            allowedPageSizes={"auto"}
-            displayMode={"compact"}
           />
         </DataGrid>
       </div>

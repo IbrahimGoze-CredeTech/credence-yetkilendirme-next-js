@@ -2,14 +2,14 @@
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { fetcherGet } from "@/utils";
+import { FetcherGet } from "@/utils";
 
 export async function kisininYetkileri(
   kisiName: string
 ): Promise<{ yetkiAdi: string; eylemTuruId: number }[]> {
   const session = await auth();
 
-  //Get the kisi surname from the name by splinting the spaces
+  // Get the kisi surname from the name by splinting the spaces
   const kisiNameArray = kisiName.split(" ");
   const kisiSurname = kisiNameArray[kisiNameArray.length - 1];
   const kisi = await db.kisi.findFirst({
@@ -25,7 +25,7 @@ export async function kisininYetkileri(
     yetkiAdi: string;
     eylemTuruId: number;
     isDirect: boolean;
-  }[] = await fetcherGet(`/Kisi/yetkiler/${kisi?.KisiId}`, session?.token);
+  }[] = await FetcherGet(`/Kisi/yetkiler/${kisi?.KisiId}`, session?.token);
 
   const allYetkiler = await db.yetki.findMany();
 
@@ -50,7 +50,7 @@ export async function kisininYetkileri(
 export async function kisiAtanabilirYetkiler(kisiName: string): Promise<[]> {
   const session = await auth();
 
-  //Get the kisi surname from the name by splinting the spaces
+  // Get the kisi surname from the name by splinting the spaces
   const kisiNameArray = kisiName.split(" ");
   const kisiSurname = kisiNameArray[kisiNameArray.length - 1];
   const kisi = await db.kisi.findFirst({
@@ -59,7 +59,7 @@ export async function kisiAtanabilirYetkiler(kisiName: string): Promise<[]> {
     },
   });
 
-  const kisiYetkiler = await fetcherGet(
+  const kisiYetkiler = await FetcherGet(
     `/Kisi/atanabilir-yetkiler/${kisi?.KisiId}`,
     session?.token
   );

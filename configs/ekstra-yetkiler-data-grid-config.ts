@@ -1,6 +1,6 @@
-import { IDataGridOptions } from "devextreme-react/data-grid";
-import { yetkiler } from "../modals/yetkiler";
+import type { IDataGridOptions } from "devextreme-react/data-grid";
 import { EylemTuruEnum } from "../modals/eylemTuru";
+import { yetkiler } from "../modals/yetkiler";
 
 const eylemTuruLookup = [
   { eylemTuruId: EylemTuruEnum.Oku, eylemAdi: "Oku" },

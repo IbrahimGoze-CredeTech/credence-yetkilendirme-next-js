@@ -1,10 +1,10 @@
 "use client";
-import { Kisi, RolOld, Yetki } from "@/types";
-import { fetcherGet } from "@/utils";
 import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useState } from "react";
+import type { KisiType, RolOldType, YetkiType } from "@/types";
+import { FetcherGet } from "@/utils";
 
-//#region ModalContext
+// #region ModalContext
 type ModalContextType = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
@@ -13,7 +13,7 @@ type ModalContextType = {
   setId: (id: number) => void;
 }
 
-const ModalContext = createContext<ModalContextType | undefined>(undefined);
+const modalContext = createContext<ModalContextType | undefined>(undefined);
 
 export function ModalContextWrapper({ children }: {
   children: React.ReactNode;
@@ -31,34 +31,34 @@ export function ModalContextWrapper({ children }: {
     id, setId,
   }
   return (
-    <ModalContext.Provider value={value}>
+    <modalContext.Provider value={value}>
       {children}
-    </ModalContext.Provider>
+    </modalContext.Provider>
   )
 }
 
 export function useModalContext() {
-  const context = useContext(ModalContext);
+  const context = useContext(modalContext);
   if (!context) {
     throw new Error('useChatContext must be used within a ChatProvider');
   }
   return context
 }
-//#endregion
+// #endregion
 
-//#region StaticTablesContext
+// #region StaticTablesContext
 type StaticTablesContextType = {
-  kisiler: Kisi[];
-  setKisiler: (kisiler: Kisi[]) => void;
+  kisiler: KisiType[];
+  setKisiler: (kisiler: KisiType[]) => void;
 
   kullaniciAdlari: string[]
   setKullaniciAdlari: (kullaniciAdlari: string[]) => void;
 
-  roller: RolOld[];
-  setRoller: (roller: RolOld[]) => void;
+  roller: RolOldType[];
+  setRoller: (roller: RolOldType[]) => void;
 
-  yetkiler: Yetki[];
-  setYetkiler: (yetkiler: Yetki[]) => void;
+  yetkiler: YetkiType[];
+  setYetkiler: (yetkiler: YetkiType[]) => void;
 
   sayfalar: string[];
   setSayfalar: (sayfalar: string[]) => void;
@@ -67,17 +67,17 @@ type StaticTablesContextType = {
   setAnyBekleyenTalep: (anyBekleyenTalep: boolean) => void;
 }
 
-const StaticTablesContext = createContext<StaticTablesContextType | undefined>(undefined);
+const staticTablesContext = createContext<StaticTablesContextType | undefined>(undefined);
 
 export function StaticTablesContextWrapper({ children }: {
   children: React.ReactNode;
 }) {
   const session = useSession();
 
-  const [kisiler, setKisiler] = useState<Kisi[]>([]);
+  const [kisiler, setKisiler] = useState<KisiType[]>([]);
   const [kullaniciAdlari, setKullaniciAdlari] = useState<string[]>([]);
-  const [roller, setRoller] = useState<RolOld[]>([]);
-  const [yetkiler, setYetkiler] = useState<Yetki[]>([]);
+  const [roller, setRoller] = useState<RolOldType[]>([]);
+  const [yetkiler, setYetkiler] = useState<YetkiType[]>([]);
   const [sayfalar, setSayfalar] = useState<string[]>([]);
   const [anyBekleyenTalep, setAnyBekleyenTalep] = useState<boolean>(false);
   useEffect(() => {
@@ -88,14 +88,14 @@ export function StaticTablesContextWrapper({ children }: {
       try {
         // Use Promise.all to fetch both resources in parallel
         const [rolData, kisiData, kullaniciAdlari, yetkiData, sayfaData, anyBekleyenTalep] = await Promise.all([
-          fetcherGet(`/Rol`, session.data?.token),
-          fetcherGet(`/Kisi`, session.data?.token),
-          fetcherGet(`/Kisi/kullanici-adlari`, session.data?.token),
+          FetcherGet(`/Rol`, session.data?.token),
+          FetcherGet(`/Kisi`, session.data?.token),
+          FetcherGet(`/Kisi/kullanici-adlari`, session.data?.token),
           // GetKullaniciAdlari(),
-          fetcherGet(`/Yetki`, session.data?.token),
-          fetcherGet(`/Sayfa`, session.data?.token),
+          FetcherGet(`/Yetki`, session.data?.token),
+          FetcherGet(`/Sayfa`, session.data?.token),
           // bekleyenTalepler()
-          fetcherGet(`/Talep/bekleyen-talepler`, session.data?.token)
+          FetcherGet(`/Talep/bekleyen-talepler`, session.data?.token)
         ]);
 
         // Set state with the data
@@ -123,18 +123,18 @@ export function StaticTablesContextWrapper({ children }: {
     anyBekleyenTalep, setAnyBekleyenTalep
   }
   return (
-    <StaticTablesContext.Provider value={value}>
+    <staticTablesContext.Provider value={value}>
       {children}
-    </StaticTablesContext.Provider>
+    </staticTablesContext.Provider>
   )
 }
 
 export function useStaticTablesContext() {
-  const context = useContext(StaticTablesContext);
+  const context = useContext(staticTablesContext);
   if (!context) {
     throw new Error('useChatContext must be used within a ChatProvider');
   }
   return context
 }
 
-//#endregion
+// #endregion

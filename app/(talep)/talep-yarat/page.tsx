@@ -9,8 +9,8 @@ export default function TalepYaratPage() {
     <div className="flex flex-col items-center justify-center w-full p-4 space-y-8">
       <h1 className="font-bold text-4xl">Atama ve Yönetim</h1>
       <Tabs
-        defaultValue="talep-kisi-form"
         className="w-[95vw] flex flex-col items-center justify-center p-4"
+        defaultValue="talep-kisi-form"
       >
         <TabsList className="bg-gray-200 p-2 py-6">
           <TabsTrigger className="text-xl" value="talep-kisi-form">

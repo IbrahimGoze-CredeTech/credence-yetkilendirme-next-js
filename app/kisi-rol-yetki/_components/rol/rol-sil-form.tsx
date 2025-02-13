@@ -1,20 +1,20 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState, useTransition } from 'react'
+import { type SubmitErrorHandler, useForm } from 'react-hook-form';
+import type { z } from 'zod';
+import { rolSilme } from '@/actions/kisi-rol-yetki-sayfa-actions';
 import CardWrapper from '@/components/card-wrapper';
+import CustomCombobox from '@/components/custom-combobox';
 import FormError from '@/components/form-error';
 import FormSuccess from '@/components/form-success';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import React, { useState, useTransition } from 'react'
-import { SubmitErrorHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { RolSilSchema } from '@/schemas';
-import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import { useStaticTablesContext } from '@/context';
-import CustomCombobox from '@/components/custom-combobox';
-import { rolSilme } from '@/actions/kisi-rol-yetki-sayfa-actions';
+import { toast } from '@/hooks/use-toast';
+import { rolSilSchema } from '@/schemas';
 
 export default function RolSilForm() {
   const staticTablesContext = useStaticTablesContext();
@@ -28,14 +28,14 @@ export default function RolSilForm() {
   const [error, setError] = useState<string | undefined>("")
   const [success, setSuccess] = useState<string | undefined>("");
 
-  const form = useForm<z.infer<typeof RolSilSchema>>({
-    resolver: zodResolver(RolSilSchema),
+  const form = useForm<z.infer<typeof rolSilSchema>>({
+    resolver: zodResolver(rolSilSchema),
     defaultValues: {
       rolAdi: '',
     }
   });
 
-  const onSubmit = (values: z.infer<typeof RolSilSchema>) => {
+  const onSubmit = (values: z.infer<typeof rolSilSchema>) => {
     setError('');
     setSuccess('');
 
@@ -61,22 +61,22 @@ export default function RolSilForm() {
     })
   }
 
-  const onFormError: SubmitErrorHandler<z.infer<typeof RolSilSchema>> = (e) => {
+  const onFormError: SubmitErrorHandler<z.infer<typeof rolSilSchema>> = (e) => {
     console.error(e);
     setError(e.rolAdi?.message);
   }
 
   return (
-    <CardWrapper className='!w-[500px]' headerLabel={'Rol Silme'} backButtonLabel={'Ana Sayfaya Geri Don'} backButtonHref={'/'}>
+    <CardWrapper backButtonHref="/" backButtonLabel="Ana Sayfaya Geri Don" className='!w-[500px]' headerLabel="Rol Silme">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
+        <form className='flex flex-col items-center justify-center' onSubmit={form.handleSubmit(onSubmit, onFormError)}>
           <div className=''>
 
-            <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
+            <FormField control={form.control} name="rolAdi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol Adı</FormLabel>
                 <FormControl>
-                  <CustomCombobox onValueChange={field.onChange} Options={rollerOptions} placeholder={'Rol Adı'} searchPlaceholder={'Rol Adı İle Ara...'} />
+                  <CustomCombobox Options={rollerOptions} onValueChange={field.onChange} placeholder="Rol Adı" searchPlaceholder="Rol Adı İle Ara..." />
                 </FormControl>
 
               </FormItem>
@@ -85,7 +85,7 @@ export default function RolSilForm() {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Rol Yarat</Button>
+          <Button className='w-[85%] mt-4' disabled={isPending} type='submit'>Rol Yarat</Button>
         </form>
       </Form>
     </CardWrapper>

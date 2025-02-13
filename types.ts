@@ -1,6 +1,6 @@
-import { KisiYetki, Rol, RolYetki } from "@prisma/client";
+import type { KisiYetki, Rol, RolYetki } from "@prisma/client";
 
-export type KisiOzet = {
+export type KisiOzetType = {
   id: number;
   ad: string;
   soyad: string;
@@ -9,7 +9,7 @@ export type KisiOzet = {
   departman: string | null;
 };
 
-export type Kisi = {
+export type KisiType = {
   kisiAdi: string;
   kisiSoyadi: string;
   roller: Rol[];
@@ -18,7 +18,7 @@ export type Kisi = {
   ekstraYetkiler: KisiYetki[]; // Depending on what `ekstraYetkiler` contains, you can refine this type further
 };
 
-export type RolOld = {
+export type RolOldType = {
   kisiId: number;
   kisiAdi: string;
   kisiSoyadi: string;
@@ -31,7 +31,7 @@ export type RolOld = {
   onaylanmaTarihi: string; // Same here for `Date`
 };
 
-export type YetkiRolOld = {
+export type YetkiRolOldType = {
   rolId: number;
   rolAdi: string;
   yetkiId: number;
@@ -39,7 +39,7 @@ export type YetkiRolOld = {
   eylemlerTuruId: number;
 };
 
-export type EkstraYetkiOld = {
+export type EkstraYetkiOldType = {
   kisiId: number;
   kisiAdi: string;
   kisiSoyadi: string;
@@ -52,7 +52,7 @@ export type EkstraYetkiOld = {
   ekstraYetkiOnaylayan: string;
   ekstraYetkiOnaylanmaTarihi: string; // Can be changed to `Date` if necessary
 };
-export type RolYetkiOld = {
+export type RolYetkiOldType = {
   rolId: number; // Rol ID
   rolAdi: string; // Rol Adı
   yetkiId: number; // Yetki ID
@@ -60,23 +60,23 @@ export type RolYetkiOld = {
   eylemlerTuruId: number; // Eylem Türü ID
 };
 
-export type RolYetkiOzet = {
+export type RolYetkiOzetType = {
   id: number;
   rolAdi: string;
   yetkiler: string[];
 };
 
-export type Talep = {
+export type TalepType = {
   olusturulmaTarihi: string;
   durum: string;
   durumTarihi: string;
   talepEdenKisiAdi: string;
-  rolAtama?: RolAtamaClient;
-  rolCikarma?: RolCikarmaClient;
-  imzalar?: Imza[];
+  rolAtama?: RolAtamaClientType;
+  rolCikarma?: RolCikarmaClientType;
+  imzalar?: ImzaType[];
 };
 
-export type RolAtamaClient = {
+export type RolAtamaClientType = {
   // kisiId: number;
   kisiAdi: string;
   // rolId: number;
@@ -85,7 +85,7 @@ export type RolAtamaClient = {
   rolBitisTarihi: string;
 };
 
-export type RolCikarmaClient = {
+export type RolCikarmaClientType = {
   // kisiId: number;
   kisiAdi: string;
   // rolId: number;
@@ -93,21 +93,21 @@ export type RolCikarmaClient = {
   rolCikarmaTarihi: string;
 };
 
-export type Imza = {
+export type ImzaType = {
   kisiAdi: string;
   talepId: number;
   durumTarihi: string;
   durum: string;
 };
 
-export type Yetki = {
+export type YetkiType = {
   yetkiId: number;
   yetkiAdi: string;
   siniflandirma: string;
 };
 
-//#region WaitingTalepGridType
-export type IWaitingRolAtama = {
+// #region WaitingTalepGridType
+export type IWaitingRolAtamaType = {
   RolAtamaId: number;
   RolAdi: string | undefined;
   KisiAdi: string;
@@ -115,14 +115,14 @@ export type IWaitingRolAtama = {
   RolBitisTarihi: Date | null;
 };
 
-export type IWaitingRolCikarma = {
+export type IWaitingRolCikarmaType = {
   RolCikarmaId: number;
   RolAdi: string | undefined;
   KisiAdi: string;
   RolCikarmaTarihi: Date | null;
 };
 
-export type IWaitingKisiYetkiEdit = {
+export type IWaitingKisiYetkiEditType = {
   KisiYetkiEditId: number;
   YetkiAdi: string;
   EylemTuruId: number;
@@ -190,9 +190,9 @@ export interface IWaitingRolYetkiEdit {
   BaslangicTarihi: Date | null;
   BitisTarihi: Date | null;
 }
-//#endregion
+// #endregion
 
-//#region PreviousTalepGridTypes
+// #region PreviousTalepGridTypes
 export interface IPreviousRolAtama {
   RolAdi: string;
   RolAtananAd: string;
@@ -276,9 +276,9 @@ export interface IPreviousKisiSayfaCikarma {
   BaslangicTarihi: string | null; // Nullable datetime as ISO string
   BitisTarihi: string | null; // Nullable datetime as ISO string
 }
-//#endregion
+// #endregion
 
-export interface TalepKayit {
+export interface ITalepKayit {
   talep_Olusturulma_Tarihi: Date;
   talep_Durum_Tarihi: string;
   talepEdenAd: string;
@@ -289,7 +289,7 @@ export interface TalepKayit {
   talepTipi: string;
 }
 
-export interface RolSayfa {
+export interface IRolSayfa {
   rolId: string;
   rolAdi: string;
   sayfaId: string;
@@ -298,14 +298,14 @@ export interface RolSayfa {
   sayfaBitisTarihi: string;
 }
 
-export interface ImzaAtananKisi {
+export interface IImzaAtananKisi {
   id: number;
   ad: string;
   soyad: string;
   imzaSayisi: number;
 }
 
-export interface ImzaAtmaKisi {
+export interface IImzaAtmaKisi {
   id: number;
   ad: string;
   soyad: string;

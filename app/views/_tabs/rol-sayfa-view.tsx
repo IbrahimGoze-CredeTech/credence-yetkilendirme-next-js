@@ -1,21 +1,21 @@
-import { RoleAccessibleRoutes } from '@prisma/client'
-import React from 'react'
+import type { RoleAccessibleRoutes } from '@prisma/client'
 import { DataGrid } from 'devextreme-react'
 import { Column, FilterRow, HeaderFilter } from 'devextreme-react/cjs/data-grid'
+import React from 'react'
 
-interface ViewsClientProps {
+interface IViewsClientProps {
   roleAccessibleRoutes: RoleAccessibleRoutes[]
 }
 
-export default function RolSayfaView({ roleAccessibleRoutes }: ViewsClientProps) {
+export default function RolSayfaView({ roleAccessibleRoutes }: IViewsClientProps) {
   return (
     <DataGrid dataSource={roleAccessibleRoutes} >
       <FilterRow visible={true} />
       <HeaderFilter visible={true} />
-      <Column dataField="RolId" caption="Kişi ID" visible={false} />
-      <Column dataField="SayfaId" caption="Sayfa ID" visible={false} />
-      <Column dataField="RolAdi" caption="Rol Adı" />
-      <Column dataField="SayfaRoute" caption="Sayfa" />
+      <Column caption="Kişi ID" dataField="RolId" visible={false} />
+      <Column caption="Sayfa ID" dataField="SayfaId" visible={false} />
+      <Column caption="Rol Adı" dataField="RolAdi" />
+      <Column caption="Sayfa" dataField="SayfaRoute" />
     </DataGrid>
   )
 }

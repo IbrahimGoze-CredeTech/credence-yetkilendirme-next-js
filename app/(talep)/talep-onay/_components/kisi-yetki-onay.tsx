@@ -1,3 +1,13 @@
+import type { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
+import DataGrid, {
+  Button,
+  Column,
+  Editing,
+  Pager,
+  Paging,
+  SearchPanel,
+} from "devextreme-react/data-grid";
+import React, { useEffect, useState } from "react";
 import { PreviousKisiYetkiEdit } from "@/actions/previous-demands";
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { WaitingKisiYetkiEdit } from "@/actions/waiting-demands";
@@ -5,17 +15,7 @@ import { ToastAction } from "@/components/ui/toast";
 // import { ekstraYetkilerDataGridConfig } from '@/configs/ekstra-yetkiler-data-grid-config';
 import { toast } from "@/hooks/use-toast";
 import { EylemTuruEnum } from "@/modals/eylemTuru";
-import { IPreviousKisiYetkiEdit, IWaitingKisiYetkiEdit } from "@/types";
-import DataGrid, {
-  Button,
-  Column,
-  Editing,
-  SearchPanel,
-  Pager,
-  Paging,
-} from "devextreme-react/data-grid";
-import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import React, { useEffect, useState } from "react";
+import type { IPreviousKisiYetkiEdit, IWaitingKisiYetkiEditType } from "@/types";
 
 const eylemTuruLookup = [
   { eylemTuruId: EylemTuruEnum.Oku, eylemAdi: "Oku" },
@@ -23,13 +23,13 @@ const eylemTuruLookup = [
   { eylemTuruId: EylemTuruEnum.Engel, eylemAdi: "Engelle" },
 ];
 
-interface Props {
-  data: IWaitingKisiYetkiEdit[];
+interface IProps {
+  data: IWaitingKisiYetkiEditType[];
   kisiYetkiEditTalepler: IPreviousKisiYetkiEdit[];
 }
 
-export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
-  const [gridData, setGridData] = useState<IWaitingKisiYetkiEdit[]>(data);
+export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: IProps) {
+  const [gridData, setGridData] = useState<IWaitingKisiYetkiEditType[]>(data);
   const [talepGrid, setTalepGrid] = useState<IPreviousKisiYetkiEdit[]>([]);
 
   useEffect(() => {
@@ -94,13 +94,13 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
           dataSource={gridData}
           noDataText="Şu anda bekleyen talep bulunmamaktadır."
         >
-          <SearchPanel visible={true} placeholder="Arama Yapın..." />
+          <SearchPanel placeholder="Arama Yapın..." visible={true} />
           <Editing mode="row" useIcons={true} />
-          <Column dataField="YetkiAdi" caption="Yetki Adı" />
-          <Column dataField="KisiAdi" caption="Kişi Ad" />
+          <Column caption="Yetki Adı" dataField="YetkiAdi" />
+          <Column caption="Kişi Ad" dataField="KisiAdi" />
           <Column
-            dataField="EylemTuruId"
             caption="Eylem Turu"
+            dataField="EylemTuruId"
             lookup={{
               dataSource: eylemTuruLookup,
               valueExpr: "eylemTuruId",
@@ -108,22 +108,22 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
             }}
           />
           <Column
-            dataField="YetkiBaslamaTarihi"
             caption="Yetki Başlama Tarihi"
+            dataField="YetkiBaslamaTarihi"
           />
-          <Column dataField="YetkiBitisTarihi" caption="Yetki Bitiş Tarihi" />
+          <Column caption="Yetki Bitiş Tarihi" dataField="YetkiBitisTarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"
-              visible={true}
               onClick={(e) => onClick(true, e)}
               text="Onay"
+              visible={true}
             />
             <Button
               hint="Ret"
-              visible={true}
               onClick={(e) => onClick(false, e)}
               text="Ret"
+              visible={true}
             />
           </Column>
         </DataGrid>
@@ -136,9 +136,9 @@ export default function KisiYetkiOnay({ data, kisiYetkiEditTalepler }: Props) {
         >
           <Paging defaultPageSize={5} />
           <Pager
+            allowedPageSizes="auto"
+            displayMode="compact"
             visible={true}
-            allowedPageSizes={"auto"}
-            displayMode={"compact"}
           />
         </DataGrid>
       </div>

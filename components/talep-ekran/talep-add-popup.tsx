@@ -7,14 +7,14 @@ export default function TalepAddPopup({ onClose }: { onClose: () => void }) {
   // function onFieldDataChanged(e: any) {
   // }
   return (
-    <Popup title="Talep Yarat" showTitle={true} width={700} height={525}
-      onHiding={onClose}>
+    <Popup height={525} onHiding={onClose} showTitle={true} title="Talep Yarat"
+      width={700}>
       <Form >
         {/* <form> */}
-        <Item dataField="talepTipiId" editorType="dxSelectBox"
-          editorOptions={{
+        <Item dataField="talepTipiId" editorOptions={{
             // onValueChanged: (e: any) => onFieldDataChanged(e)
           }}
+          editorType="dxSelectBox"
         />
         {/* </form> */}
 

@@ -1,10 +1,10 @@
 "use server";
 
 import { auth } from "@/auth";
-import { currentUser } from "@/lib/auth";
+import { CurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { IImzaOraniMatris } from "@/types";
-import { fetcherGet } from "@/utils";
+import type { IImzaOraniMatris } from "@/types";
+import { FetcherGet } from "@/utils";
 
 export async function TalepYaratmaMatris() {
   const session = await auth();
@@ -13,7 +13,7 @@ export async function TalepYaratmaMatris() {
     return { error: "Session not found" };
   }
 
-  const responseData = await fetcherGet(
+  const responseData = await FetcherGet(
     "/Matris/talep-yaratma-matris",
     session.token
   );
@@ -28,7 +28,7 @@ export async function ImzaAtmaMatris() {
     return { error: "Session not found" };
   }
 
-  const responseData = await fetcherGet(
+  const responseData = await FetcherGet(
     "/Matris/imza-atma-matris",
     session.token
   );
@@ -43,7 +43,7 @@ export async function ImzaAtananMatris() {
     return { error: "Session not found" };
   }
 
-  const responseData = await fetcherGet(
+  const responseData = await FetcherGet(
     "/Matris/imza-atanan-matris",
     session.token
   );
@@ -58,7 +58,7 @@ export async function TalepYaratmaGunlukMatris() {
     return { error: "Session not found" };
   }
 
-  const responseData = await fetcherGet(
+  const responseData = await FetcherGet(
     "/Matris/talep-yaratma-gunluk-matris",
     session.token
   );
@@ -73,7 +73,7 @@ export async function ImzaAtmaGunlukMatris() {
     return { error: "Session not found" };
   }
 
-  const responseData = await fetcherGet(
+  const responseData = await FetcherGet(
     "/Matris/imza-atma-gunluk-matris",
     session.token
   );
@@ -88,7 +88,7 @@ export async function TalepTipiMatris() {
     return { error: "Session not found" };
   }
 
-  const responseData = await fetcherGet(
+  const responseData = await FetcherGet(
     "/Matris/talep-tipi-matris",
     session.token
   );
@@ -103,7 +103,7 @@ export async function KisiRiskMatris() {
     return { error: "Session not found" };
   }
 
-  const responseData = await fetcherGet(
+  const responseData = await FetcherGet(
     "/Matris/kisi-risk-matris",
     session.token
   );
@@ -118,7 +118,7 @@ export async function RolDagilimiMatris() {
     return { error: "Session not found" };
   }
 
-  const responseData = await fetcherGet(
+  const responseData = await FetcherGet(
     "/Matris/rol-dagilimi-matris",
     session.token
   );
@@ -127,7 +127,7 @@ export async function RolDagilimiMatris() {
 }
 
 export async function ImzaOraniMatris(): Promise<IImzaOraniMatris[]> {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     console.error("User not found");
@@ -153,7 +153,7 @@ export async function KisiVerimlilikMatris() {
     return { error: "Session not found" };
   }
 
-  const responseData = await fetcherGet(
+  const responseData = await FetcherGet(
     "/Matris/kisi-verimlilik-matris",
     session.token
   );

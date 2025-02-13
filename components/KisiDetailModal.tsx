@@ -1,37 +1,37 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useModalContext } from '../context';
-import { Kisi } from '../types';
+import type { RowClickEvent } from 'devextreme/ui/data_grid';
 import DataGrid, {
   Column,
   Editing,
-  Paging,
-  Popup,
   FilterRow,
   MasterDetail,
+  Paging,
+  Popup,
 } from "devextreme-react/data-grid";
-
+import { useSession } from 'next-auth/react';
+import React, { useEffect, useState } from 'react';
+import { FetcherGet } from '@/utils';
+import { ekstraYetkilerDataGridConfig } from '../configs/ekstra-yetkiler-data-grid-config';
 import { rolDataGridConfig } from '../configs/rol-data-grid-config';
 import { yetkiDataGridConfig } from '../configs/yetki-data-grid-config';
-import { ekstraYetkilerDataGridConfig } from '../configs/ekstra-yetkiler-data-grid-config';
-import { RowClickEvent } from 'devextreme/ui/data_grid';
-import { fetcherGet } from '@/utils';
-import { useSession } from 'next-auth/react';
+import { useModalContext } from '../context';
+import type { KisiType } from '../types';
+
 
 export default function KisiDetailModal() {
   const session = useSession();
   const modalContext = useModalContext();
 
-  const [employees, setEmployees] = useState<Kisi[]>([]); // API'den gelecek roller için state
-  const [selectedRowData, setSelectedRowData] = useState<Kisi | null>(null); // Seçili satır verisi için state
+  const [employees, setEmployees] = useState<KisiType[]>([]); // API'den gelecek roller için state
+  const [selectedRowData, setSelectedRowData] = useState<KisiType | null>(null); // Seçili satır verisi için state
   const [isPopupVisible, setIsPopupVisible] = useState(false); // Popup görünürlüğü için state
 
   useEffect(() => {
     if (!modalContext?.isOpen) return;
 
     const fetchData = async () => {
-      const bilgilerFetch = await fetcherGet(`/Kisi/butun-bilgiler/${modalContext.id}`, session.data?.token);
+      const bilgilerFetch = await FetcherGet(`/Kisi/butun-bilgiler/${modalContext.id}`, session.data?.token);
 
       try {
         const [bilgilerData] = await Promise.all([bilgilerFetch]);
@@ -70,38 +70,37 @@ export default function KisiDetailModal() {
   };
 
   return (
-    <div style={{ position: 'fixed', zIndex: 2 }} className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm  min-h-[100vh] h-full overflow-auto ${modalContext?.isOpen ? "visible" : "hidden"}`} onPointerDown={(e) => {
+    <div className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm  min-h-[100vh] h-full overflow-auto ${modalContext?.isOpen ? "visible" : "hidden"}`} onPointerDown={(e) => {
       e.stopPropagation();
       modalContext.toggle();
-    }}>
-      <div style={{ position: 'relative', pointerEvents: "auto", userSelect: "none", zIndex: 3, top: "20%" }}
-        className="w-[80vw] bg-white p-4 rounded-md" onPointerDown={(e) => e.stopPropagation()}>
+    }} style={{ position: 'fixed', zIndex: 2 }}>
+      <div className="w-[80vw] bg-white p-4 rounded-md"
+        onPointerDown={(e) => e.stopPropagation()} style={{ position: 'relative', pointerEvents: "auto", userSelect: "none", zIndex: 3, top: "20%" }}>
         <DataGrid
-          id="gridContainer"
-          dataSource={[employees]} // Burada roller verisini kullanıyoruz
-          keyExpr="kisiAdi" // 'kisiAdi' ile her satırı tanımlıyoruz
           allowColumnReordering={true}
-          showBorders={true}
+          dataSource={[employees]} // Burada roller verisini kullanıyoruz
+          id="gridContainer"
+          keyExpr="kisiAdi" // 'kisiAdi' ile her satırı tanımlıyoruz
           onRowClick={handleRowClick} // Satıra tıklama olayını yönet
+          showBorders={true}
         >
           <FilterRow visible={true} />
           <Paging enabled={true} />
           <Editing
-            mode="row"
-            allowUpdating={true}
-            allowDeleting={true}
             allowAdding={true}
+            allowDeleting={true}
+            allowUpdating={true}
+            mode="row"
             useIcons={true}
           />
 
           {/* Main Columns */}
-          <Column dataField="kisiAdi" caption="Ad" />
-          <Column dataField="kisiSoyadi" caption="Soyad" />
-          <Column dataField="departman" caption="Departman" />
+          <Column caption="Ad" dataField="kisiAdi" />
+          <Column caption="Soyad" dataField="kisiSoyadi" />
+          <Column caption="Departman" dataField="departman" />
 
           {/* Master-Detail Configuration */}
           <MasterDetail
-            enabled={true}
             component={({ data }) => (
               <>
                 {/* Roller Sub-grid */}
@@ -113,10 +112,10 @@ export default function KisiDetailModal() {
                 >
                   {/* Düzenleme yapılandırması */}
                   <Editing
-                    mode="row" // Düzenleme işlemi popup içinde yapılacak
-                    allowUpdating={true} // Güncelleme izni
-                    allowDeleting={true} // Silme izni
                     allowAdding={true} // Ekleme izni
+                    allowDeleting={true} // Silme izni
+                    allowUpdating={true} // Güncelleme izni
+                    mode="row" // Düzenleme işlemi popup içinde yapılacak
                     useIcons={true} // Simge kullanımı
                   />
                 </DataGrid>
@@ -137,17 +136,18 @@ export default function KisiDetailModal() {
                 />
               </>
             )}
+            enabled={true}
           />
         </DataGrid>
 
         {/* Popup ile sadece seçilen satır verilerini göster */}
         <Popup
-          title="Detaylar"
-          showTitle={true}
-          visible={isPopupVisible} // Popup görünürlüğünü kontrol et
-          onHiding={handleClosePopup} // Popup kapatıldığında fonksiyonu çağır
-          width={700}
           height={600}
+          onHiding={handleClosePopup} // Popup kapatıldığında fonksiyonu çağır
+          showTitle={true}
+          title="Detaylar"
+          visible={isPopupVisible} // Popup görünürlüğünü kontrol et
+          width={700}
         >
           {selectedRowData && (
             <div>

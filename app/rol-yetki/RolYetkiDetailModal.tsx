@@ -1,18 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useModalContext } from "../../context";
-import { RolYetkiOld } from "../../types";
+import { console } from "inspector";
+import { Button } from "devextreme-react"; // Buton bileşenini içe aktar
 import DataGrid, {
   Column,
   Editing,
-  Paging,
   FilterRow,
+  Paging,
 } from "devextreme-react/data-grid";
-import { Button } from "devextreme-react"; // Buton bileşenini içe aktar
-import { rolYetkiDataGridConfig } from "../../configs/rol-yetki-data-grid-config";
-import { fetcherGet, fetcherPost } from "@/utils";
 import { useSession } from "next-auth/react";
-import { console } from "inspector";
+import React, { useEffect, useState } from "react";
+import { FetcherGet, FetcherPost } from "@/utils";
+import { rolYetkiDataGridConfig } from "../../configs/rol-yetki-data-grid-config";
+import { useModalContext } from "../../context";
+import type { RolYetkiOldType } from "../../types";
 
 type RolYetkiInsertType = {
   rolAdi: string;
@@ -28,7 +28,7 @@ export default function RolYetkiDetailModal() {
     RolYetkiInsertType[]
   >([]);
 
-  const [employees, setEmployees] = useState<RolYetkiOld[]>([]);
+  const [employees, setEmployees] = useState<RolYetkiOldType[]>([]);
   const [rolAdi, setRolAdi] = useState<string | null>(null); // Rol Adını tutacak state
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function RolYetkiDetailModal() {
 
     const fetchData = async () => {
       try {
-        const bilgilerData = await fetcherGet(
+        const bilgilerData = await FetcherGet(
           `/Rol/yetkiler/${modalContext.id}`,
           session.data?.token
         );
@@ -82,7 +82,7 @@ export default function RolYetkiDetailModal() {
 
   const handleSaveChanges = async () => {
     try {
-      const result = await fetcherPost(
+      const result = await FetcherPost(
         "/Rol/rol-yetki",
         session.data?.token,
         JSON.stringify(insertedRolYetki)
@@ -100,15 +100,17 @@ export default function RolYetkiDetailModal() {
 
   return (
     <div
-      style={{ position: "fixed", zIndex: 2 }}
       className={`top-0 flex items-start justify-center w-full bg-gray-400/15 backdrop-blur-sm min-h-[100vh] h-full overflow-auto ${modalContext?.isOpen ? "visible" : "hidden"
         }`}
       onPointerDown={(e) => {
         e.stopPropagation();
         modalContext.toggle();
       }}
+      style={{ position: "fixed", zIndex: 2 }}
     >
       <div
+        className="w-[80vw] bg-white p-4 rounded-md"
+        onPointerDown={(e) => e.stopPropagation()}
         style={{
           position: "relative",
           pointerEvents: "auto",
@@ -116,8 +118,6 @@ export default function RolYetkiDetailModal() {
           zIndex: 3,
           top: "20%",
         }}
-        className="w-[80vw] bg-white p-4 rounded-md"
-        onPointerDown={(e) => e.stopPropagation()}
       >
         {/* Rol Adı Başlık olarak gösteriliyor */}
         {rolAdi && (
@@ -127,31 +127,31 @@ export default function RolYetkiDetailModal() {
         )}
 
         <DataGrid
-          id="gridContainer"
-          dataSource={employees}
-          keyExpr="yetkiAdi"
           allowColumnReordering={true}
-          showBorders={true}
+          dataSource={employees}
+          id="gridContainer"
+          keyExpr="yetkiAdi"
           onRowInserted={(e) => {
             handleInsertRow(e.data);
           }}
+          showBorders={true}
           {...rolYetkiDataGridConfig}
         >
           <FilterRow visible={true} />
           <Paging enabled={true} />
           <Editing
-            mode="row"
-            allowUpdating={true}
-            allowDeleting={true}
             allowAdding={true}
+            allowDeleting={true}
+            allowUpdating={true}
+            mode="row"
             useIcons={true} // Simge kullanmayı etkinleştir
           />
 
-          <Column dataField="yetkiAdi" caption="Yetki" allowEditing={false} />
-          <Column dataField="eylemlerTuruId" caption="Eylem Türü" />
+          <Column allowEditing={false} caption="Yetki" dataField="yetkiAdi" />
+          <Column caption="Eylem Türü" dataField="eylemlerTuruId" />
 
           {/* Edit ve Delete simgeleri için özel simgeler ekleyin */}
-          <Column type="buttons" width={100} caption="İşlemler">
+          <Column caption="İşlemler" type="buttons" width={100}>
             <Button
               icon="edit" // Edit simgesi
             />

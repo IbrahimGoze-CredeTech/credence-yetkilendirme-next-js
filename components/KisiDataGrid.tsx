@@ -4,14 +4,14 @@
 
 "use client";
 import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
+import { useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { KisiOzet } from "../types";
+import { FetcherGet } from "@/utils";
+import { useModalContext } from "../context";
 import { roles, rollerAdi } from "../modals/roller";
 import { yetkilerAdi } from "../modals/yetkiler";
-import { useModalContext } from "../context";
-import { fetcherGet } from "@/utils";
-import { useSession } from "next-auth/react";
-import { useRouter } from 'next/navigation';
+import type { KisiOzetType } from "../types";
 
 
 export default function KisiDataGrid() {
@@ -19,18 +19,18 @@ export default function KisiDataGrid() {
   const modalContext = useModalContext();
   const router = useRouter();
 
-  const [kisiOzet, setKisiOzet] = useState<KisiOzet[]>([])
+  const [kisiOzet, setKisiOzet] = useState<KisiOzetType[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetcherGet('/Kisi/ozet-bilgi', session.data?.token);
+      const response = await FetcherGet('/Kisi/ozet-bilgi', session.data?.token);
       setKisiOzet(response)
     }
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  ///-----
+  // /-----
 
   const rolesFilterOperations = ["contains", "endswith", "=", "startswith"];
   function rolesToFilterItem(item: string) {
@@ -61,7 +61,7 @@ export default function KisiDataGrid() {
     const column = this;
 
     if (filterValue) {
-      const selector = (data: KisiOzet) => {
+      const selector = (data: KisiOzetType) => {
         const applyOperation = (arg1: string, arg2: string, op: string) => {
           if (op === "=") return arg1 === arg2;
           if (op === "contains") return arg1.includes(arg2);
@@ -84,50 +84,50 @@ export default function KisiDataGrid() {
     <>
       <h1 className="text-3xl font-medium my-4">Kişi Bilgileri</h1>
       <DataGrid
+        dataSource={kisiOzet}
         id="kisiOzet"
         keyExpr="id"
-        dataSource={kisiOzet}
-        showRowLines={true}
-        showBorders={true}
         onRowClick={(e) => {
 
           modalContext.setId(e.data.id);
           // modalContext.toggle();
           router.push("/kisi-bilgileri/kisi");
         }}
+        showBorders={true}
+        showRowLines={true}
       >
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
 
         <Column
-          dataField="ad"
-          caption="Ad"
-          allowHeaderFiltering={false} />
-        <Column
-          dataField="soyad"
-          caption="Soyad"
-          allowHeaderFiltering={false} />
-        <Column
-          dataField="departman"
-          caption="Departman"
           allowHeaderFiltering={false}
+          caption="Ad"
+          dataField="ad" />
+        <Column
+          allowHeaderFiltering={false}
+          caption="Soyad"
+          dataField="soyad" />
+        <Column
+          allowHeaderFiltering={false}
+          caption="Departman"
+          dataField="departman"
         />
         <Column
-          dataField="roller"
-          caption="Rol"
-          dataType="string"
-          headerFilter={rolesHeaderFilter}
           calculateFilterExpression={calculateFilterExpression}
+          caption="Rol"
+          dataField="roller"
+          dataType="string"
           filterOperations={rolesFilterOperations}
+          headerFilter={rolesHeaderFilter}
         >
           <HeaderFilter dataSource={roles} />
         </Column>
 
         <Column
-          dataField="yetkiler"
-          caption="Yetki"
-          dataType="string"
           calculateFilterExpression={calculateFilterExpression}
+          caption="Yetki"
+          dataField="yetkiler"
+          dataType="string"
           filterOperations={rolesFilterOperations}
           headerFilter={yetkilerHeaderFilter}
         ><HeaderFilter dataSource={yetkilerAdi} /></Column>

@@ -1,21 +1,21 @@
 "use server";
 
-import { currentUser } from "@/lib/auth";
+import type { Imza, RolAtama, RolCikarma, Talep } from "@prisma/client";
+import { CurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import {
+import type {
   IWaitingKisiSayfaAtama,
   IWaitingKisiSayfaCikarma,
   IWaitingKisiSayfaEdit,
-  IWaitingKisiYetkiEdit,
-  IWaitingRolAtama,
-  IWaitingRolCikarma,
+  IWaitingKisiYetkiEditType,
+  IWaitingRolAtamaType,
+  IWaitingRolCikarmaType,
   IWaitingRolSayfaAtama,
   IWaitingRolSayfaCikarma,
   IWaitingRolYetkiEdit,
 } from "@/types";
-import { Imza, RolAtama, RolCikarma, Talep } from "@prisma/client";
 
-export type ExpendedTalep = {
+export type ExpendedTalepType = {
   talep: Talep;
   imzalar: Imza[];
   rolAtama?: RolAtama[];
@@ -44,15 +44,15 @@ export type ExpendedTalep = {
 //   return true;
 // }
 
-export async function WaitingRolAtamalar(): Promise<IWaitingRolAtama[]> {
-  const kisi = await currentUser();
+export async function WaitingRolAtamalar(): Promise<IWaitingRolAtamaType[]> {
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
   }
 
   try {
-    const rolAtamalar = await db.$queryRaw<IWaitingRolAtama[]>`
+    const rolAtamalar = await db.$queryRaw<IWaitingRolAtamaType[]>`
   EXEC WaitingRolAtamas @KisiId = ${+kisi.id}
 `;
 
@@ -69,8 +69,10 @@ export async function WaitingRolAtamalar(): Promise<IWaitingRolAtama[]> {
   return [];
 }
 
-export async function WaitingRolCikarmalar(): Promise<IWaitingRolCikarma[]> {
-  const kisi = await currentUser();
+export async function WaitingRolCikarmalar(): Promise<
+  IWaitingRolCikarmaType[]
+> {
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -78,7 +80,7 @@ export async function WaitingRolCikarmalar(): Promise<IWaitingRolCikarma[]> {
 
   try {
     // Get All the imza with the KisiId Only if imza has a DurumId of 1
-    const rolCikarmalar = await db.$queryRaw<IWaitingRolCikarma[]>`
+    const rolCikarmalar = await db.$queryRaw<IWaitingRolCikarmaType[]>`
   EXEC WaitingRolCikarmas @KisiId = ${+kisi.id}
 `;
 
@@ -95,15 +97,17 @@ export async function WaitingRolCikarmalar(): Promise<IWaitingRolCikarma[]> {
   return [];
 }
 
-export async function WaitingKisiYetkiEdit(): Promise<IWaitingKisiYetkiEdit[]> {
-  const kisi = await currentUser();
+export async function WaitingKisiYetkiEdit(): Promise<
+  IWaitingKisiYetkiEditType[]
+> {
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
   }
 
   try {
-    const kisiYetkiEdits = await db.$queryRaw<IWaitingKisiYetkiEdit[]>`
+    const kisiYetkiEdits = await db.$queryRaw<IWaitingKisiYetkiEditType[]>`
   EXEC WaitingKisiYetkiEdits @KisiId = ${+kisi.id}
 `;
 
@@ -122,7 +126,7 @@ export async function WaitingKisiYetkiEdit(): Promise<IWaitingKisiYetkiEdit[]> {
 }
 
 export async function WaitingKisiSayfaEdit(): Promise<IWaitingKisiSayfaEdit[]> {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -152,7 +156,7 @@ export async function WaitingKisiSayfaEdit(): Promise<IWaitingKisiSayfaEdit[]> {
 export async function WaitingKisiSayfaAtama(): Promise<
   IWaitingKisiSayfaAtama[]
 > {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -181,7 +185,7 @@ export async function WaitingKisiSayfaAtama(): Promise<
 export async function WaitingKisiSayfaCikarma(): Promise<
   IWaitingKisiSayfaCikarma[]
 > {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -207,9 +211,9 @@ export async function WaitingKisiSayfaCikarma(): Promise<
   return [];
 }
 
-//#region Rol Sayfa
+// #region Rol Sayfa
 export async function WaitingRolSayfaAtama(): Promise<IWaitingRolSayfaAtama[]> {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -238,7 +242,7 @@ export async function WaitingRolSayfaAtama(): Promise<IWaitingRolSayfaAtama[]> {
 export async function WaitingRolSayfaCikarma(): Promise<
   IWaitingRolSayfaCikarma[]
 > {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -263,10 +267,10 @@ export async function WaitingRolSayfaCikarma(): Promise<
   }
   return [];
 }
-//#endregion
+// #endregion
 
 export async function WaitingRolYetkiEdit(): Promise<IWaitingRolYetkiEdit[]> {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];

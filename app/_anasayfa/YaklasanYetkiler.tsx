@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, startTransition } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { startTransition, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type Yetki = {
+type YetkiType = {
   id: number;
   ad: string;
   soyad: string;
@@ -13,15 +13,15 @@ type Yetki = {
 };
 
 export default function YaklasanYetkiler() {
-  const [yetkiler, setYetkiler] = useState<Yetki[]>([]);
+  const [yetkiler, setYetkiler] = useState<YetkiType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 5;
 
   useEffect(() => {
-    setLoading(true); 
-    
-    const tumYetkiler: Yetki[] = [
+    setLoading(true);
+
+    const tumYetkiler: YetkiType[] = [
       { id: 1, ad: "Gurkan", soyad: "Erginer", rol: "Yazılım Personeli", bitisTarihi: "2024-11-29T14:30:00" },
       { id: 2, ad: "Burak", soyad: "Pozut", rol: "sa", bitisTarihi: "2024-11-29T10:00:00" },
       { id: 3, ad: "İbrahim Mert", soyad: "Goze", rol: "Yazılım Personeli", bitisTarihi: "2024-11-25T18:15:00" },
@@ -43,7 +43,7 @@ export default function YaklasanYetkiler() {
 
     startTransition(() => {
       setYetkiler(yaklasanYetkiler);
-      setLoading(false); 
+      setLoading(false);
     });
   }, []);
 
@@ -81,39 +81,39 @@ export default function YaklasanYetkiler() {
       </CardHeader>
       <CardContent>
         {loading ? (
-         
+
           <div className="animate-pulse">
             <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
                   <th className="border border-gray-300 px-4 py-2">
-                    <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/3" />
                   </th>
                   <th className="border border-gray-300 px-4 py-2">
-                    <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/4" />
                   </th>
                   <th className="border border-gray-300 px-4 py-2">
-                    <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/4" />
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td className="border border-gray-300 px-4 py-2">
-                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                    <div className="h-4 bg-gray-200 rounded w-full" />
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                    <div className="h-4 bg-gray-200 rounded w-full" />
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                    <div className="h-4 bg-gray-200 rounded w-full" />
                   </td>
                 </tr>
               </tbody>
             </table>
             <div className="flex justify-between mt-4">
-              <div className="px-4 py-2 bg-blue-500 text-white rounded opacity-75"></div>
-              <div className="px-4 py-2 bg-blue-500 text-white rounded opacity-75"></div>
+              <div className="px-4 py-2 bg-blue-500 text-white rounded opacity-75" />
+              <div className="px-4 py-2 bg-blue-500 text-white rounded opacity-75" />
             </div>
           </div>
         ) : yetkiler.length === 0 ? (
@@ -145,9 +145,9 @@ export default function YaklasanYetkiler() {
 
             <div className="flex justify-between mt-4">
               <button
-                onClick={prevPage}
                 className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
                 disabled={currentPage === 1}
+                onClick={prevPage}
               >
                 Önceki
               </button>
@@ -155,9 +155,9 @@ export default function YaklasanYetkiler() {
                 Sayfa {currentPage} / {Math.ceil(yetkiler.length / itemsPerPage)}
               </span>
               <button
-                onClick={nextPage}
                 className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
                 disabled={currentPage === Math.ceil(yetkiler.length / itemsPerPage)}
+                onClick={nextPage}
               >
                 Sonraki
               </button>

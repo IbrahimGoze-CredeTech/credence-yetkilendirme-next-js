@@ -1,8 +1,8 @@
 "use server";
 
-import { currentUser } from "@/lib/auth";
+import { CurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import {
+import type {
   IPreviousKisiSayfaAtama,
   IPreviousKisiSayfaCikarma,
   IPreviousKisiSayfaEdit,
@@ -15,7 +15,7 @@ import {
 } from "@/types";
 
 export async function PreviousRolAtama(): Promise<IPreviousRolAtama[]> {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -43,7 +43,7 @@ export async function PreviousRolAtama(): Promise<IPreviousRolAtama[]> {
 }
 
 export async function PreviousRolCikarma(): Promise<IPreviousRolCikarma[]> {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -72,7 +72,7 @@ export async function PreviousRolCikarma(): Promise<IPreviousRolCikarma[]> {
 export async function PreviousKisiYetkiEdit(): Promise<
   IPreviousKisiYetkiEdit[]
 > {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -103,7 +103,7 @@ export async function PreviousKisiYetkiEdit(): Promise<
 export async function PreviousKisiSayfaEdit(): Promise<
   IPreviousKisiSayfaEdit[]
 > {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -129,7 +129,7 @@ export async function PreviousKisiSayfaEdit(): Promise<
 export async function PreviousKisiSayfaAtama(): Promise<
   IPreviousKisiSayfaAtama[]
 > {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -154,7 +154,7 @@ export async function PreviousKisiSayfaAtama(): Promise<
 export async function PreviousKisiSayfaCikarma(): Promise<
   IPreviousKisiSayfaCikarma[]
 > {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -176,11 +176,11 @@ export async function PreviousKisiSayfaCikarma(): Promise<
   return [];
 }
 
-//#region Rol Sayfa
+// #region Rol Sayfa
 export async function PreviousRolSayfaAtama(): Promise<
   IPreviousRolSayfaAtama[]
 > {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -205,7 +205,7 @@ export async function PreviousRolSayfaAtama(): Promise<
 export async function PreviousRolSayfaCikarma(): Promise<
   IPreviousRolSayfaCikarma[]
 > {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];
@@ -226,10 +226,10 @@ export async function PreviousRolSayfaCikarma(): Promise<
   }
   return [];
 }
-//#endregion
+// #endregion
 
 export async function PreviousRolYetkiEdit(): Promise<IPreviousRolYetkiEdit[]> {
-  const kisi = await currentUser();
+  const kisi = await CurrentUser();
 
   if (!kisi) {
     return [];

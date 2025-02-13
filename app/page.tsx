@@ -1,11 +1,11 @@
-import KisiDataGridOzet from "./_anasayfa/KisiDataGridOzet";
-import TalepOnayDatagrid from "./_anasayfa/talep-onay/TalepOnayDatagrid";
-import TalepOzet from "./_anasayfa/TalepOzet";
-import YaklasanYetkiler from "./_anasayfa/YaklasanYetkiler";
-import "devextreme/dist/css/dx.light.css";
 import config from "devextreme/core/config";
 import { Suspense } from "react";
-import { WaitingRolAtamalar, WaitingRolCikarmalar, WaitingKisiYetkiEdit } from "@/actions/waiting-demands";
+import { WaitingKisiYetkiEdit, WaitingRolAtamalar, WaitingRolCikarmalar } from "@/actions/waiting-demands";
+import KisiDataGridOzet from "./_anasayfa/KisiDataGridOzet";
+import TalepOzet from "./_anasayfa/TalepOzet";
+import YaklasanYetkiler from "./_anasayfa/YaklasanYetkiler";
+import TalepOnayDatagrid from "./_anasayfa/talep-onay/TalepOnayDatagrid";
+import "devextreme/dist/css/dx.light.css";
 import TalepOnaySkeleton from "./_anasayfa/talep-onay/talep-onay-skeleton";
 // import { GetKisiAccessibleRoutes } from "@/actions/views";
 
@@ -25,9 +25,9 @@ export default function Home() {
     ]);
     return (
       <TalepOnayDatagrid
+        waitingKisiYetkiEdit={waitingKisiYetkiEdit}
         waitingRolAtamalar={waitingRolAtamalar}
         waitingRolCikarmalar={waitingRolCikarmalar}
-        waitingKisiYetkiEdit={waitingKisiYetkiEdit}
       />
     )
   }

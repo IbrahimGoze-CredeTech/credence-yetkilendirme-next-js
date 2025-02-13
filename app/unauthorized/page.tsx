@@ -1,5 +1,5 @@
-import React from "react";
 import Link from "next/link";
+import React from "react";
 
 export default function UnauthorizedPage() {
   return (
@@ -12,8 +12,8 @@ export default function UnauthorizedPage() {
           Bu sayfayı görüntülemek için gereken yetkiye sahip değilsin.
         </p>
         <Link
-          href="/"
           className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all duration-150"
+          href="/"
         >
           Ana Sayfa
         </Link>

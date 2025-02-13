@@ -1,25 +1,25 @@
-import { RolYetkiView } from '@prisma/client'
+import type { RolYetkiView } from '@prisma/client'
 import { DataGrid } from 'devextreme-react'
 import { Column, FilterRow, HeaderFilter } from 'devextreme-react/cjs/data-grid'
 import React from 'react'
 
-interface Props {
+interface IProps {
   roleYetkiView: RolYetkiView[]
 }
 
-export default function RoleYetkiView({ roleYetkiView }: Props) {
+export default function RoleYetkiView({ roleYetkiView }: IProps) {
   return (
     <DataGrid dataSource={roleYetkiView} >
       <FilterRow visible={true} />
       <HeaderFilter visible={true} />
-      <Column dataField="RolId" caption="Kişi ID" visible={false} />
-      <Column dataField="YetkiId" caption="Sayfa ID" visible={false} />
-      <Column dataField="RolAdi" caption="Rol Adı" />
-      <Column dataField="SupervizorRolId" caption="Supervizor Rol Id" />
-      <Column dataField="RolRisk" caption="Rol Risk" />
+      <Column caption="Kişi ID" dataField="RolId" visible={false} />
+      <Column caption="Sayfa ID" dataField="YetkiId" visible={false} />
+      <Column caption="Rol Adı" dataField="RolAdi" />
+      <Column caption="Supervizor Rol Id" dataField="SupervizorRolId" />
+      <Column caption="Rol Risk" dataField="RolRisk" />
       {/* <Column dataField="RolDeleted" caption="Silindi" /> */}
-      <Column dataField="YetkiAdi" caption="Yetki Adı" />
-      <Column dataField="YetkiRisk" caption="Yetki Risk" />
+      <Column caption="Yetki Adı" dataField="YetkiAdi" />
+      <Column caption="Yetki Risk" dataField="YetkiRisk" />
       {/* <Column dataField="YetkiDeleted" caption="Yetki Silindi" /> */}
     </DataGrid>
   )

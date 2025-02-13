@@ -1,11 +1,11 @@
 "use server";
 
+import type { z } from "zod";
 import { auth } from "@/auth";
-import { YetkiTalepSchema } from "@/schemas";
-import { fetcherPost } from "@/utils";
-import { z } from "zod";
+import { yetkiTalepSchema } from "@/schemas";
+import { FetcherPost } from "@/utils";
 
-type YetkiEditRequest = {
+type YetkiEditRequestType = {
   yetkiAdi: string;
   kisiAdi: string;
   eylemTuru: string;
@@ -14,10 +14,10 @@ type YetkiEditRequest = {
   ciftImza: boolean;
   ekstraImza: string[];
 };
-export async function yetkiEdit(values: z.infer<typeof YetkiTalepSchema>) {
+export async function yetkiEdit(values: z.infer<typeof yetkiTalepSchema>) {
   const session = await auth();
 
-  const validateFields = YetkiTalepSchema.safeParse(values);
+  const validateFields = yetkiTalepSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -40,7 +40,7 @@ export async function yetkiEdit(values: z.infer<typeof YetkiTalepSchema>) {
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const yetkiEditRequest: YetkiEditRequest = {
+  const yetkiEditRequest: YetkiEditRequestType = {
     yetkiAdi,
     kisiAdi,
     eylemTuru,
@@ -50,7 +50,7 @@ export async function yetkiEdit(values: z.infer<typeof YetkiTalepSchema>) {
     ekstraImza: ekstraImzaArray,
   };
 
-  await fetcherPost(
+  await FetcherPost(
     "/Talep/yetki-edit",
     session?.token,
     JSON.stringify(yetkiEditRequest)
@@ -58,10 +58,10 @@ export async function yetkiEdit(values: z.infer<typeof YetkiTalepSchema>) {
   return { success: "Talep Yaratıldı", error: "" };
 }
 
-export async function yetkiAtama(values: z.infer<typeof YetkiTalepSchema>) {
+export async function yetkiAtama(values: z.infer<typeof yetkiTalepSchema>) {
   const session = await auth();
 
-  const validateFields = YetkiTalepSchema.safeParse(values);
+  const validateFields = yetkiTalepSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -94,7 +94,7 @@ export async function yetkiAtama(values: z.infer<typeof YetkiTalepSchema>) {
     ekstraImza: ekstraImzaArray,
   };
 
-  await fetcherPost(
+  await FetcherPost(
     "/Talep/yetki-atama",
     session?.token,
     JSON.stringify(yetkiAtamaRequest)

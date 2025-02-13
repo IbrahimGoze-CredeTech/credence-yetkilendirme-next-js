@@ -1,4 +1,4 @@
-import { IDataGridOptions } from "devextreme-react/data-grid";
+import type { IDataGridOptions } from "devextreme-react/data-grid";
 import { yetkiler } from "../modals/yetkiler";
 
 const authorityDataGridConfig: IDataGridOptions = {

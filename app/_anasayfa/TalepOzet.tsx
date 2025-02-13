@@ -1,26 +1,26 @@
 'use client';
 
-import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
-import { Talep } from '@/types';
-import { fetcherGet } from '@/utils';
 import DataGrid, { Pager, Paging, Scrolling } from 'devextreme-react/data-grid';
-import { useSession } from 'next-auth/react';
-
-
-import React, { useEffect, useState } from 'react';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { useSession } from 'next-auth/react';
+import React, { useEffect, useState } from 'react';
+import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
+import type { TalepType } from '@/types';
+import { FetcherGet } from '@/utils';
+
+
+
 
 export default function TalepEkranPage() {
   const session = useSession();
-  const [talepler, setTalepler] = useState<Talep[]>([]);
+  const [talepler, setTalepler] = useState<TalepType[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const talepler = await fetcherGet('/Talep', session.data?.token);
+      const talepler = await FetcherGet('/Talep', session.data?.token);
       setTalepler(talepler);
     };
 
@@ -78,10 +78,10 @@ export default function TalepEkranPage() {
         <h1 className="text-3xl font-medium my-4 flex justify-between items-center mt-4">
           Geçmiş Talepler
           <div className="flex gap-4">
-            <button onClick={handleExportPDF} className="bg-blue-500 text-white text-xl px-4 py-2 rounded">
+            <button className="bg-blue-500 text-white text-xl px-4 py-2 rounded" onClick={handleExportPDF}>
               PDF&apos;e Aktar
             </button>
-            <button onClick={handleExportExcel} className="bg-green-500 text-white text-xl px-4 py-2 rounded">
+            <button className="bg-green-500 text-white text-xl px-4 py-2 rounded" onClick={handleExportExcel}>
               Excel&apos;e Aktar
             </button>
           </div>
@@ -97,9 +97,9 @@ export default function TalepEkranPage() {
         <Scrolling rowRenderingMode="virtual" />
         <Paging defaultPageSize={7} />
         <Pager
-          visible={true}
           allowedPageSizes="auto"
           displayMode="compact"
+          visible={true}
         />
       </DataGrid>
 

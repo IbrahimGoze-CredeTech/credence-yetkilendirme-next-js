@@ -9,8 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+// import type {
+//   ChartConfig} from "@/components/ui/chart";
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -29,7 +31,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export interface BarChartData {
+export interface IBarChartData {
   ad: string;
   soyad: string;
   quantityData: number;
@@ -38,10 +40,10 @@ export interface BarChartData {
   imzaAtilanTalepSayısı?: string;
 }
 
-interface ChartData {
+interface IChartData {
   chartLabel: string;
   chartDescription?: string;
-  data: BarChartData[];
+  data: IBarChartData[];
   firstQuantityValue: string;
   secondQuantityValue: string;
   firstQuantityLabel: string;
@@ -56,7 +58,7 @@ export function MultipleBarChartComp({
   secondQuantityLabel,
   firstQuantityValue,
   secondQuantityValue,
-}: ChartData) {
+}: IChartData) {
   return (
     <Card>
       <CardHeader>
@@ -64,53 +66,53 @@ export function MultipleBarChartComp({
         <CardDescription>{chartDescription}</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="max-h-[500px]">
+        <ChartContainer className="max-h-[500px]" config={chartConfig}>
           <BarChart
-            width={600}
-            height={300}
-            barSize={50}
             accessibilityLayer
+            barSize={50}
             data={data}
+            height={300}
             margin={{
               top: 50,
             }}
+            width={600}
           >
             <CartesianGrid vertical={true} />
             <XAxis
-              dataKey="ad"
-              tickLine={false}
-              tickMargin={10}
               axisLine={false}
+              dataKey="ad"
               tickFormatter={(value, index) => {
                 const item = data[index];
                 return `${item.ad} ${item.soyad}`;
               }}
+              tickLine={false}
+              tickMargin={10}
             />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <ChartTooltip content={<ChartTooltipContent />} cursor={false} />
             <Bar
               dataKey={firstQuantityValue}
-              label={firstQuantityLabel}
               fill="#ff0066"
+              label={firstQuantityLabel}
               radius={8}
             >
               <LabelList
-                position="top"
-                offset={12}
                 className="fill-foreground"
                 fontSize={12}
+                offset={12}
+                position="top"
               />
             </Bar>
             <Bar
               dataKey={secondQuantityValue}
-              label={secondQuantityLabel}
               fill="#3b82f6"
+              label={secondQuantityLabel}
               radius={8}
             >
               <LabelList
-                position="top"
-                offset={12}
                 className="fill-foreground"
                 fontSize={12}
+                offset={12}
+                position="top"
               />
             </Bar>
           </BarChart>

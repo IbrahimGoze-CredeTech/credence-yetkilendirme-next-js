@@ -1,29 +1,29 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { ChevronDownIcon } from "@heroicons/react/solid";
+import Image from "next/image";
 import Link from "next/link";
-import { useCurrentUser } from "@/hooks/use-current-user";
-import { ExtendedUser } from "@/next-auth";
+import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
 import { useStaticTablesContext } from "@/context";
+import { UseCurrentUser } from "@/hooks/use-current-user";
+import type { ExtendedUser } from "@/next-auth";
 import { RoleGate } from "./role-gate";
-import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const pathname = usePathname(); // pathname'i alın
   const showNavbar = pathname !== "/auth/login"; // Navbar'ı göstermeyi kontrol edin
 
   const session = useSession();
-  const userHook = useCurrentUser();
-  const StaticTablesContext = useStaticTablesContext();
+  const userHook = UseCurrentUser();
+  const staticTablesContext = useStaticTablesContext();
   const [user, setUser] = useState<ExtendedUser | undefined>(undefined);
 
   useEffect(() => {
@@ -54,31 +54,31 @@ export default function Navbar() {
       </h1>
 
       <div className="w-full flex items-center justify-between mt-4">
-        <div id="Buttons" className="flex items-center space-x-6">
+        <div className="flex items-center space-x-6" id="Buttons">
           <Link
-            href="/"
             className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white p-2 rounded"
+            href="/"
           >
             <Image
-              src="/homepage.png"
               alt="Anasayfa"
-              width={24}
-              height={24}
               className="mr-2"
+              height={24}
+              src="/homepage.png"
+              width={24}
             />
             Anasayfa
           </Link>
 
           <Link
-            href="/kisi-bilgileri"
             className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white p-2 rounded"
+            href="/kisi-bilgileri"
           >
             <Image
-              src="/person.png"
               alt="Kişi Bilgileri"
-              width={24}
-              height={24}
               className="mr-2"
+              height={24}
+              src="/person.png"
+              width={24}
             />
             Kişi Bilgileri
           </Link>
@@ -86,11 +86,11 @@ export default function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white  p-2 rounded ">
               <Image
-                src="/organization.png"
                 alt="Organizasyon"
-                width={24}
-                height={24}
                 className="mr-2"
+                height={24}
+                src="/organization.png"
+                width={24}
               />
               Organizasyon <ChevronDownIcon className="w-4 h-4 ml-2" />
             </DropdownMenuTrigger>
@@ -101,8 +101,8 @@ export default function Navbar() {
                 className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
               >
                 <Link
-                  href="/rol"
                   className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
+                  href="/rol"
                 >
                   Roller
                 </Link>
@@ -112,8 +112,8 @@ export default function Navbar() {
                 className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
               >
                 <Link
-                  href="/yetki"
                   className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
+                  href="/yetki"
                 >
                   Yetkiler
                 </Link>
@@ -124,8 +124,8 @@ export default function Navbar() {
                 className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
               >
                 <Link
-                  href="/kisi"
                   className="flex items-center transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white px-4 p-2 rounded"
+                  href="/kisi"
                 >
                   Kişiler
                 </Link>
@@ -134,15 +134,15 @@ export default function Navbar() {
           </DropdownMenu>
 
           <Link
-            href="/rol-yetki"
             className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white  p-2 rounded"
+            href="/rol-yetki"
           >
             <Image
-              src="/assignment.png"
               alt="Rol Ve Yetki Atama"
-              width={24}
-              height={24}
               className="mr-2"
+              height={24}
+              src="/assignment.png"
+              width={24}
             />
             Rol Ve Yetki Atama
           </Link>
@@ -150,11 +150,11 @@ export default function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center text-white font-bold transition-colors duration-150  hover:bg-azure-radiance-600 hover:text-white  p-2 rounded ">
               <Image
-                src="/demand.png"
                 alt="Talepler"
-                width={24}
-                height={24}
                 className="mr-2"
+                height={24}
+                src="/demand.png"
+                width={24}
               />
               Talepler <ChevronDownIcon className="w-4 h-4 ml-2" />
             </DropdownMenuTrigger>
@@ -165,8 +165,8 @@ export default function Navbar() {
                 className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
               >
                 <Link
-                  href="/talep-ekran"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+                  href="/talep-ekran"
                 >
                   Talepler
                 </Link>
@@ -176,8 +176,8 @@ export default function Navbar() {
                 className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
               >
                 <Link
-                  href="/talep-yarat"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+                  href="/talep-yarat"
                 >
                   Talep Yarat
                 </Link>
@@ -188,8 +188,8 @@ export default function Navbar() {
                 className="cursor-pointer hover:!bg-azure-radiance-600 hover:!text-white"
               >
                 <Link
-                  href="/talep-kayitlari"
                   className="block px-4 py-2 hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+                  href="/talep-kayitlari"
                 >
                   Talep Kayıtları
                 </Link>
@@ -198,15 +198,15 @@ export default function Navbar() {
           </DropdownMenu>
 
           <Link
-            href="/rapor"
             className="flex items-center text-white font-bold transition-colors duration-150 hover:bg-azure-radiance-600 hover:text-white p-2 rounded"
+            href="/rapor"
           >
             <Image
-              src="/report.png"
               alt="Rol Ve Yetki Atama"
-              width={24}
-              height={24}
               className="mr-2"
+              height={24}
+              src="/report.png"
+              width={24}
             />
             Raporlar
           </Link>
@@ -214,30 +214,30 @@ export default function Navbar() {
 
         <RoleGate allowedRole="sa" showError={false}>
           <Link
-            href="/kisi-rol-yetki"
             className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+            href="/kisi-rol-yetki"
           >
             <Image
-              src="/ekle-sil.png"
               alt="Ekle-Sil"
-              width={24}
-              height={24}
               className="mr-2"
+              height={24}
+              src="/ekle-sil.png"
+              width={24}
             />
             Ekle-Sil
           </Link>
         </RoleGate>
         <RoleGate allowedRole="sa" showError={false}>
           <Link
-            href="/views"
             className="relative flex items-center px-4 py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+            href="/views"
           >
             <Image
-              src="/eye.png"
               alt="Views"
-              width={24}
-              height={24}
               className="mr-2"
+              height={24}
+              src="/eye.png"
+              width={24}
             />
             Erişimler
           </Link>
@@ -245,23 +245,23 @@ export default function Navbar() {
 
         <div className="flex items-center space-x-4">
           <Link
-            href="/talep-onay"
             className="relative flex items-center  py-2 font-bold text-white rounded-md hover:bg-azure-radiance-600 hover:text-white transition-colors duration-150"
+            href="/talep-onay"
           >
             <Image
-              src="/notifications.png"
               alt="Talepler"
-              width={24}
-              height={24}
               className="mx-2 h-6"
+              height={24}
+              src="/notifications.png"
+              width={24}
             />
-            {StaticTablesContext?.anyBekleyenTalep && (
+            {staticTablesContext?.anyBekleyenTalep && (
               <Image
-                src={"/bildirim-circle.png"}
-                width={16}
-                height={16}
-                alt={""}
+                alt=""
                 className="absolute top-0 left-0"
+                height={16}
+                src="/bildirim-circle.png"
+                width={16}
               />
             )}
           </Link>

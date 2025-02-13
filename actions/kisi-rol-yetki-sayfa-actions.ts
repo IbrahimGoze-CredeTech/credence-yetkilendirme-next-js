@@ -1,23 +1,23 @@
 "use server";
 
-import { auth } from "@/auth";
-import {
-  KisiSchema,
-  KisiSilmeSchema,
-  RolSchema,
-  RolSilSchema,
-  SayfaSchema,
-  YetkiSchema,
-} from "@/schemas";
-import { z } from "zod";
-import { fetcherPost } from "@/utils";
-import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
+import type { z } from "zod";
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
+import {
+  kisiSchema,
+  kisiSilmeSchema,
+  rolSchema,
+  rolSilSchema,
+  sayfaSchema,
+  yetkiSchema,
+} from "@/schemas";
+import { FetcherPost } from "@/utils";
 
-export async function yetkiYaratma(values: z.infer<typeof YetkiSchema>) {
+export async function yetkiYaratma(values: z.infer<typeof yetkiSchema>) {
   const session = await auth();
 
-  const validateFields = YetkiSchema.safeParse(values);
+  const validateFields = yetkiSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -29,11 +29,11 @@ export async function yetkiYaratma(values: z.infer<typeof YetkiSchema>) {
     yetkiAdi: yetkiAdi,
   };
 
-  await fetcherPost("/Yetki", session?.token, JSON.stringify(yetki));
+  await FetcherPost("/Yetki", session?.token, JSON.stringify(yetki));
 }
 
-export async function yetkiSilme(values: z.infer<typeof YetkiSchema>) {
-  const validateFields = YetkiSchema.safeParse(values);
+export async function yetkiSilme(values: z.infer<typeof yetkiSchema>) {
+  const validateFields = yetkiSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -54,10 +54,10 @@ export async function yetkiSilme(values: z.infer<typeof YetkiSchema>) {
   }
 }
 
-export async function SayfaYaratma(values: z.infer<typeof SayfaSchema>) {
+export async function SayfaYaratma(values: z.infer<typeof sayfaSchema>) {
   const session = await auth();
 
-  const validateFields = SayfaSchema.safeParse(values);
+  const validateFields = sayfaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -69,7 +69,7 @@ export async function SayfaYaratma(values: z.infer<typeof SayfaSchema>) {
     sayfaRoute: sayfaRoute,
   };
 
-  const response = await fetcherPost(
+  const response = await FetcherPost(
     "/Sayfa",
     session?.token,
     JSON.stringify(yetki)
@@ -78,8 +78,8 @@ export async function SayfaYaratma(values: z.infer<typeof SayfaSchema>) {
   return { success: response.success, error: response.error };
 }
 
-export async function sayfaSilme(values: z.infer<typeof SayfaSchema>) {
-  const validateFields = SayfaSchema.safeParse(values);
+export async function sayfaSilme(values: z.infer<typeof sayfaSchema>) {
+  const validateFields = sayfaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -100,11 +100,11 @@ export async function sayfaSilme(values: z.infer<typeof SayfaSchema>) {
   }
 }
 
-//#region Rol
-export async function rolYaratma(values: z.infer<typeof RolSchema>) {
+// #region Rol
+export async function rolYaratma(values: z.infer<typeof rolSchema>) {
   const session = await auth();
 
-  const validateFields = RolSchema.safeParse(values);
+  const validateFields = rolSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -124,7 +124,7 @@ export async function rolYaratma(values: z.infer<typeof RolSchema>) {
     riskWeight: riskWeight,
   };
 
-  const response = await fetcherPost(
+  const response = await FetcherPost(
     "/Rol",
     session?.token,
     JSON.stringify(rol)
@@ -133,8 +133,8 @@ export async function rolYaratma(values: z.infer<typeof RolSchema>) {
   return { success: response.success, error: response.error };
 }
 
-export async function rolSilme(values: z.infer<typeof RolSilSchema>) {
-  const validateFields = RolSilSchema.safeParse(values);
+export async function rolSilme(values: z.infer<typeof rolSilSchema>) {
+  const validateFields = rolSilSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -154,13 +154,13 @@ export async function rolSilme(values: z.infer<typeof RolSilSchema>) {
     return { success: false, error: error };
   }
 }
-//#endregion
+// #endregion
 
-//#region Kisi
-export async function kisiYaratma(values: z.infer<typeof KisiSchema>) {
+// #region Kisi
+export async function kisiYaratma(values: z.infer<typeof kisiSchema>) {
   const session = await auth();
 
-  const validateFields = KisiSchema.safeParse(values);
+  const validateFields = kisiSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -176,7 +176,7 @@ export async function kisiYaratma(values: z.infer<typeof KisiSchema>) {
     sifre: hashedPassword,
   };
 
-  const response = await fetcherPost(
+  const response = await FetcherPost(
     "/Kisi",
     session?.token,
     JSON.stringify(kisi)
@@ -185,8 +185,8 @@ export async function kisiYaratma(values: z.infer<typeof KisiSchema>) {
   return { success: response.success, error: response.error };
 }
 
-export async function kisiSilme(values: z.infer<typeof KisiSilmeSchema>) {
-  const validateFields = KisiSilmeSchema.safeParse(values);
+export async function kisiSilme(values: z.infer<typeof kisiSilmeSchema>) {
+  const validateFields = kisiSilmeSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -202,4 +202,4 @@ export async function kisiSilme(values: z.infer<typeof KisiSilmeSchema>) {
     return { success: false, error: error };
   }
 }
-//#endregion
+// #endregion

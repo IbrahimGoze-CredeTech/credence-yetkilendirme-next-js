@@ -1,4 +1,6 @@
-import { DefaultSession, DefaultJWT } from "next-auth";
+/* eslint-disable */
+
+import type { DefaultJWT, DefaultSession } from "next-auth";
 
 export type ExtendedUser = DefaultSession["user"] & {
   role: string;

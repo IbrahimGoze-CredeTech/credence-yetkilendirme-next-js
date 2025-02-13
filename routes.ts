@@ -29,6 +29,7 @@ export const apiAuthPrefix = "/api/auth";
  * The default redirect path after logging in
  * @type{string}
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const DEFAULT_LOGIN_REDIRECT = "/";
 
 /**

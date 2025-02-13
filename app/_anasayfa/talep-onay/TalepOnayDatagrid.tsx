@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react'
-import { IWaitingKisiYetkiEdit, IWaitingRolAtama, IWaitingRolCikarma } from '@/types';
+import type { IWaitingKisiYetkiEditType, IWaitingRolAtamaType, IWaitingRolCikarmaType } from '@/types';
 
-interface Props {
-  waitingRolAtamalar: IWaitingRolAtama[]
-  waitingRolCikarmalar: IWaitingRolCikarma[]
-  waitingKisiYetkiEdit: IWaitingKisiYetkiEdit[]
+interface IProps {
+  waitingRolAtamalar: IWaitingRolAtamaType[]
+  waitingRolCikarmalar: IWaitingRolCikarmaType[]
+  waitingKisiYetkiEdit: IWaitingKisiYetkiEditType[]
 }
 
-export default function TalepOnayPage({ waitingRolAtamalar, waitingRolCikarmalar, waitingKisiYetkiEdit }: Props) {
+export default function TalepOnayPage({ waitingRolAtamalar, waitingRolCikarmalar, waitingKisiYetkiEdit }: IProps) {
 
 
   // const [rolAtamalar, setRolAtamalar] = useState<IWaitingRolAtama[]>(waitingRolAtamalar)

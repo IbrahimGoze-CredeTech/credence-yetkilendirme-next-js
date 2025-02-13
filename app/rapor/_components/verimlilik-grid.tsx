@@ -1,25 +1,25 @@
 import { DataGrid } from "devextreme-react";
 import React from "react";
-import { BarChartComp, BarChartData } from "./bar-chart";
+import { BarChartComp, type IBarChartData } from "./bar-chart";
 
-interface Props {
-  data: BarChartData[];
+interface IProps {
+  data: IBarChartData[];
 }
 
-export default function VerimlilikGrid({ data }: Props) {
+export default function VerimlilikGrid({ data }: IProps) {
   return (
     <>
       <div>
-        <DataGrid dataSource={data}></DataGrid>
+        <DataGrid dataSource={data} />
       </div>
       <div className="mt-4">
         <BarChartComp
-          chartLabel={"Verimlilik Tablosu"}
-          chartDescription="En verimli kişiler (Gelen talepleri ortalama ne kadar sürede yanıtladığını gösterir.)"
-          data={data}
-          quantityValue="averageResponseTime"
-          quantityLabel="Verimlilik Sıralaması"
           barColor="#21ff8c"
+          chartDescription="En verimli kişiler (Gelen talepleri ortalama ne kadar sürede yanıtladığını gösterir.)"
+          chartLabel="Verimlilik Tablosu"
+          data={data}
+          quantityLabel="Verimlilik Sıralaması"
+          quantityValue="averageResponseTime"
         />
       </div>
     </>

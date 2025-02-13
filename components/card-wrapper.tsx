@@ -1,13 +1,13 @@
 import React from 'react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import BackButton from './back-button';
 import { cn } from '@/lib/utils';
+import BackButton from './back-button';
 
 // import Header from './header';
 // import Social from './social';
 // import BackButton from './back-button';
 
-interface CardWrapperProps {
+interface ICardWrapperProps {
   children: React.ReactNode;
   headerLabel: string;
   backButtonLabel: string;
@@ -16,7 +16,7 @@ interface CardWrapperProps {
   className?: string;
 }
 
-export default function CardWrapper({ className, children, headerLabel, backButtonLabel, backButtonHref }: CardWrapperProps) {
+export default function CardWrapper({ className, children, headerLabel, backButtonLabel, backButtonHref }: ICardWrapperProps) {
   return (
     <Card className={cn('w-[800px] shadow-md}', className)}>
       <CardHeader>
@@ -27,7 +27,7 @@ export default function CardWrapper({ className, children, headerLabel, backButt
         {children}
       </CardContent>
       <CardFooter>
-        <BackButton label={backButtonLabel} href={backButtonHref} />
+        <BackButton href={backButtonHref} label={backButtonLabel} />
       </CardFooter>
     </Card>
   )

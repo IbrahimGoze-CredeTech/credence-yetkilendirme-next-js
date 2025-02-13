@@ -1,3 +1,8 @@
+/* eslint-disable no-duplicate-imports */
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState, useTransition } from 'react'
+import { useForm } from 'react-hook-form';
+import type { z } from 'zod';
 import { kisininYetkileri } from '@/actions/kisi-yetki';
 import { yetkiEdit } from '@/actions/yetki-post';
 import CardWrapper from '@/components/card-wrapper';
@@ -5,7 +10,8 @@ import CustomCombobox from '@/components/custom-combobox';
 import { CustomDatePicker } from '@/components/custom-date-picker';
 import FormError from '@/components/form-error';
 import FormSuccess from '@/components/form-success';
-import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
+import type { Option } from '@/components/talep-ekran/multiple-selector';
+import MultipleSelector from '@/components/talep-ekran/multiple-selector';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -14,20 +20,16 @@ import { ToastAction } from '@/components/ui/toast';
 import { useStaticTablesContext } from '@/context';
 import { toast } from '@/hooks/use-toast';
 import { EylemTuruEnum, eylemTuruStringArray } from '@/modals/eylemTuru';
-import { YetkiTalepSchema } from '@/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState, useTransition } from 'react'
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { yetkiTalepSchema } from '@/schemas';
 
-type KisiYetki = { yetkiAdi: string, eylemTuruId: number };
+type KisiYetkiType = { yetkiAdi: string, eylemTuruId: number };
 
 export default function YetkiEditForm() {
   const staticTablesContext = useStaticTablesContext();
   const kisilerOptions: Option[] = staticTablesContext.kisiler.map((kisi) =>
     ({ label: kisi.kisiAdi + " " + kisi.kisiSoyadi, value: kisi.kisiAdi + " " + kisi.kisiSoyadi })) || [];
 
-  const [kisiYetkiler, setKisiYetkiler] = useState<KisiYetki[]>([]);
+  const [kisiYetkiler, setKisiYetkiler] = useState<KisiYetkiType[]>([]);
   const yetkilerOptions: Option[] = kisiYetkiler.map((yetki) =>
     ({ label: yetki.yetkiAdi, value: yetki.yetkiAdi })) || [];
 
@@ -41,15 +43,15 @@ export default function YetkiEditForm() {
   const [isKisiSelected, setIsKisiSelected] = useState(false);
 
 
-  const form = useForm<z.infer<typeof YetkiTalepSchema>>({
-    resolver: zodResolver(YetkiTalepSchema),
+  const form = useForm<z.infer<typeof yetkiTalepSchema>>({
+    resolver: zodResolver(yetkiTalepSchema),
     defaultValues: {
       baslamaTarihi: new Date(),
       bitisTarihi: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
     }
   });
 
-  const onSubmit = (values: z.infer<typeof YetkiTalepSchema>) => {
+  const onSubmit = (values: z.infer<typeof yetkiTalepSchema>) => {
     setError('');
     setSuccess('');
 
@@ -98,31 +100,31 @@ export default function YetkiEditForm() {
   }
 
   return (
-    <CardWrapper headerLabel={'Yetki Değiştirme'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
+    <CardWrapper backButtonHref="/talep-ekran" backButtonLabel="Talepler Sayfasına Geri Don" headerLabel="Yetki Değiştirme">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
+        <form className='flex flex-col items-center justify-center' onSubmit={form.handleSubmit(onSubmit)}>
           <div className='grid grid-cols-2 gap-8'>
 
             {/* Kisi Filed */}
-            <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
+            <FormField control={form.control} name="kisiAdi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Kisi</FormLabel>
-                <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
+                <CustomCombobox Options={kisilerOptions} onValueChange={(value) => { field.onChange(value); onValueChange(value) }} placeholder="Kişi Ara" searchPlaceholder="Kişi Ara..." />
               </FormItem>
             )} />
 
             {/* Yetki Field */}
-            <FormField control={form.control} name={'yetkiAdi'} render={({ field }) => (
+            <FormField control={form.control} name="yetkiAdi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Yetki</FormLabel>
-                <CustomCombobox onValueChange={(value) => { field.onChange(value); onYetkiSelected(value) }} Options={yetkilerOptions} placeholder={'Yetki Ara'} searchPlaceholder={'Yetki Ara...'} disabled={isPending || !isKisiSelected} />
+                <CustomCombobox Options={yetkilerOptions} disabled={isPending || !isKisiSelected} onValueChange={(value) => { field.onChange(value); onYetkiSelected(value) }} placeholder="Yetki Ara" searchPlaceholder="Yetki Ara..." />
               </FormItem>
             )} />
 
             <FormField control={form.control} name='eylemTuru' render={({ field }) => (
               <FormItem>
                 <FormLabel>Eylem Türü</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending || !isKisiSelected} value={field.value}>
+                <Select defaultValue={field.value} disabled={isPending || !isKisiSelected} onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Eylem Türü Seç" />
@@ -142,29 +144,29 @@ export default function YetkiEditForm() {
             )} />
 
             {/* Yetki baslama Tarihi */}
-            <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
+            <FormField control={form.control} name="baslamaTarihi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Yetki Başlangıç Tarihi</FormLabel>
                 <CustomDatePicker
-                  selectedDate={field.value}
-                  onDateChange={field.onChange}
-                  isOpen={isBaslangicOpen}
-                  setIsOpen={setIsBaslangicOpen}
                   isDisabled={isPending || !isKisiSelected}
+                  isOpen={isBaslangicOpen}
+                  onDateChange={field.onChange}
+                  selectedDate={field.value}
+                  setIsOpen={setIsBaslangicOpen}
                 />
               </FormItem>
             )} />
 
             {/* Yetki Bitis Tarihi */}
-            <FormField control={form.control} name={'bitisTarihi'} render={({ field }) => (
+            <FormField control={form.control} name="bitisTarihi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Yetki Bitiş Tarihi</FormLabel>
                 <CustomDatePicker
-                  selectedDate={field.value}
-                  onDateChange={field.onChange}
-                  isOpen={isBitisOpen}
-                  setIsOpen={setIsBitisOpen}
                   isDisabled={isPending || !isKisiSelected}
+                  isOpen={isBitisOpen}
+                  onDateChange={field.onChange}
+                  selectedDate={field.value}
+                  setIsOpen={setIsBitisOpen}
                 />
 
               </FormItem>
@@ -181,28 +183,28 @@ export default function YetkiEditForm() {
                 <FormControl>
                   <Switch
                     checked={field.value}
-                    onCheckedChange={field.onChange}
                     disabled={isPending || !isKisiSelected}
+                    onCheckedChange={field.onChange}
                   />
                 </FormControl>
               </FormItem>
             )}
             />
 
-            <FormField control={form.control} name={'ekstraImza'} render={({ }) => (
+            <FormField control={form.control} name="ekstraImza" render={({ }) => (
               <FormItem>
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
-                  <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
+                  <MultipleSelector defaultOptions={kisilerOptions} disabled={isPending || !isKisiSelected} onChange={(e) => {
                     form.setValue('ekstraImza', e);
-                  }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
+                  }} placeholder="Imza atacak kişileri seçin" />
                 ) : (<span>Yükleniyor...</span>)}
               </FormItem>
             )} />
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Yetki Değiştirme Talebi Olustur</Button>
+          <Button className='w-[85%] mt-4' disabled={isPending} type='submit'>Yetki Değiştirme Talebi Olustur</Button>
         </form>
       </Form>
     </CardWrapper >

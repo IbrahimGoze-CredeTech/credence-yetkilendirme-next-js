@@ -1,25 +1,25 @@
-import React from 'react'
+import type { KisiYetki } from '@prisma/client';
 import DataGrid, { FilterRow, Pager, Paging, Scrolling } from 'devextreme-react/data-grid';
+import React from 'react'
 import { ekstraYetkilerDataGridConfig } from '@/configs/ekstra-yetkiler-data-grid-config';
-import { KisiYetki } from '@prisma/client';
 
-interface Props {
+interface IProps {
   ekstraYetkiler: KisiYetki[] | undefined;
 }
 
-export default function EkstraYetkilerTab({ ekstraYetkiler }: Props) {
+export default function EkstraYetkilerTab({ ekstraYetkiler }: IProps) {
   return (
     <DataGrid
       dataSource={ekstraYetkiler} // Nested data from ekstraYetkiler
       showBorders={true}
       {...ekstraYetkilerDataGridConfig}
     ><FilterRow visible={true} />
-      <Scrolling rowRenderingMode='virtual'></Scrolling>
+      <Scrolling rowRenderingMode='virtual' />
       <Paging defaultPageSize={10} />
       <Pager
+        allowedPageSizes="auto"
+        displayMode="compact"
         visible={true}
-        allowedPageSizes={"auto"}
-        displayMode={"compact"}
       />
     </DataGrid>
   )

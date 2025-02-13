@@ -1,21 +1,21 @@
+import type { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
+import DataGrid, {
+  Button,
+  Column,
+  Editing,
+  Pager,
+  Paging,
+  SearchPanel,
+} from "devextreme-react/data-grid";
+import React, { useState } from "react";
 import { PreviousKisiSayfaEdit } from "@/actions/previous-demands";
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { WaitingKisiSayfaEdit } from "@/actions/waiting-demands";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/hooks/use-toast";
-import { IPreviousKisiSayfaEdit, IWaitingKisiSayfaEdit } from "@/types";
-import DataGrid, {
-  Button,
-  Column,
-  Editing,
-  SearchPanel,
-  Pager,
-  Paging,
-} from "devextreme-react/data-grid";
-import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import React, { useState } from "react";
+import type { IPreviousKisiSayfaEdit, IWaitingKisiSayfaEdit } from "@/types";
 
-interface Props {
+interface IProps {
   data: IWaitingKisiSayfaEdit[];
   previousKisiSayfaEdit: IPreviousKisiSayfaEdit[];
 }
@@ -23,7 +23,7 @@ interface Props {
 export default function KisiSayfaEditOnay({
   data,
   previousKisiSayfaEdit,
-}: Props) {
+}: IProps) {
   const [gridData, setGridData] = useState<IWaitingKisiSayfaEdit[]>(data);
   const [previousGrid, setPreviousGrid] = useState<IPreviousKisiSayfaEdit[]>(
     previousKisiSayfaEdit
@@ -85,27 +85,27 @@ export default function KisiSayfaEditOnay({
           dataSource={gridData}
           noDataText="Şu anda bekleyen talep bulunmamaktadır."
         >
-          <SearchPanel visible={true} placeholder="Arama Yapın..." />
+          <SearchPanel placeholder="Arama Yapın..." visible={true} />
           <Editing mode="row" useIcons={true} />
           {/* <Column dataField="ad" caption="Ad" /> */}
           {/* <Column dataField="soyad" caption="Soyad" /> */}
-          <Column dataField="KisiAdi" caption="Kişi Adı" />
-          <Column dataField="SayfaRoute" caption="Sayfa" />
-          <Column dataField="IsPermitted" caption="Izin" />
-          <Column dataField="BaslangicTarihi" caption="Başlama Tarihi" />
-          <Column dataField="BitisTarihi" caption="Bitiş Tarihi" />
+          <Column caption="Kişi Adı" dataField="KisiAdi" />
+          <Column caption="Sayfa" dataField="SayfaRoute" />
+          <Column caption="Izin" dataField="IsPermitted" />
+          <Column caption="Başlama Tarihi" dataField="BaslangicTarihi" />
+          <Column caption="Bitiş Tarihi" dataField="BitisTarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"
-              visible={true}
               onClick={(e) => onClick(true, e)}
               text="Onay"
+              visible={true}
             />
             <Button
               hint="Ret"
-              visible={true}
               onClick={(e) => onClick(false, e)}
               text="Ret"
+              visible={true}
             />
           </Column>
         </DataGrid>
@@ -118,9 +118,9 @@ export default function KisiSayfaEditOnay({
         >
           <Paging defaultPageSize={5} />
           <Pager
+            allowedPageSizes="auto"
+            displayMode="compact"
             visible={true}
-            allowedPageSizes={"auto"}
-            displayMode={"compact"}
           />
         </DataGrid>
       </div>

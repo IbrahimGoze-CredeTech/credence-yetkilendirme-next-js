@@ -1,5 +1,5 @@
-import { GetKisiAccessibleRoutes, GetKisiYetkisView, GetRoleAccessibleRoutes, GetRoleYetkisView } from '@/actions/views'
 import React from 'react'
+import { GetKisiAccessibleRoutes, GetKisiYetkisView, GetRoleAccessibleRoutes, GetRoleYetkisView } from '@/actions/views'
 import ViewsClient from './views-client';
 
 async function ViewsData() {
@@ -11,7 +11,7 @@ async function ViewsData() {
   ]);
 
   return (
-    <ViewsClient kisiAccessibleRoutes={kisiAccessibleRoutes} roleAccessibleRoutes={roleAccessibleRoutes} roleYetkiView={rolYetkiView} kisiYetkiView={kisiYetkiView} />
+    <ViewsClient kisiAccessibleRoutes={kisiAccessibleRoutes} kisiYetkiView={kisiYetkiView} roleAccessibleRoutes={roleAccessibleRoutes} roleYetkiView={rolYetkiView} />
   )
 }
 

@@ -1,10 +1,10 @@
-import { YetkiRolOld } from "../types";
 import jwt from "jsonwebtoken";
+import type { YetkiRolOldType } from "../types";
 
 const isLocalHost: boolean = false;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const isYetkiArray = (data: any): data is YetkiRolOld[] => {
+export const IsYetkiArray = (data: any): data is YetkiRolOldType[] => {
   return (
     Array.isArray(data) &&
     data.every(
@@ -16,7 +16,7 @@ export const isYetkiArray = (data: any): data is YetkiRolOld[] => {
   );
 };
 
-export const createToken = (userId: string) => {
+export const CreateToken = (userId: string) => {
   const secret = process.env.AUTH_SECRET;
 
   if (!secret) {
@@ -33,7 +33,7 @@ export const createToken = (userId: string) => {
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-export const fetcherGet = async (url: string, token: string | undefined) => {
+export const FetcherGet = async (url: string, token: string | undefined) => {
   if (!token) {
     throw new Error("Token is not defined");
   }
@@ -64,7 +64,7 @@ export const fetcherGet = async (url: string, token: string | undefined) => {
  * @param {string} jsonBody - The JSON string to be sent as the body of the request.
  * @returns {Promise<Response>} The response from the server.
  */
-export const fetcherPost = async (
+export const FetcherPost = async (
   url: string,
   token: string | undefined,
   jsonBody: string
@@ -152,7 +152,7 @@ export const fetcherPost = async (
  * @param {string} jsonBody - The JSON string to be sent as the body of the request.
  * @returns {Promise<Response>} The response from the server.
  */
-export const fetcherPUT = async (
+export const FetcherPUT = async (
   url: string,
   token: string | undefined,
   jsonBody: string
@@ -191,22 +191,22 @@ export const fetcherPUT = async (
   return response.json();
 };
 
-//#region Data Formatting
-export interface DataItem {
+// #region Data Formatting
+export interface IDataItem {
   date: string;
   [key: string]: unknown;
 }
 // Function to format the date string
-export const formatDate = (dateString: string): string => {
+export const FormatDate = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleDateString("tr-TR");
 };
 
 // Function to format a list of data
-export const formatDataList = (dataList: DataItem[]) => {
+export const FormatDataList = (dataList: IDataItem[]) => {
   return dataList.map((data) => ({
     ...data,
-    date: formatDate(data.date),
+    date: FormatDate(data.date),
   }));
 };
-//#endregion
+// #endregion

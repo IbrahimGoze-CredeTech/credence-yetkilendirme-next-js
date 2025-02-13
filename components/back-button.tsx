@@ -1,17 +1,17 @@
 "use client"
 
+import Link from 'next/link';
 import React from 'react'
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 
-interface BackButtonProps {
+interface IBackButtonProps {
   href: string;
   label: string;
 }
 
-export default function BackButton({ href, label }: BackButtonProps) {
+export default function BackButton({ href, label }: IBackButtonProps) {
   return (
-    <Button variant={'link'} className='font-normal w-full' size={'sm'} asChild>
+    <Button asChild className='font-normal w-full' size="sm" variant="link">
       <Link href={href}>{label}</Link>
     </Button>
   )

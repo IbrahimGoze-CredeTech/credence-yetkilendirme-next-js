@@ -1,6 +1,6 @@
-import { IDataGridOptions } from "devextreme-react/data-grid";
-import { yetkiler } from "../modals/yetkiler";
+import type { IDataGridOptions } from "devextreme-react/data-grid";
 import { roles } from "@/modals/roller";
+import { yetkiler } from "../modals/yetkiler";
 
 export const rolyetkiAtamaConfig: IDataGridOptions = {
   id: "rolyetkiatama",

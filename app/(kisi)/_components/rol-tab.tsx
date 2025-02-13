@@ -1,15 +1,15 @@
-import { rolDataGridConfig } from '@/configs/rol-data-grid-config';
-import { Rol } from '@prisma/client';
+import type { Rol } from '@prisma/client';
 import DataGrid, { Pager, Paging, Scrolling } from 'devextreme-react/data-grid';
 import Link from 'next/link';
 import React from 'react'
+import { rolDataGridConfig } from '@/configs/rol-data-grid-config';
 
-interface Props {
+interface IProps {
   roller: Rol[] | undefined
 
 }
 
-export default function RolTab({ roller }: Props) {
+export default function RolTab({ roller }: IProps) {
   return (
     <div>
 
@@ -18,19 +18,19 @@ export default function RolTab({ roller }: Props) {
         showBorders={true}
         {...rolDataGridConfig}
       >
-        <Scrolling rowRenderingMode='virtual'></Scrolling>
+        <Scrolling rowRenderingMode='virtual' />
         <Paging defaultPageSize={10} />
         <Pager
+          allowedPageSizes="auto"
+          displayMode="compact"
           visible={true}
-          allowedPageSizes={"auto"}
-          displayMode={"compact"}
         />
       </DataGrid>
       <div className='space-x-8'>
-        <Link href='/talep-yarat'
-          className='bg-azure-radiance-500 text-white p-4 rounded-md hover:bg-azure-radiance-400 active:bg-azure-radiance-600'>Rol Atama Talebi Oluştur</Link>
-        <Link href='/talep-yarat'
-          className='bg-azure-radiance-500 text-white p-4 rounded-md hover:bg-azure-radiance-400 active:bg-azure-radiance-600'>Rol Çıkarma Talebi Oluştur</Link>
+        <Link className='bg-azure-radiance-500 text-white p-4 rounded-md hover:bg-azure-radiance-400 active:bg-azure-radiance-600'
+          href='/talep-yarat'>Rol Atama Talebi Oluştur</Link>
+        <Link className='bg-azure-radiance-500 text-white p-4 rounded-md hover:bg-azure-radiance-400 active:bg-azure-radiance-600'
+          href='/talep-yarat'>Rol Çıkarma Talebi Oluştur</Link>
       </div>
     </div>
 

@@ -2,20 +2,20 @@
 
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
-import { PieChartComp } from "./_components/pie-chart";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { IImzaOraniMatris } from "@/types";
 import { AreaChartComp } from "./_components/area-chart";
-import RiskGrid from "./_components/risk-grid";
 import ImzaAtananGrid from "./_components/imza-atanan-grid";
+import ImzaAtmaGrid from "./_components/imza-atma-grid";
 import ImzaOraniGrid from "./_components/imza-orani-grid";
+import { PieChartComp } from "./_components/pie-chart";
+import RiskGrid from "./_components/risk-grid";
 import RolDagilimiPieChart from "./_components/rol-dagilimi-piechart";
 import TalepYaratmaGrid from "./_components/talep-yaratma-grid";
-import ImzaAtmaGrid from "./_components/imza-atma-grid";
-import { IImzaOraniMatris } from "@/types";
 import VerimlilikGrid from "./_components/verimlilik-grid";
 
-interface Props {
+interface IProps {
   talepYaratma: [];
   imzaAtma: [];
   imzaAtanan: [];
@@ -39,38 +39,38 @@ export default function MatrisClient({
   rolDagilimi,
   imzaOrani,
   kisiVerimlilik,
-}: Props) {
+}: IProps) {
   return (
     <Tabs
-      defaultValue="gunluk"
       className="w-[95vw] flex flex-col items-center justify-center p-4"
+      defaultValue="gunluk"
     >
       <TabsList className="bg-gray-200 p-2 py-6">
-        <TabsTrigger value="talep-yaratma" className="text-xl">
+        <TabsTrigger className="text-xl" value="talep-yaratma">
           Talep Yaratma
         </TabsTrigger>
-        <TabsTrigger value="imza-atma" className="text-xl">
+        <TabsTrigger className="text-xl" value="imza-atma">
           İmza Atma
         </TabsTrigger>
-        <TabsTrigger value="imza-atanan" className="text-xl">
+        <TabsTrigger className="text-xl" value="imza-atanan">
           İmza Atanan
         </TabsTrigger>
-        <TabsTrigger value="imza-atma-oranı" className="text-xl">
+        <TabsTrigger className="text-xl" value="imza-atma-oranı">
           İmza Oranı
         </TabsTrigger>
-        <TabsTrigger value="risk" className="text-xl">
+        <TabsTrigger className="text-xl" value="risk">
           Risk
         </TabsTrigger>
-        <TabsTrigger value="gunluk" className="text-xl">
+        <TabsTrigger className="text-xl" value="gunluk">
           Günlük
         </TabsTrigger>
-        <TabsTrigger value="talep-tipleri" className="text-xl">
+        <TabsTrigger className="text-xl" value="talep-tipleri">
           Talep Tipleri
         </TabsTrigger>
-        <TabsTrigger value="rol-dagilimi" className="text-xl">
+        <TabsTrigger className="text-xl" value="rol-dagilimi">
           Rol Dağılımı
         </TabsTrigger>
-        <TabsTrigger value="kisi-verimlilik" className="text-xl">
+        <TabsTrigger className="text-xl" value="kisi-verimlilik">
           Kişi Verimlilik
         </TabsTrigger>
       </TabsList>
@@ -90,18 +90,18 @@ export default function MatrisClient({
       <TabsContent value="risk">
         <RiskGrid data={kisiRisk} />
       </TabsContent>
-      <TabsContent value="gunluk" className="flex gap-4">
+      <TabsContent className="flex gap-4" value="gunluk">
         <AreaChartComp
-          data={talepYaratmaGunluk}
           chartLabel="Günlük Talep Yaratma"
-          quantityValue="talepSayisi"
+          data={talepYaratmaGunluk}
           quantityLabel="Talep Sayısı"
+          quantityValue="talepSayisi"
         />
         <AreaChartComp
-          data={imzaAtmaGunluk}
           chartLabel="Günlük İmza Atma"
-          quantityValue="imzaSayisi"
+          data={imzaAtmaGunluk}
           quantityLabel="İmza Sayısı"
+          quantityValue="imzaSayisi"
         />
       </TabsContent>
       <TabsContent value="talep-tipleri">

@@ -1,10 +1,12 @@
+/* eslint-disable */
+
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 import authConfig from "./auth.config";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import { getUserById, getUserPages, getUserRole } from "./data/user";
 import { db } from "./lib/db";
-import { createToken } from "./utils";
+import { CreateToken } from "./utils";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -35,7 +37,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         // session.role = typeof token.role === "string" ? token.role : "";
         session.user.role = typeof token.role === "string" ? token.role : "";
       }
-      session.token = createToken(session.user.id);
+      session.token = CreateToken(session.user.id);
 
       return {
         ...session,

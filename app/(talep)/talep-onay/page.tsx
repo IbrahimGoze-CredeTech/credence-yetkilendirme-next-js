@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
-import { TalepOnayClient } from './talep-onay-client';
 import { PreviousKisiSayfaAtama, PreviousKisiSayfaCikarma, PreviousKisiSayfaEdit, PreviousKisiYetkiEdit, PreviousRolAtama, PreviousRolCikarma, PreviousRolSayfaAtama, PreviousRolSayfaCikarma, PreviousRolYetkiEdit } from '@/actions/previous-demands';
-import { WaitingRolAtamalar, WaitingRolCikarmalar, WaitingKisiYetkiEdit, WaitingKisiSayfaAtama, WaitingKisiSayfaEdit, WaitingKisiSayfaCikarma, WaitingRolSayfaAtama, WaitingRolSayfaCikarma, WaitingRolYetkiEdit } from '@/actions/waiting-demands';
+import { WaitingKisiSayfaAtama, WaitingKisiSayfaCikarma, WaitingKisiSayfaEdit, WaitingKisiYetkiEdit, WaitingRolAtamalar, WaitingRolCikarmalar, WaitingRolSayfaAtama, WaitingRolSayfaCikarma, WaitingRolYetkiEdit } from '@/actions/waiting-demands';
+import { TalepOnayClient } from './talep-onay-client';
 
 async function TalepOnayData() {
   const [
@@ -46,24 +46,24 @@ async function TalepOnayData() {
 
   return (
     <TalepOnayClient
-      waitingRolAtamalar={waitingRolAtamalar}
-      waitingRolCikarmalar={waitingRolCikarmalar}
-      waitingKisiYetkiEdit={waitingKisiYetkiEdit}
-      waitingKisiSayfaAtama={waitingKisiSayfaAtama}
-      waitingKisiSayfaCikarma={waitingKisiSayfaCikarma}
-      waitingKisiSayfaEdit={waitingKisiSayfaEdit}
-      waitingRolSayfaAtama={waitingRolSayfaAtama}
-      waitingRolSayfaCikarma={waitingRolSayfaCikarma}
-      waitingRolYetkiEdit={waitingRolYetkiEdit}
-      previousRolAtama={previousRolAtama}
-      previousRolCikarma={previousRolCikarma}
-      previousKisiYetkiEdit={previousKisiYetkiEdit}
       previousKisiSayfaAtama={previousKisiSayfaAtama}
       previousKisiSayfaCikarma={previousKisiSayfaCikarma}
       previousKisiSayfaEdit={previousKisiSayfaEdit}
+      previousKisiYetkiEdit={previousKisiYetkiEdit}
+      previousRolAtama={previousRolAtama}
+      previousRolCikarma={previousRolCikarma}
       previousRolSayfaAtama={previousRolSayfaAtama}
       previousRolSayfaCikarma={previousRolSayfaCikarma}
-      previousRolYetkiEdit={previousRolYetkiEdit} />
+      previousRolYetkiEdit={previousRolYetkiEdit}
+      waitingKisiSayfaAtama={waitingKisiSayfaAtama}
+      waitingKisiSayfaCikarma={waitingKisiSayfaCikarma}
+      waitingKisiSayfaEdit={waitingKisiSayfaEdit}
+      waitingKisiYetkiEdit={waitingKisiYetkiEdit}
+      waitingRolAtamalar={waitingRolAtamalar}
+      waitingRolCikarmalar={waitingRolCikarmalar}
+      waitingRolSayfaAtama={waitingRolSayfaAtama}
+      waitingRolSayfaCikarma={waitingRolSayfaCikarma}
+      waitingRolYetkiEdit={waitingRolYetkiEdit} />
   )
 }
 

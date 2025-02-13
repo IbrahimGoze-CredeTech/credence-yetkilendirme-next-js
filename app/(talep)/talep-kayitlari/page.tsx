@@ -8,7 +8,7 @@ export default function TalepKayitlariPage() {
   return (
     <div className='flex flex-col items-center justify-center w-full p-4 space-y-8'>
       <h1 className='font-bold text-4xl'>Talep Kayıtları</h1>
-      <Tabs defaultValue="onaylanan-talepler" className=" flex flex-col items-center justify-center p-2" >
+      <Tabs className=" flex flex-col items-center justify-center p-2" defaultValue="onaylanan-talepler" >
         <TabsList className='bg-gray-200 p-2 py-6'>
           <TabsTrigger className='text-xl' value="onaylanan-talepler">Onaylanan Talepler</TabsTrigger>
           <TabsTrigger className='text-xl' value="reddedilen-talepler">Reddedilen Talepler</TabsTrigger>

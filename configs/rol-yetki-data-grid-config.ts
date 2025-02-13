@@ -1,6 +1,6 @@
-import { IDataGridOptions } from "devextreme-react/data-grid";
-import { yetkiler } from "../modals/yetkiler";
+import type { IDataGridOptions } from "devextreme-react/data-grid";
 import { EylemTuruEnum } from "../modals/eylemTuru";
+import { yetkiler } from "../modals/yetkiler";
 
 // Convert enum to an array of objects for lookup
 const eylemTuruLookup = Object.keys(EylemTuruEnum)
@@ -22,7 +22,7 @@ export const rolYetkiDataGridConfig: IDataGridOptions = {
     {
       dataField: "yetkiAdi",
       caption: "Yetki",
-      //allowEditing: true,
+      // allowEditing: true,
       lookup: {
         dataSource: yetkiler,
         valueExpr: "yetkiAdi",

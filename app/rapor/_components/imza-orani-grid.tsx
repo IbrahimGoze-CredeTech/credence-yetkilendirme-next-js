@@ -1,28 +1,34 @@
 import { DataGrid } from "devextreme-react";
 import React from "react";
+import type { IImzaOraniMatris } from "@/types";
 import { MultipleBarChartComp } from "./bar-chart-multiple";
-import { IImzaOraniMatris } from "@/types";
 
-interface Props {
-  // data: MultipleBarChartData[];
+interface IProps {
   data: IImzaOraniMatris[];
 }
 
-export default function ImzaOraniGrid({ data }: Props) {
+export default function ImzaOraniGrid({ data }: IProps) {
+  const chartData = data.map(item => ({
+    Ad: item.Ad,
+    Soyad: item.Soyad,
+    ImzaAtma: item.ImzaAtma,
+    ImzaAtanma: item.ImzaAtanma,
+  }));
+
   return (
     <>
       <div>
-        <DataGrid dataSource={data}></DataGrid>
+        <DataGrid dataSource={data} />
       </div>
       <div className="mt-4">
         <MultipleBarChartComp
-          chartLabel={"İmza Atma Oranı"}
           chartDescription="Gelen taleplerin kaçına imza atıldığını gösterir. "
-          data={data}
-          firstQuantityValue="ImzaAtanma"
+          chartLabel="İmza Atma Oranı"
+          data={chartData}
           firstQuantityLabel="Atanan Imza Sayısı"
-          secondQuantityValue="ImzaAtma"
+          firstQuantityValue="ImzaAtanma"
           secondQuantityLabel="Atılan İmza Sayısı"
+          secondQuantityValue="ImzaAtma"
         />
       </div>
     </>

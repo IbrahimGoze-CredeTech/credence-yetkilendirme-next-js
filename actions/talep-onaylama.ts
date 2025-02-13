@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { fetcherPUT } from "@/utils";
+import { FetcherPUT } from "@/utils";
 
 export async function talepOnayla(
   onaylandi: boolean,
@@ -10,7 +10,7 @@ export async function talepOnayla(
   const session = await auth();
 
   if (onaylandi) {
-    const response = await fetcherPUT(
+    const response = await FetcherPUT(
       "/Talep/onayla",
       session?.token,
       JSON.stringify({ talepId: talepId })
@@ -20,7 +20,7 @@ export async function talepOnayla(
     }
     return false;
   } else {
-    const response = await fetcherPUT(
+    const response = await FetcherPUT(
       "/Talep/reddet",
       session?.token,
       JSON.stringify({ talepId: talepId })

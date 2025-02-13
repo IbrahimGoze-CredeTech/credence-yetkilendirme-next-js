@@ -1,20 +1,20 @@
 "use client";
-import { TalepKayit } from "@/types";
-import { fetcherGet } from "@/utils";
-import { useSession } from "next-auth/react";
-import DataGrid, { Column, Pager, Paging } from "devextreme-react/data-grid";
-import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import DataGrid, { Column, Pager, Paging } from "devextreme-react/data-grid";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import type { ITalepKayit } from "@/types";
+import { FetcherGet } from "@/utils";
 
 export default function YaratilanTaleplerGrid() {
   const session = useSession();
-  const [onaylananTalepler, setOnaylananTalepler] = useState<TalepKayit[]>([]);
+  const [onaylananTalepler, setOnaylananTalepler] = useState<ITalepKayit[]>([]);
 
   useEffect(() => {
     // fetch data
     const fetchData = async () => {
       try {
-        const response = await fetcherGet(
+        const response = await FetcherGet(
           "/Talep/kisi-yaratilan-talepler",
           session.data?.token
         );
@@ -31,34 +31,34 @@ export default function YaratilanTaleplerGrid() {
       noDataText="Şu anda yaratılan talep kaydı bulunmamaktadır."
     >
       <Paging defaultPageSize={10} />
-      <Pager visible={true} allowedPageSizes={"auto"} displayMode={"compact"} />
+      <Pager allowedPageSizes="auto" displayMode="compact" visible={true} />
       <Column
-        dataField="talep_Olusturulma_Tarihi"
+        calculateCellValue={(data) =>
+          dayjs(data.talep_Olusturulma_Tarihi).format("DD-MM-YYYY - HH:mm")
+        }
         caption="Oluşturulma Tarihi"
+        dataField="talep_Olusturulma_Tarihi"
         dataType="date"
+      />
+      <Column
         calculateCellValue={(data) =>
           dayjs(data.talep_Olusturulma_Tarihi).format("DD-MM-YYYY - HH:mm")
         }
-      />
-      <Column
-        dataField="talep_Durum_Tarihi"
         caption="Durum Tarihi"
+        dataField="talep_Durum_Tarihi"
         dataType="date"
-        calculateCellValue={(data) =>
-          dayjs(data.talep_Olusturulma_Tarihi).format("DD-MM-YYYY - HH:mm")
-        }
       />
-      <Column dataField="talepEdenAd" caption="Talep Eden Ad" />
-      <Column dataField="talepEdenSoyad" caption="Talep Eden Soyad" />
+      <Column caption="Talep Eden Ad" dataField="talepEdenAd" />
+      <Column caption="Talep Eden Soyad" dataField="talepEdenSoyad" />
       <Column
-        dataField="imza_Durum_Tarih"
-        caption="İmza Durum Tarih"
-        dataType="date"
         calculateCellValue={(data) =>
           dayjs(data.talep_Olusturulma_Tarihi).format("DD-MM-YYYY - HH:mm")
         }
+        caption="İmza Durum Tarih"
+        dataField="imza_Durum_Tarih"
+        dataType="date"
       />
-      <Column dataField="talepTipi" caption="Talep Tipi" />
+      <Column caption="Talep Tipi" dataField="talepTipi" />
     </DataGrid>
   );
 }

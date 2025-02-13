@@ -8,8 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+// import type {
+//   ChartConfig} from "@/components/ui/chart";
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -51,18 +53,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type ChartKeys = keyof typeof chartConfig;
+type ChartKeysType = keyof typeof chartConfig;
 
-interface DataItem {
-  talepTipi: ChartKeys;
+interface IDataItem {
+  talepTipi: ChartKeysType;
   talepCount: number;
 }
 
-interface Props {
-  data: DataItem[];
+interface IProps {
+  data: IDataItem[];
 }
 
-export function PieChartComp({ data }: Props) {
+export function PieChartComp({ data }: IProps) {
 
   return (
     <Card className="flex flex-col p-4">
@@ -74,26 +76,26 @@ export function PieChartComp({ data }: Props) {
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
-          config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
+          config={chartConfig}
         >
           <PieChart>
             <ChartTooltip
-              cursor={false}
               content={<ChartTooltipContent hideLabel />}
+              cursor={false}
             />
             <Pie
               data={data}
               dataKey="talepCount"
-              nameKey="talepTipi"
               innerRadius={60}
+              nameKey="talepTipi"
               outerRadius={80}
               paddingAngle={3}
             >
               {data.map((entry, index) => (
                 <Cell
-                  key={`cell-${index}`}
                   fill={chartConfig[entry.talepTipi]?.color}
+                  key={`cell-${index}`}
                 />
               ))}
             </Pie>
@@ -101,13 +103,13 @@ export function PieChartComp({ data }: Props) {
         </ChartContainer>
         <div className="grid grid-cols-3">
           {Object.keys(chartConfig).map((key) => (
-            <div key={key} className="flex  items-center space-x-2">
+            <div className="flex  items-center space-x-2" key={key}>
               <span
                 className="w-4 h-4 rounded"
-                style={{ backgroundColor: chartConfig[key as ChartKeys].color }}
-              ></span>
+                style={{ backgroundColor: chartConfig[key as ChartKeysType].color }}
+              />
               <span className="text-sm font-medium">
-                {chartConfig[key as ChartKeys].label}
+                {chartConfig[key as ChartKeysType].label}
               </span>
             </div>
           ))}

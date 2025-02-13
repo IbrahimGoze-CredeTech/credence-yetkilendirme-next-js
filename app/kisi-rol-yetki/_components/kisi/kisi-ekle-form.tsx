@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState, useTransition } from "react";
+import { type SubmitErrorHandler, useForm } from "react-hook-form";
+import type { z } from "zod";
+import { kisiYaratma } from "@/actions/kisi-rol-yetki-sayfa-actions";
 import CardWrapper from "@/components/card-wrapper";
 import FormError from "@/components/form-error";
 import FormSuccess from "@/components/form-success";
@@ -11,15 +16,10 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import React, { useState, useTransition } from "react";
-import { SubmitErrorHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { KisiSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { kisiYaratma } from "@/actions/kisi-rol-yetki-sayfa-actions";
+import { toast } from "@/hooks/use-toast";
+import { kisiSchema } from "@/schemas";
 
 export default function KisiEkleForm() {
   const [isPending, startTransition] = useTransition();
@@ -27,8 +27,8 @@ export default function KisiEkleForm() {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
-  const form = useForm<z.infer<typeof KisiSchema>>({
-    resolver: zodResolver(KisiSchema),
+  const form = useForm<z.infer<typeof kisiSchema>>({
+    resolver: zodResolver(kisiSchema),
     defaultValues: {
       kisiAdi: "",
       kisiSoyadi: "",
@@ -37,7 +37,7 @@ export default function KisiEkleForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof KisiSchema>) => {
+  const onSubmit = (values: z.infer<typeof kisiSchema>) => {
     setError("");
     setSuccess("");
 
@@ -71,7 +71,7 @@ export default function KisiEkleForm() {
     });
   };
 
-  const onFormError: SubmitErrorHandler<z.infer<typeof KisiSchema>> = (e) => {
+  const onFormError: SubmitErrorHandler<z.infer<typeof kisiSchema>> = (e) => {
     console.error(e);
     setError(
       e.kullaniciAdi?.message ||
@@ -83,20 +83,20 @@ export default function KisiEkleForm() {
 
   return (
     <CardWrapper
+      backButtonHref="/"
+      backButtonLabel="Ana Sayfaya Geri Don"
       className="!w-[500px]"
-      headerLabel={"Kişi Yaratma"}
-      backButtonLabel={"Ana Sayfaya Geri Don"}
-      backButtonHref={"/"}
+      headerLabel="Kişi Yaratma"
     >
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit, onFormError)}
           className="flex flex-col items-center justify-center"
+          onSubmit={form.handleSubmit(onSubmit, onFormError)}
         >
           <div className="grid grid-cols-2 gap-8">
             <FormField
               control={form.control}
-              name={"kisiAdi"}
+              name="kisiAdi"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Kişi Adı</FormLabel>
@@ -108,7 +108,7 @@ export default function KisiEkleForm() {
             />
             <FormField
               control={form.control}
-              name={"kisiSoyadi"}
+              name="kisiSoyadi"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Kişi Soyadı</FormLabel>
@@ -120,7 +120,7 @@ export default function KisiEkleForm() {
             />
             <FormField
               control={form.control}
-              name={"kullaniciAdi"}
+              name="kullaniciAdi"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Kullanıcı Adı</FormLabel>
@@ -132,7 +132,7 @@ export default function KisiEkleForm() {
             />
             <FormField
               control={form.control}
-              name={"kisiSifre"}
+              name="kisiSifre"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Şifre</FormLabel>
@@ -145,7 +145,7 @@ export default function KisiEkleForm() {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type="submit" className="w-[85%] mt-4" disabled={isPending}>
+          <Button className="w-[85%] mt-4" disabled={isPending} type="submit">
             Kişi Yarat
           </Button>
         </form>

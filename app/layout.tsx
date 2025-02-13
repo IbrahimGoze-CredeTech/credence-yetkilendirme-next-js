@@ -1,16 +1,12 @@
-// src/app/layout.tsx
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import "./globals.css";
-import { ModalContextWrapper, StaticTablesContextWrapper } from "../context";
 import "devextreme/dist/css/dx.light.css";
-import { ReactNode } from "react";
-// import NavBar from "@/components/NavBar";
 import { SessionProvider } from "next-auth/react";
+import type { ReactNode } from "react";
 import { auth } from "@/auth";
+import SidebarWrapper from "@/components/sidebar-wrapper";
 import { Toaster } from "@/components/ui/toaster";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-// import NavBar from "@/components/NavBar";
+import { ModalContextWrapper, StaticTablesContextWrapper } from "../context";
 
 export const metadata: Metadata = {
   title: "Credence Yetkilendirme Paneli", // Uygulamanız için uygun bir başlık belirleyin
@@ -22,28 +18,20 @@ export default async function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  // const userName = "Alper";
-  // const userSurname = "Özpınar";
-  // const userRole = "Admin";
   const session = await auth();
 
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className="3xl:overflow-x-clip bg-gray-100 dx-device-desktop dx-device-generic">
+        <body className="3xl:overflow-x-clip bg-gray-100 ">
           <ModalContextWrapper>
             <StaticTablesContextWrapper>
-              <SidebarProvider>
-                <AppSidebar />
+              <SidebarWrapper >
                 <main>
-                  {/* <div className="w-full">
-                    <NavBar />
-                  </div> */}
-                  <SidebarTrigger />
                   {children}
                 </main>
                 <Toaster />
-              </SidebarProvider>
+              </SidebarWrapper>
             </StaticTablesContextWrapper>
           </ModalContextWrapper>
         </body>

@@ -1,4 +1,4 @@
-import { IDataGridOptions } from "devextreme-react/data-grid";
+import type { IDataGridOptions } from "devextreme-react/data-grid";
 // import { roles } from "../modals/roller";
 
 export const summaryDataGridConfig: IDataGridOptions = {

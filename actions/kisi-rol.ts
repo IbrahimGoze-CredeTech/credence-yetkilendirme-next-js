@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 
 export async function kisininRolleri(kisiName: string): Promise<string[]> {
-  //Get the kisi surname from the name by splinting the spaces
+  // Get the kisi surname from the name by splinting the spaces
   const kisiNameArray = kisiName.split(" ");
   const kisiSurname = kisiNameArray[kisiNameArray.length - 1];
   const kisi = await db.kisi.findFirst({
@@ -33,7 +33,7 @@ export async function kisininRolleri(kisiName: string): Promise<string[]> {
 export async function kisiAtanabilirRoller(
   kisiName: string
 ): Promise<string[]> {
-  //Get the kisi surname from the name by splinting the spaces
+  // Get the kisi surname from the name by splinting the spaces
   const kisiNameArray = kisiName.split(" ");
   const kisiSurname = kisiNameArray[kisiNameArray.length - 1];
   const kisi = await db.kisi.findFirst({

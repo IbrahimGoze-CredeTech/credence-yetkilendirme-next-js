@@ -1,21 +1,21 @@
-import { talepOnayla } from "@/actions/talep-onaylama";
-import { ToastAction } from "@/components/ui/toast";
-import { toast } from "@/hooks/use-toast";
-import { IPreviousRolYetkiEdit, IWaitingRolYetkiEdit } from "@/types";
+import type { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
 import DataGrid, {
   Button,
   Column,
   Editing,
-  SearchPanel,
   Pager,
   Paging,
+  SearchPanel,
 } from "devextreme-react/data-grid";
-import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import { Separator } from "@/components/ui/separator";
-
 import React, { useEffect, useState } from "react";
 import { PreviousRolYetkiEdit } from "@/actions/previous-demands";
+import { talepOnayla } from "@/actions/talep-onaylama";
+import { Separator } from "@/components/ui/separator";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/hooks/use-toast";
 import { EylemTuruEnum } from "@/modals/eylemTuru";
+import type { IPreviousRolYetkiEdit, IWaitingRolYetkiEdit } from "@/types";
+
 
 const eylemTuruLookup = [
   { eylemTuruId: EylemTuruEnum.Oku, eylemAdi: "Oku" },
@@ -23,12 +23,12 @@ const eylemTuruLookup = [
   { eylemTuruId: EylemTuruEnum.Engel, eylemAdi: "Engelle" },
 ];
 
-interface Props {
+interface IProps {
   data: IWaitingRolYetkiEdit[];
   rolYetkiEdits: IPreviousRolYetkiEdit[];
 }
 
-export default function RolYetkiGrid({ data, rolYetkiEdits }: Props) {
+export default function RolYetkiGrid({ data, rolYetkiEdits }: IProps) {
 
   const [gridData, setGridData] = useState<IWaitingRolYetkiEdit[]>(data);
   const [talepGrid, setTalepGrid] = useState<IPreviousRolYetkiEdit[]>([]);
@@ -98,36 +98,36 @@ export default function RolYetkiGrid({ data, rolYetkiEdits }: Props) {
       <div className="p-2 rounded-md">
         <DataGrid
           dataSource={gridData}
-          showBorders
           noDataText="Şu anda bekleyen talep bulunmamaktadır."
+          showBorders
         >
-          <SearchPanel visible={true} placeholder="Arama Yapın..." />
+          <SearchPanel placeholder="Arama Yapın..." visible={true} />
           <Editing mode="row" useIcons={true} />
-          <Column dataField="RolAdi" caption="Rol Adı" />
-          <Column dataField="YetkiAdi" caption="Yetki Adı" />
+          <Column caption="Rol Adı" dataField="RolAdi" />
+          <Column caption="Yetki Adı" dataField="YetkiAdi" />
           <Column
-            dataField="EylemTuruId"
             caption="Eylem Turu"
+            dataField="EylemTuruId"
             lookup={{
               dataSource: eylemTuruLookup,
               valueExpr: "eylemTuruId",
               displayExpr: "eylemAdi",
             }}
           />
-          <Column dataField="BaslangicTarihi" caption="Başlangıç Tarihi" />
-          <Column dataField="BitisTarihi" caption="Bitiş Tarihi" />
+          <Column caption="Başlangıç Tarihi" dataField="BaslangicTarihi" />
+          <Column caption="Bitiş Tarihi" dataField="BitisTarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"
-              visible={true}
               onClick={(e) => onClick(true, e)}
               text="Onay"
+              visible={true}
             />
             <Button
               hint="Ret"
-              visible={true}
               onClick={(e) => onClick(false, e)}
               text="Ret"
+              visible={true}
             />
           </Column>
         </DataGrid>
@@ -143,9 +143,9 @@ export default function RolYetkiGrid({ data, rolYetkiEdits }: Props) {
         >
           <Paging defaultPageSize={5} />
           <Pager
+            allowedPageSizes="auto"
+            displayMode="compact"
             visible={true}
-            allowedPageSizes={"auto"}
-            displayMode={"compact"}
           />
         </DataGrid>
       </div>

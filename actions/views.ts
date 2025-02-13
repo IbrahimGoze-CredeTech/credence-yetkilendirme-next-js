@@ -1,10 +1,10 @@
-import { db } from "@/lib/db";
-import {
+import type {
   KisiAccessibleRoutes,
   KisiYetkiView,
-  RoleAccessibleRoutes,
   RolYetkiView,
+  RoleAccessibleRoutes,
 } from "@prisma/client";
+import { db } from "@/lib/db";
 
 export async function GetKisiAccessibleRoutes(): Promise<
   KisiAccessibleRoutes[]

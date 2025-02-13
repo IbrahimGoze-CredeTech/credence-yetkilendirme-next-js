@@ -1,117 +1,113 @@
 import * as z from "zod";
 
 // Define a Zod schema for the Option interface
-const OptionSchema = z.object({
+const optionSchema = z.object({
   value: z.string().min(1, { message: "Value cannot be empty" }),
   label: z.string().optional(), // You mentioned you only need `value`, so `label` is optional
   disable: z.boolean().optional(),
   fixed: z.boolean().optional(),
 });
 
-//#region Common Schemas
-const SayfaFieldSchema = z.object({
-  SayfaRoute: z
+// #region Common Schemas
+const sayfaFieldSchema = z.object({
+  sayfaRoute: z
     .string({ required_error: "Sayfa Adi Boş Olamaz" })
     .min(1, { message: "sayfa adı boş olamaz" }),
 });
-const KisiFieldSchema = z.object({
+const kisiFieldSchema = z.object({
   kisiAdi: z.string().min(1, { message: "Kisi adı boş olamaz" }),
 });
-const RolFieldSchema = z.object({
+const rolFieldSchema = z.object({
   rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
 });
 
-const BaslamaTarihiFieldSchema = z.object({
+const baslamaTarihiFieldSchema = z.object({
   baslamaTarihi: z.date({
     required_error: "Başlangıç tarihi girilmesi zorunludur.",
   }),
 });
 
-const BitisTarihiFieldSchema = z.object({
+const bitisTarihiFieldSchema = z.object({
   bitisTarihi: z.date({
     required_error: "Bitiş tarihi girilmesi zorunludur.",
   }),
 });
 
-const CiftImzaFieldSchema = z.object({
+const ciftImzaFieldSchema = z.object({
   ciftImza: z.boolean().default(false),
 });
 
-const EkstraImzaFieldSchema = z.object({
-  ekstraImza: z.array(OptionSchema).optional(),
+const ekstraImzaFieldSchema = z.object({
+  ekstraImza: z.array(optionSchema).optional(),
 });
-//#endregion
+// #endregion
 
-export const LoginSchema = z.object({
+export const loginSchema = z.object({
   name: z.string().min(2, { message: "email is required" }),
   password: z.string().min(2, { message: "Password is required" }),
 });
 
-export const TalepRolAtamaSchema = KisiFieldSchema.merge(
-  BaslamaTarihiFieldSchema
-)
-  .merge(BitisTarihiFieldSchema)
-  .merge(CiftImzaFieldSchema)
-  .merge(EkstraImzaFieldSchema)
+export const talepRolAtamaSchema = kisiFieldSchema
+  .merge(baslamaTarihiFieldSchema)
+  .merge(bitisTarihiFieldSchema)
+  .merge(ciftImzaFieldSchema)
+  .merge(ekstraImzaFieldSchema)
   .extend({
     rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
   });
-export const TalepKisiSayfaEditSchema = KisiFieldSchema.merge(
-  BaslamaTarihiFieldSchema
-)
-  .merge(BitisTarihiFieldSchema)
-  .merge(CiftImzaFieldSchema)
-  .merge(EkstraImzaFieldSchema)
-  .merge(SayfaFieldSchema)
+export const talepKisiSayfaEditSchema = kisiFieldSchema
+  .merge(baslamaTarihiFieldSchema)
+  .merge(bitisTarihiFieldSchema)
+  .merge(ciftImzaFieldSchema)
+  .merge(ekstraImzaFieldSchema)
+  .merge(sayfaFieldSchema)
   .extend({
     isPermitted: z.boolean().default(false),
   });
 
-export const TalepKisiSayfaAtamaSchema = KisiFieldSchema.merge(
-  BaslamaTarihiFieldSchema
-)
-  .merge(BitisTarihiFieldSchema)
-  .merge(CiftImzaFieldSchema)
-  .merge(EkstraImzaFieldSchema)
-  .merge(SayfaFieldSchema);
+export const talepKisiSayfaAtamaSchema = kisiFieldSchema
+  .merge(baslamaTarihiFieldSchema)
+  .merge(bitisTarihiFieldSchema)
+  .merge(ciftImzaFieldSchema)
+  .merge(ekstraImzaFieldSchema)
+  .merge(sayfaFieldSchema);
 
-export const TalepKisiSayfaCikarmaSchema = KisiFieldSchema.merge(
-  BaslamaTarihiFieldSchema
-)
-  .merge(BitisTarihiFieldSchema)
-  .merge(CiftImzaFieldSchema)
-  .merge(EkstraImzaFieldSchema)
-  .merge(SayfaFieldSchema);
+export const talepKisiSayfaCikarmaSchema = kisiFieldSchema
+  .merge(baslamaTarihiFieldSchema)
+  .merge(bitisTarihiFieldSchema)
+  .merge(ciftImzaFieldSchema)
+  .merge(ekstraImzaFieldSchema)
+  .merge(sayfaFieldSchema);
 
-export const TalepRolSayfaAtamaSchema = RolFieldSchema.merge(
-  BaslamaTarihiFieldSchema
-)
-  .merge(BitisTarihiFieldSchema)
-  .merge(CiftImzaFieldSchema)
-  .merge(EkstraImzaFieldSchema)
-  .merge(SayfaFieldSchema);
+export const talepRolSayfaAtamaSchema = rolFieldSchema
+  .merge(baslamaTarihiFieldSchema)
+  .merge(bitisTarihiFieldSchema)
+  .merge(ciftImzaFieldSchema)
+  .merge(ekstraImzaFieldSchema)
+  .merge(sayfaFieldSchema);
 
-export const TalepRolSayfaCikarmaSchema = RolFieldSchema.merge(
-  BaslamaTarihiFieldSchema
-)
-  .merge(BitisTarihiFieldSchema)
-  .merge(CiftImzaFieldSchema)
-  .merge(EkstraImzaFieldSchema)
-  .merge(SayfaFieldSchema);
+export const talepRolSayfaCikarmaSchema = rolFieldSchema
+  .merge(baslamaTarihiFieldSchema)
+  .merge(bitisTarihiFieldSchema)
+  .merge(ciftImzaFieldSchema)
+  .merge(ekstraImzaFieldSchema)
+  .merge(sayfaFieldSchema);
 
-export const YetkiTalepSchema = KisiFieldSchema.merge(BaslamaTarihiFieldSchema)
-  .merge(BitisTarihiFieldSchema)
-  .merge(CiftImzaFieldSchema)
-  .merge(EkstraImzaFieldSchema)
+export const yetkiTalepSchema = kisiFieldSchema
+  .merge(baslamaTarihiFieldSchema)
+  .merge(bitisTarihiFieldSchema)
+  .merge(ciftImzaFieldSchema)
+  .merge(ekstraImzaFieldSchema)
   .extend({
     yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
     eylemTuru: z.string().min(1, { message: "Eylem türü boş olamaz" }),
   });
 
-export const RolYetkiSchema = RolFieldSchema.merge(BaslamaTarihiFieldSchema)
-  .merge(BitisTarihiFieldSchema)
-  .merge(CiftImzaFieldSchema)
-  .merge(EkstraImzaFieldSchema)
+export const rolYetkiSchema = rolFieldSchema
+  .merge(baslamaTarihiFieldSchema)
+  .merge(bitisTarihiFieldSchema)
+  .merge(ciftImzaFieldSchema)
+  .merge(ekstraImzaFieldSchema)
   .extend({
     yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
     eylemTuru: z.string().min(1, { message: "Eylem türü boş olamaz" }),
@@ -125,16 +121,15 @@ export const RolYetkiSchema = RolFieldSchema.merge(BaslamaTarihiFieldSchema)
 //     yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
 //   });
 
-export const TalepRolCikarmaSchema = KisiFieldSchema.merge(
-  BitisTarihiFieldSchema
-)
-  .merge(CiftImzaFieldSchema)
-  .merge(EkstraImzaFieldSchema)
+export const talepRolCikarmaSchema = kisiFieldSchema
+  .merge(bitisTarihiFieldSchema)
+  .merge(ciftImzaFieldSchema)
+  .merge(ekstraImzaFieldSchema)
   .extend({
     rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
   });
 
-export const KisiSchema = z.object({
+export const kisiSchema = z.object({
   kisiAdi: z
     .string()
     .min(1, { message: "Kisi adı boş olamaz" })
@@ -147,14 +142,14 @@ export const KisiSchema = z.object({
   kisiSifre: z.string().min(1, { message: "Kisi şifresi boş olamaz" }),
 });
 
-export const KisiSilmeSchema = z.object({
+export const kisiSilmeSchema = z.object({
   kullaniciAdi: z
     .string()
     .max(20, { message: "Kullanıcı adı 20 karakterden fazla olamaz" })
     .regex(/\./, { message: "Kullanıcı adı bir nokta içermelidir" }),
 });
 
-export const RolSchema = z.object({
+export const rolSchema = z.object({
   rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
   supervizorRol: z.string().min(1, { message: "Supervizor rol boş olamaz" }),
   riskWeight: z.string().refine((value) => {
@@ -169,15 +164,15 @@ export const RolSchema = z.object({
   //   .nullable(),
 });
 
-export const RolSilSchema = z.object({
+export const rolSilSchema = z.object({
   rolAdi: z.string().min(1, { message: "Rol adı boş olamaz" }),
 });
 
-export const YetkiSchema = z.object({
+export const yetkiSchema = z.object({
   yetkiAdi: z.string().min(1, { message: "Yetki adı boş olamaz" }),
 });
 
-export const SayfaSchema = z.object({
+export const sayfaSchema = z.object({
   sayfaRoute: z
     .string()
     .min(1, { message: "Sayfa adı boş olamaz" })

@@ -1,11 +1,11 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import React from 'react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import SayfaEkleForm from "./sayfa-ekle-form"
 import SayfaSilForm from "./sayfa-sil-form"
 
 export default function SayfaTabs() {
   return (
-    <Tabs defaultValue="sayfa-ekle" className="w-[95vw] flex flex-col items-center justify-center p-4" >
+    <Tabs className="w-[95vw] flex flex-col items-center justify-center p-4" defaultValue="sayfa-ekle" >
       <TabsList className='bg-gray-200 p-2 py-6'>
         <TabsTrigger className='text-xl' value="sayfa-ekle">Sayfa Ekle</TabsTrigger>
         <TabsTrigger className='text-xl' value="sayfa-sil">Sayfa Sil</TabsTrigger>

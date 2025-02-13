@@ -1,21 +1,21 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState, useTransition } from 'react'
+import { type SubmitErrorHandler, useForm } from 'react-hook-form';
+import type { z } from 'zod';
+import { kisiSilme } from '@/actions/kisi-rol-yetki-sayfa-actions';
 import CardWrapper from '@/components/card-wrapper';
+import CustomCombobox from '@/components/custom-combobox';
 import FormError from '@/components/form-error';
 import FormSuccess from '@/components/form-success';
+import type { Option } from '@/components/talep-ekran/multiple-selector';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import React, { useState, useTransition } from 'react'
-import { SubmitErrorHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { KisiSilmeSchema } from '@/schemas';
-import { Option } from '@/components/talep-ekran/multiple-selector';
-import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
-import CustomCombobox from '@/components/custom-combobox';
 import { useStaticTablesContext } from '@/context';
-import { kisiSilme } from '@/actions/kisi-rol-yetki-sayfa-actions';
+import { toast } from '@/hooks/use-toast';
+import { kisiSilmeSchema } from '@/schemas';
 
 export default function KisiSilForm() {
   const staticTablesContext = useStaticTablesContext();
@@ -27,14 +27,14 @@ export default function KisiSilForm() {
   const [error, setError] = useState<string | undefined>("")
   const [success, setSuccess] = useState<string | undefined>("");
 
-  const form = useForm<z.infer<typeof KisiSilmeSchema>>({
-    resolver: zodResolver(KisiSilmeSchema),
+  const form = useForm<z.infer<typeof kisiSilmeSchema>>({
+    resolver: zodResolver(kisiSilmeSchema),
     defaultValues: {
       kullaniciAdi: '',
     }
   });
 
-  const onSubmit = (values: z.infer<typeof KisiSilmeSchema>) => {
+  const onSubmit = (values: z.infer<typeof kisiSilmeSchema>) => {
     setError('');
     setSuccess('');
 
@@ -58,28 +58,28 @@ export default function KisiSilForm() {
     })
   }
 
-  const onFormError: SubmitErrorHandler<z.infer<typeof KisiSilmeSchema>> = (e) => {
+  const onFormError: SubmitErrorHandler<z.infer<typeof kisiSilmeSchema>> = (e) => {
     console.error(e);
     setError(e.kullaniciAdi?.message);
   }
 
   return (
-    <CardWrapper className='!w-[500px]' headerLabel={'Kişi Sil'} backButtonLabel={'Ana Sayfaya Geri Don'} backButtonHref={'/'}>
+    <CardWrapper backButtonHref="/" backButtonLabel="Ana Sayfaya Geri Don" className='!w-[500px]' headerLabel="Kişi Sil">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
+        <form className='flex flex-col items-center justify-center' onSubmit={form.handleSubmit(onSubmit, onFormError)}>
           <div className=''>
-            <FormField control={form.control} name={'kullaniciAdi'} render={({ field }) => (
+            <FormField control={form.control} name="kullaniciAdi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Kullanıcı Adı</FormLabel>
                 <FormControl>
-                  <CustomCombobox onValueChange={field.onChange} Options={kullaniciAdlariOptions} placeholder={'Kullanıcı Adı'} searchPlaceholder={'Kullanıcı Adı İle Ara...'} />
+                  <CustomCombobox Options={kullaniciAdlariOptions} onValueChange={field.onChange} placeholder="Kullanıcı Adı" searchPlaceholder="Kullanıcı Adı İle Ara..." />
                 </FormControl>
               </FormItem>
             )} />
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Kişi Sil</Button>
+          <Button className='w-[85%] mt-4' disabled={isPending} type='submit'>Kişi Sil</Button>
         </form>
       </Form>
     </CardWrapper>

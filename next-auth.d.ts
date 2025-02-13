@@ -1,3 +1,4 @@
+/* eslint-disable */
 // import { type DefaultSession } from "next-auth";
 
 // TODO: Make this role Enum and Token

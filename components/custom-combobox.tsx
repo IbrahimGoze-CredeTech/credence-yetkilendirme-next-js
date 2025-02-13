@@ -1,14 +1,14 @@
 'use client';
 
+import { Check, ChevronsUpDown } from 'lucide-react';
 import React from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import type { Option } from '@/components/talep-ekran/multiple-selector';
+import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from './ui/command';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { Option } from '@/components/talep-ekran/multiple-selector';
-import { cn } from '@/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
-interface KisiComboboxProps {
+interface IKisiComboboxProps {
   placeholder: string;  // Placeholder text
   searchPlaceholder: string;  // Search placeholder text
   onValueChange: (value: string) => void;  // Prop to handle value change
@@ -16,20 +16,20 @@ interface KisiComboboxProps {
   disabled?: boolean;  // Disabled state
 }
 
-export default function CustomCombobox({ placeholder, searchPlaceholder, onValueChange, Options, disabled = false }: KisiComboboxProps) {
+export default function CustomCombobox({ placeholder, searchPlaceholder, onValueChange, Options, disabled = false }: IKisiComboboxProps) {
 
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
   return (
     <>
       {/* <FormLabel>Kişi Ad</FormLabel> */}
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover onOpenChange={setOpen} open={open}>
         <PopoverTrigger asChild disabled={disabled}>
           <Button
-            variant="outline"
-            role="combobox"
             aria-expanded={open}
             className="w-full justify-between"
+            role="combobox"
+            variant="outline"
           >
             {value
               ? Options.find((option) => option.value === value)?.label
@@ -46,13 +46,13 @@ export default function CustomCombobox({ placeholder, searchPlaceholder, onValue
                 {Options.map((option) => (
                   <CommandItem
                     key={option.value}
-                    value={option.value}
                     onSelect={(currentValue) => {
                       const newValue = currentValue === value ? "" : currentValue;
                       setValue(newValue)
                       setOpen(false)
                       onValueChange(newValue)
                     }}
+                    value={option.value}
                   >
                     <Check
                       className={cn(

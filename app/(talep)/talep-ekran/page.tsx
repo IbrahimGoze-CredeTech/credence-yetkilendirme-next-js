@@ -1,25 +1,25 @@
 'use client';
 
-import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
-import { Talep } from '@/types';
-import { fetcherGet } from '@/utils';
-import DataGrid, { Column, Editing, MasterDetail, Form, Popup } from 'devextreme-react/cjs/data-grid';
+import DataGrid, { Column, Editing, Form, MasterDetail, Popup } from 'devextreme-react/cjs/data-grid';
 import { Item } from 'devextreme-react/form';
 
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react'
+import { talepDataGridConfig } from '@/configs/talep-data-grid-config';
+import type { TalepType } from '@/types';
+import { FetcherGet } from '@/utils';
 
 
 
 export default function TalepEkranPage() {
   const session = useSession();
   const [isRolAtama, setIsRolAtama] = useState<boolean>(false);
-  const [talepler, setTalepler] = useState<Talep[]>()
+  const [talepler, setTalepler] = useState<TalepType[]>()
 
   useEffect(() => {
 
     const fetchData = async () => {
-      const taleplerResponse = await fetcherGet('/Talep', session.data?.token);
+      const taleplerResponse = await FetcherGet('/Talep', session.data?.token);
       setTalepler(taleplerResponse);
     }
 
@@ -42,17 +42,17 @@ export default function TalepEkranPage() {
         {...talepDataGridConfig}
       >
         <Editing
-          mode="popup"
           allowAdding={true}
-          // allowUpdating={true}
-          allowDeleting={true}>
-          <Popup title="Talep Yarat" showTitle={true} width={700} height={525} />
+          allowDeleting={true}
+          mode="popup"
+        >
+          <Popup height={525} showTitle={true} title="Talep Yarat" width={700} />
           <Form >
-            <Item dataField="talepTipiId" editorType="dxSelectBox"
-              editorOptions={{
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onValueChanged: (e: any) => onFieldDataChanged(e)
-              }}
+            <Item dataField="talepTipiId" editorOptions={{
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              onValueChanged: (e: any) => onFieldDataChanged(e)
+            }}
+              editorType="dxSelectBox"
             />
             {isRolAtama && (
               <Item dataField="rolAtama"
@@ -61,44 +61,44 @@ export default function TalepEkranPage() {
             }
           </Form>
         </Editing>
-        <MasterDetail enabled={true}
-          component={({ data }) => {
-            const detailData = data.data;
-            return (
-              <>
-                <h4 className="text-3xl font-semibold">Imzalar</h4>
-                <DataGrid dataSource={detailData.imza} showBorders={true}>
-                  <Column dataField="durumTarihi" caption="Imza Tarihi" dataType="date" format="dd.MM.yyyy" />
-                  <Column dataField="kisiAdi" caption="Imza Veren" />
-                  <Column dataField="durum" caption="Imza Durumu" />
-                </DataGrid>
+        <MasterDetail component={({ data }) => {
+          const detailData = data.data;
+          return (
+            <>
+              <h4 className="text-3xl font-semibold">Imzalar</h4>
+              <DataGrid dataSource={detailData.imza} showBorders={true}>
+                <Column caption="Imza Tarihi" dataField="durumTarihi" dataType="date" format="dd.MM.yyyy" />
+                <Column caption="Imza Veren" dataField="kisiAdi" />
+                <Column caption="Imza Durumu" dataField="durum" />
+              </DataGrid>
 
-                {/* Conditional rendering based on rolAtama or rolCikarma */}
-                {detailData.rolAtama ? (
-                  <>
-                    <h4 className="text-3xl font-semibold">Rol Atama</h4>
-                    <DataGrid dataSource={[detailData.rolAtama]} showBorders={true}>
-                      <Column dataField="rolAdi" caption="Rol Adı" />
-                      <Column dataField="kisiAdi" caption="Kişi Adı" />
-                      <Column dataField="rolBaslangicTarihi" caption="Rol Başlangıç Tarihi" dataType="date" format="dd.MM.yyyy" />
-                      <Column dataField="rolBitisTarihi" caption="Rol Bitiş Tarihi" dataType="date" format="dd.MM.yyyy" />
-                    </DataGrid>
-                  </>
-                ) : detailData.rolCikarma ? (
-                  <>
-                    <h4 className="text-3xl font-semibold">Rol Çıkarma</h4>
-                    <DataGrid dataSource={[detailData.rolCikarma]} showBorders={true}>
-                      <Column dataField="rolAdi" caption="Rol Adı" />
-                      <Column dataField="kisiAdi" caption="Kişi Adı" />
-                      <Column dataField="rolCikarmaTarihi" caption="Rol Çıkarma Tarihi" dataType="date" format="dd.MM.yyyy" />
-                    </DataGrid>
-                  </>
-                ) : (
-                  <p className="text-xl font-light">No details available</p>
-                )}
-              </>
-            )
-          }} />
+              {/* Conditional rendering based on rolAtama or rolCikarma */}
+              {detailData.rolAtama ? (
+                <>
+                  <h4 className="text-3xl font-semibold">Rol Atama</h4>
+                  <DataGrid dataSource={[detailData.rolAtama]} showBorders={true}>
+                    <Column caption="Rol Adı" dataField="rolAdi" />
+                    <Column caption="Kişi Adı" dataField="kisiAdi" />
+                    <Column caption="Rol Başlangıç Tarihi" dataField="rolBaslangicTarihi" dataType="date" format="dd.MM.yyyy" />
+                    <Column caption="Rol Bitiş Tarihi" dataField="rolBitisTarihi" dataType="date" format="dd.MM.yyyy" />
+                  </DataGrid>
+                </>
+              ) : detailData.rolCikarma ? (
+                <>
+                  <h4 className="text-3xl font-semibold">Rol Çıkarma</h4>
+                  <DataGrid dataSource={[detailData.rolCikarma]} showBorders={true}>
+                    <Column caption="Rol Adı" dataField="rolAdi" />
+                    <Column caption="Kişi Adı" dataField="kisiAdi" />
+                    <Column caption="Rol Çıkarma Tarihi" dataField="rolCikarmaTarihi" dataType="date" format="dd.MM.yyyy" />
+                  </DataGrid>
+                </>
+              ) : (
+                <p className="text-xl font-light">No details available</p>
+              )}
+            </>
+          )
+        }}
+          enabled={true} />
       </DataGrid>
 
     </div>

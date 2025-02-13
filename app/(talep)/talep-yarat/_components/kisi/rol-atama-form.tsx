@@ -1,22 +1,24 @@
-import CardWrapper from '@/components/card-wrapper';
-import FormError from '@/components/form-error';
-import FormSuccess from '@/components/form-success';
-import { Button } from '@/components/ui/button';
-import MultipleSelector, { Option } from '@/components/talep-ekran/multiple-selector';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Switch } from '@/components/ui/switch';
-import React, { useState, useTransition } from 'react'
-import { useStaticTablesContext } from '@/context';
-import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { TalepRolAtamaSchema } from '@/schemas';
-import { toast } from '@/hooks/use-toast';
-import { ToastAction } from '@/components/ui/toast';
-import CustomCombobox from '@/components/custom-combobox';
-import { CustomDatePicker } from '@/components/custom-date-picker';
+import React, { useState, useTransition } from 'react'
+import { type SubmitErrorHandler, useForm } from 'react-hook-form';
+import type { z } from 'zod';
 import { kisiAtanabilirRoller } from '@/actions/kisi-rol';
 import { rolAtama } from '@/actions/rol-post';
+import CardWrapper from '@/components/card-wrapper';
+import CustomCombobox from '@/components/custom-combobox';
+import { CustomDatePicker } from '@/components/custom-date-picker';
+import FormError from '@/components/form-error';
+import FormSuccess from '@/components/form-success';
+import type { Option } from '@/components/talep-ekran/multiple-selector';
+// eslint-disable-next-line no-duplicate-imports
+import MultipleSelector from '@/components/talep-ekran/multiple-selector';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Switch } from '@/components/ui/switch';
+import { ToastAction } from '@/components/ui/toast';
+import { useStaticTablesContext } from '@/context';
+import { toast } from '@/hooks/use-toast';
+import { talepRolAtamaSchema } from '@/schemas';
 
 export default function RolAtamaForm() {
   const staticTablesContext = useStaticTablesContext();
@@ -36,8 +38,8 @@ export default function RolAtamaForm() {
   const [isKisiSelected, setIsKisiSelected] = useState(false);
 
 
-  const form = useForm<z.infer<typeof TalepRolAtamaSchema>>({
-    resolver: zodResolver(TalepRolAtamaSchema),
+  const form = useForm<z.infer<typeof talepRolAtamaSchema>>({
+    resolver: zodResolver(talepRolAtamaSchema),
     defaultValues: {
       rolAdi: '',
       kisiAdi: '',
@@ -48,7 +50,7 @@ export default function RolAtamaForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof TalepRolAtamaSchema>) => {
+  const onSubmit = (values: z.infer<typeof talepRolAtamaSchema>) => {
     setError('');
     setSuccess('');
 
@@ -83,53 +85,53 @@ export default function RolAtamaForm() {
     });
   };
 
-  const onFormError: SubmitErrorHandler<z.infer<typeof TalepRolAtamaSchema>> = (e) => {
+  const onFormError: SubmitErrorHandler<z.infer<typeof talepRolAtamaSchema>> = (e) => {
     console.error(e)
   }
 
   return (
-    <CardWrapper headerLabel={'Rol Atama'} backButtonLabel={'Talepler Sayfasına Geri Don'} backButtonHref={'/talep-ekran'}>
+    <CardWrapper backButtonHref="/talep-ekran" backButtonLabel="Talepler Sayfasına Geri Don" headerLabel="Rol Atama">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onFormError)} className='flex flex-col items-center justify-center'>
+        <form className='flex flex-col items-center justify-center' onSubmit={form.handleSubmit(onSubmit, onFormError)}>
           <div className='grid grid-cols-2 gap-8'>
-            <FormField control={form.control} name={'kisiAdi'} render={({ field }) => (
+            <FormField control={form.control} name="kisiAdi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Kisi Adi</FormLabel>
                 <FormControl>
-                  <CustomCombobox onValueChange={(value) => { field.onChange(value); onValueChange(value) }} Options={kisilerOptions} placeholder={'Kişi Ara'} searchPlaceholder={'Kişi Ara...'} />
+                  <CustomCombobox Options={kisilerOptions} onValueChange={(value) => { field.onChange(value); onValueChange(value) }} placeholder="Kişi Ara" searchPlaceholder="Kişi Ara..." />
                 </FormControl>
               </FormItem>
             )} />
 
-            <FormField control={form.control} name={'rolAdi'} render={({ field }) => (
+            <FormField control={form.control} name="rolAdi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol Adi</FormLabel>
-                <CustomCombobox onValueChange={field.onChange} Options={rollerOptions} placeholder={'Rol Ara'} searchPlaceholder={'Rol Ara...'} disabled={isPending || !isKisiSelected} />
+                <CustomCombobox Options={rollerOptions} disabled={isPending || !isKisiSelected} onValueChange={field.onChange} placeholder="Rol Ara" searchPlaceholder="Rol Ara..." />
               </FormItem>
             )} />
 
-            <FormField control={form.control} name={'baslamaTarihi'} render={({ field }) => (
+            <FormField control={form.control} name="baslamaTarihi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol Başlangıç Tarihi</FormLabel>
                 <CustomDatePicker
-                  selectedDate={field.value}
-                  onDateChange={field.onChange}
-                  isOpen={isBaslangicOpen}
-                  setIsOpen={setIsBaslangicOpen}
                   isDisabled={isPending || !isKisiSelected}
+                  isOpen={isBaslangicOpen}
+                  onDateChange={field.onChange}
+                  selectedDate={field.value}
+                  setIsOpen={setIsBaslangicOpen}
                 />
               </FormItem>
             )} />
 
-            <FormField control={form.control} name={'bitisTarihi'} render={({ field }) => (
+            <FormField control={form.control} name="bitisTarihi" render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol Bitiş Tarihi</FormLabel>
                 <CustomDatePicker
-                  selectedDate={field.value}
-                  onDateChange={field.onChange}
-                  isOpen={isBitisOpen}
-                  setIsOpen={setIsBitisOpen}
                   isDisabled={isPending || !isKisiSelected}
+                  isOpen={isBitisOpen}
+                  onDateChange={field.onChange}
+                  selectedDate={field.value}
+                  setIsOpen={setIsBitisOpen}
                 />
 
               </FormItem>
@@ -146,28 +148,28 @@ export default function RolAtamaForm() {
                 <FormControl>
                   <Switch
                     checked={field.value}
-                    onCheckedChange={field.onChange}
                     disabled={isPending || !isKisiSelected}
+                    onCheckedChange={field.onChange}
                   />
                 </FormControl>
               </FormItem>
             )}
             />
 
-            <FormField control={form.control} name={'ekstraImza'} render={({ }) => (
+            <FormField control={form.control} name="ekstraImza" render={({ }) => (
               <FormItem>
                 <FormLabel>Ekstra Imza Yetkilileri</FormLabel>
                 {kisilerOptions.length > 0 ? (
-                  <MultipleSelector defaultOptions={kisilerOptions} onChange={(e) => {
+                  <MultipleSelector defaultOptions={kisilerOptions} disabled={isPending || !isKisiSelected} onChange={(e) => {
                     form.setValue('ekstraImza', e);
-                  }} placeholder="Imza atacak kişileri seçin" disabled={isPending || !isKisiSelected} />
+                  }} placeholder="Imza atacak kişileri seçin" />
                 ) : (<span>Yükleniyor...</span>)}
               </FormItem>
             )} />
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type='submit' className='w-[85%] mt-4' disabled={isPending}>Rol Atama Talebi Olustur</Button>
+          <Button className='w-[85%] mt-4' disabled={isPending} type='submit'>Rol Atama Talebi Olustur</Button>
         </form>
       </Form>
     </CardWrapper>

@@ -1,26 +1,26 @@
 "use server";
 
+import type { z } from "zod";
 import { auth } from "@/auth";
 import {
-  RolYetkiSchema,
-  TalepRolAtamaSchema,
-  TalepRolCikarmaSchema,
+  rolYetkiSchema,
+  talepRolAtamaSchema,
+  talepRolCikarmaSchema,
 } from "@/schemas";
-import { RolAtamaClient, RolCikarmaClient } from "@/types";
-import { fetcherPost } from "@/utils";
-import { z } from "zod";
+import type { RolAtamaClientType, RolCikarmaClientType } from "@/types";
+import { FetcherPost } from "@/utils";
 
-//#region TalepRolAtama
-type RolAtamaRequest = {
-  rolAtama: RolAtamaClient;
+// #region TalepRolAtama
+type RolAtamaRequestType = {
+  rolAtama: RolAtamaClientType;
   ciftImza: boolean;
   ekstraImza: string[];
 };
 
-export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
+export async function rolAtama(values: z.infer<typeof talepRolAtamaSchema>) {
   const session = await auth();
 
-  const validateFields = TalepRolAtamaSchema.safeParse(values);
+  const validateFields = talepRolAtamaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -36,42 +36,42 @@ export async function rolAtama(values: z.infer<typeof TalepRolAtamaSchema>) {
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const rolAtama: RolAtamaClient = {
+  const rolAtama: RolAtamaClientType = {
     kisiAdi,
     rolAdi,
     rolBaslangicTarihi: baslamaTarihi.toISOString(),
     rolBitisTarihi: bitisTarihi.toISOString(),
   };
 
-  const rolAtamaRequest: RolAtamaRequest = {
+  const rolAtamaRequest: RolAtamaRequestType = {
     rolAtama,
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  await fetcherPost(
+  await FetcherPost(
     "/Talep/rol-atama",
     session?.token,
     JSON.stringify(rolAtamaRequest)
   );
   return { success: "Talep Yaratıldı", error: "" };
 }
-//#endregion
+// #endregion
 
-//#region TalepRolCikarma
-type RolCikarmaRequest = {
+// #region TalepRolCikarma
+type RolCikarmaRequestType = {
   talepEdenKisiId: number;
-  rolCikarma: RolCikarmaClient;
+  rolCikarma: RolCikarmaClientType;
   ciftImza: boolean;
   ekstraImza: string[];
 };
 
 export async function rolCikarma(
-  values: z.infer<typeof TalepRolCikarmaSchema>
+  values: z.infer<typeof talepRolCikarmaSchema>
 ) {
   const session = await auth();
 
-  const validateFields = TalepRolCikarmaSchema.safeParse(values);
+  const validateFields = talepRolCikarmaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -86,30 +86,30 @@ export async function rolCikarma(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const rolCikarma: RolCikarmaClient = {
+  const rolCikarma: RolCikarmaClientType = {
     kisiAdi,
     rolAdi,
     rolCikarmaTarihi: bitisTarihi.toISOString(),
   };
 
-  const rolCikarmaRequest: RolCikarmaRequest = {
+  const rolCikarmaRequest: RolCikarmaRequestType = {
     talepEdenKisiId: session?.user.id,
     rolCikarma: rolCikarma,
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  await fetcherPost(
+  await FetcherPost(
     "/Talep/rol-cikarma",
     session?.token,
     JSON.stringify(rolCikarmaRequest)
   );
   return { success: "Talep Yaratıldı", error: "" };
 }
-//#endregion
+// #endregion
 
-//#region TalepRolYetki
-type RolYetkiRequest = {
+// #region TalepRolYetki
+type RolYetkiRequestType = {
   rolAdi: string;
   yetkiAdi: string;
   eylemTuru: string;
@@ -118,10 +118,10 @@ type RolYetkiRequest = {
   ciftImza: boolean;
   ekstraImza: string[];
 };
-export async function rolYetkiPost(values: z.infer<typeof RolYetkiSchema>) {
+export async function rolYetkiPost(values: z.infer<typeof rolYetkiSchema>) {
   const session = await auth();
 
-  const validateFields = RolYetkiSchema.safeParse(values);
+  const validateFields = rolYetkiSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -151,7 +151,7 @@ export async function rolYetkiPost(values: z.infer<typeof RolYetkiSchema>) {
   //   rolBitisTarihi: bitisTarihi.toISOString(),
   // };
 
-  const rolYetkiRequest: RolYetkiRequest = {
+  const rolYetkiRequest: RolYetkiRequestType = {
     rolAdi: rolAdi,
     yetkiAdi: yetkiAdi,
     eylemTuru: eylemTuru,
@@ -161,7 +161,7 @@ export async function rolYetkiPost(values: z.infer<typeof RolYetkiSchema>) {
     ekstraImza: ekstraImzaArray,
   };
 
-  await fetcherPost(
+  await FetcherPost(
     "/Talep/rol-yetki",
     session?.token,
     JSON.stringify(rolYetkiRequest)
@@ -169,4 +169,4 @@ export async function rolYetkiPost(values: z.infer<typeof RolYetkiSchema>) {
   return { success: "Talep Yaratıldı", error: "" };
 }
 
-//#endregion
+// #endregion

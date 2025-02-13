@@ -1,35 +1,35 @@
 "use client";
 
-import { Home, Inbox, Search, Settings, User2, ChevronUp, ChevronDown, Users, FileText, Eye } from "lucide-react"
-import { useCurrentUser } from "@/hooks/use-current-user";
+import { ChevronDown, ChevronUp, Eye, FileText, Home, Inbox, Search, Settings, User2, Users } from "lucide-react"
+import { useEffect, useState } from "react";
 import { logout } from "@/actions/logout";
-import { useState, useEffect } from "react";
-
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarFooter,
-  useSidebar,
-} from "@/components/ui/sidebar"
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar"
+
+
+import { UseCurrentUser } from "@/hooks/use-current-user";
 
 // Menu items.
 const items = [
@@ -108,7 +108,7 @@ const items = [
 
 export function AppSidebar() {
   const { state } = useSidebar();
-  const user = useCurrentUser();
+  const user = UseCurrentUser();
   const [openSubMenus, setOpenSubMenus] = useState<{ [key: string]: boolean }>({});
 
   // Close all submenus when sidebar is collapsed
@@ -143,7 +143,7 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   {item.submenu ? (
-                    <Collapsible open={openSubMenus[item.title]} onOpenChange={() => toggleSubMenu(item.title)} >
+                    <Collapsible onOpenChange={() => toggleSubMenu(item.title)} open={openSubMenus[item.title]} >
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton className="hover:bg-azure-radiance-700 rounded-md transition-colors duration-200 w-full">
                           <item.icon className="text-white text-base font-semibold" />
@@ -161,7 +161,7 @@ export function AppSidebar() {
                         {item.submenu.map((subItem) => (
                           <SidebarMenuItem key={subItem.title}>
                             <SidebarMenuButton asChild>
-                              <a href={subItem.url} className="hover:bg-azure-radiance-700 rounded-md transition-colors duration-200">
+                              <a className="hover:bg-azure-radiance-700 rounded-md transition-colors duration-200" href={subItem.url}>
                                 <span className="text-base font-semibold text-white ml-6">
                                   {subItem.title}
                                 </span>
@@ -173,7 +173,7 @@ export function AppSidebar() {
                     </Collapsible>
                   ) : (
                     <SidebarMenuButton asChild>
-                      <a href={item.url} className="hover:bg-azure-radiance-700 rounded-md transition-colors duration-200">
+                      <a className="hover:bg-azure-radiance-700 rounded-md transition-colors duration-200" href={item.url}>
                         <item.icon className="text-white text-base font-semibold" />
                         <span className="text-base font-semibold text-white">
                           {item.title}
@@ -201,15 +201,15 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                side="top"
                 className="w-[--radix-popper-anchor-width] bg-white"
+                side="top"
               >
                 <DropdownMenuItem asChild>
-                  <a href="/profil" className="flex items-center hover:bg-azure-radiance-600 hover:text-white transition-colors duration-200 p-2">
+                  <a className="flex items-center hover:bg-azure-radiance-600 hover:text-white transition-colors duration-200 p-2" href="/profil">
                     <span>Profil</span>
                   </a>
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={onLogout} className="hover:bg-azure-radiance-600 hover:text-white transition-colors duration-200 p-2">
+                <DropdownMenuItem className="hover:bg-azure-radiance-600 hover:text-white transition-colors duration-200 p-2" onSelect={onLogout}>
                   <span>Çıkış Yap</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

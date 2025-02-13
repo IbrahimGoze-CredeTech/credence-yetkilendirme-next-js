@@ -4,19 +4,19 @@
 "use client";
 
 import DataGrid, { Column, FilterRow, HeaderFilter } from "devextreme-react/data-grid";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { RolYetkiOzet } from "../../types";
-import { yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
-import { useModalContext, useStaticTablesContext } from "../../context";
 
 
 import { roles } from "@/modals/roller";
-import { fetcherGet } from "@/utils";
-import { useSession } from "next-auth/react";
+import { FetcherGet } from "@/utils";
+import { useModalContext, useStaticTablesContext } from "../../context";
+import { yetkilerAdi } from "../../modals/yetkiler"; // Yetkiler listesi
+import type { RolYetkiOzetType } from "../../types";
 
 export default function RolYetkiDataGrid() {
   const session = useSession();
-  const [rolYetki, setRolYetki] = useState<RolYetkiOzet[]>([]);
+  const [rolYetki, setRolYetki] = useState<RolYetkiOzetType[]>([]);
   const modalContext = useModalContext();
   const staticTablesContext = useStaticTablesContext();
 
@@ -26,7 +26,7 @@ export default function RolYetkiDataGrid() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetcherGet('/Rol/ozet-rol-yetki', session.data?.token);
+      const response = await FetcherGet('/Rol/ozet-rol-yetki', session.data?.token);
       setRolYetki(response);
     };
     fetchData();
@@ -75,7 +75,7 @@ export default function RolYetkiDataGrid() {
     const column = this;
 
     if (filterValue) {
-      const selector = (data: RolYetkiOzet) => {
+      const selector = (data: RolYetkiOzetType) => {
         const applyOperation = (arg1: string, arg2: string, op: string) => {
           if (op === "=") return arg1 === arg2;
           if (op === "contains") return arg1.includes(arg2);
@@ -104,15 +104,15 @@ export default function RolYetkiDataGrid() {
   return (
     <>
       <DataGrid
+        dataSource={rolYetki}
         id="rolYetki"
         keyExpr="rolAdi"
-        dataSource={rolYetki}
-        showRowLines={true}
-        showBorders={true}
         onRowClick={(e) => {
           modalContext.setId(e.data.id);
           modalContext.toggle();
         }}
+        showBorders={true}
+        showRowLines={true}
       >
 
         <FilterRow visible={true} />
@@ -120,24 +120,24 @@ export default function RolYetkiDataGrid() {
 
         {/* Rol sütunu */}
         <Column
-          dataField="rolAdi"
-          caption="Rol"
-          dataType="string"
-          headerFilter={rolesHeaderFilter}
-          calculateFilterExpression={calculateFilterExpression}
-          filterOperations={rolesFilterOperations}
           allowEditing={false}
+          calculateFilterExpression={calculateFilterExpression}
+          caption="Rol"
+          dataField="rolAdi"
+          dataType="string"
+          filterOperations={rolesFilterOperations}
+          headerFilter={rolesHeaderFilter}
         >
           <HeaderFilter dataSource={roles} />
         </Column>
 
         {/* Yetkiler sütunu */}
         <Column
-          dataField="yetkiler"
-          caption="Yetki"
-          dataType="string"
           allowEditing={true}
           calculateFilterExpression={calculateFilterExpression}
+          caption="Yetki"
+          dataField="yetkiler"
+          dataType="string"
           filterOperations={rolesFilterOperations}
           headerFilter={yetkilerHeaderFilter}
         ><HeaderFilter dataSource={yetkilerAdi} /></Column>

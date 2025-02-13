@@ -1,8 +1,8 @@
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Suspense } from "react";
+import { ImzaAtananMatris, ImzaAtmaGunlukMatris, ImzaAtmaMatris, ImzaOraniMatris, KisiRiskMatris, KisiVerimlilikMatris, RolDagilimiMatris, TalepTipiMatris, TalepYaratmaGunlukMatris, TalepYaratmaMatris } from "@/actions/matris";
 import MatrisClient from "./matris-client";
-import { TalepYaratmaMatris, ImzaAtmaMatris, ImzaAtananMatris, TalepYaratmaGunlukMatris, TalepTipiMatris, KisiRiskMatris, RolDagilimiMatris, ImzaAtmaGunlukMatris, ImzaOraniMatris, KisiVerimlilikMatris } from "@/actions/matris";
 
 async function MatrisData() {
   const [
@@ -29,7 +29,7 @@ async function MatrisData() {
     KisiVerimlilikMatris()
   ]);
   return (
-    <MatrisClient talepYaratma={talepYaratma} imzaAtma={imzaAtma} imzaAtanan={imzaAtanan} talepYaratmaGunluk={talepYaratmaGunluk} imzaAtmaGunluk={imzaAtmaGunluk} talepTipi={talepTipi} kisiRisk={kisiRisk} rolDagilimi={rolDagilimi} imzaOrani={imzaOrani} kisiVerimlilik={kisiVerimlilik} />
+    <MatrisClient imzaAtanan={imzaAtanan} imzaAtma={imzaAtma} imzaAtmaGunluk={imzaAtmaGunluk} imzaOrani={imzaOrani} kisiRisk={kisiRisk} kisiVerimlilik={kisiVerimlilik} rolDagilimi={rolDagilimi} talepTipi={talepTipi} talepYaratma={talepYaratma} talepYaratmaGunluk={talepYaratmaGunluk} />
   )
 }
 

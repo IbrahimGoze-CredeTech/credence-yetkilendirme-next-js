@@ -1,28 +1,28 @@
-import { talepOnayla } from "@/actions/talep-onaylama";
-import { ToastAction } from "@/components/ui/toast";
-import { toast } from "@/hooks/use-toast";
-import { IPreviousRolCikarma, IWaitingRolCikarma } from "@/types";
+import type { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
 import DataGrid, {
   Button,
   Column,
   Editing,
-  SearchPanel,
   Pager,
   Paging,
+  SearchPanel,
 } from "devextreme-react/data-grid";
-import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import { Separator } from "@/components/ui/separator";
-
 import React, { useEffect, useState } from "react";
 import { PreviousRolCikarma } from "@/actions/previous-demands";
+import { talepOnayla } from "@/actions/talep-onaylama";
+import { Separator } from "@/components/ui/separator";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/hooks/use-toast";
+import type { IPreviousRolCikarma, IWaitingRolCikarmaType } from "@/types";
 
-interface Props {
-  data: IWaitingRolCikarma[];
+
+interface IProps {
+  data: IWaitingRolCikarmaType[];
   rolCikarmaTalepler: IPreviousRolCikarma[];
 }
 
-export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
-  const [gridData, setGridData] = useState<IWaitingRolCikarma[]>(data);
+export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: IProps) {
+  const [gridData, setGridData] = useState<IWaitingRolCikarmaType[]>(data);
   const [talepGrid, setTalepGrid] = useState<IPreviousRolCikarma[]>([]);
 
   useEffect(() => {
@@ -90,26 +90,26 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
       <div className="p-2 rounded-md">
         <DataGrid
           dataSource={gridData}
-          showBorders
           noDataText="Şu anda bekleyen talep bulunmamaktadır."
+          showBorders
         >
-          <SearchPanel visible={true} placeholder="Arama Yapın..." />
+          <SearchPanel placeholder="Arama Yapın..." visible={true} />
           <Editing mode="row" useIcons={true} />
-          <Column dataField="RolAdi" caption="Rol Adı" />
-          <Column dataField="KisiAdi" caption="Kişi Ad" />
-          <Column dataField="RolCikarmaTarihi" caption="Rol Bitiş Tarihi" />
+          <Column caption="Rol Adı" dataField="RolAdi" />
+          <Column caption="Kişi Ad" dataField="KisiAdi" />
+          <Column caption="Rol Bitiş Tarihi" dataField="RolCikarmaTarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"
-              visible={true}
               onClick={(e) => onClick(true, e)}
               text="Onay"
+              visible={true}
             />
             <Button
               hint="Ret"
-              visible={true}
               onClick={(e) => onClick(false, e)}
               text="Ret"
+              visible={true}
             />
           </Column>
         </DataGrid>
@@ -125,9 +125,9 @@ export default function RolCikarmaGrid({ data, rolCikarmaTalepler }: Props) {
         >
           <Paging defaultPageSize={5} />
           <Pager
+            allowedPageSizes="auto"
+            displayMode="compact"
             visible={true}
-            allowedPageSizes={"auto"}
-            displayMode={"compact"}
           />
         </DataGrid>
       </div>

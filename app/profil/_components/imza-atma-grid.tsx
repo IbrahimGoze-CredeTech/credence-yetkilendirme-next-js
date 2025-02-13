@@ -1,20 +1,20 @@
-import React from 'react'
 import { DataGrid } from 'devextreme-react';
-import { BarChartComp, BarChartData } from './bar-chart';
+import React from 'react'
+import { BarChartComp, type IBarChartData } from './bar-chart';
 
 
-interface Props {
-  data: BarChartData[];
+interface IProps {
+  data: IBarChartData[];
 }
 
-export default function ImzaAtmaGrid({ data }: Props) {
+export default function ImzaAtmaGrid({ data }: IProps) {
 
   return (
     <>
       <div>
-        <DataGrid dataSource={data}></DataGrid>
+        <DataGrid dataSource={data} />
       </div><div className='mt-4'>
-        <BarChartComp chartLabel={'En Çok Imza Atanlar'} chartDescription='En çok imza atan' data={data} quantityValue='imzaAtilanTalepSayısı' quantityLabel='Imza Sayısı' />
+        <BarChartComp chartDescription='En çok imza atan' chartLabel="En Çok Imza Atanlar" data={data} quantityLabel='Imza Sayısı' quantityValue='imzaAtilanTalepSayısı' />
       </div>
     </>
   )

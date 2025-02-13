@@ -2,22 +2,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import Image from "next/image";
+import { useSession } from "next-auth/react";
 import React, {
   startTransition,
   useEffect,
   useState,
   useTransition,
 } from "react";
-import { useCurrentUser } from "@/hooks/use-current-user";
-import { ExtendedUser } from "@/next-auth";
-import TalepOnayDatagrid from "../_anasayfa/talep-onay/TalepOnayDatagrid";
+import { UseCurrentUser } from "@/hooks/use-current-user";
+import type { ExtendedUser } from "@/next-auth";
+// import type { IDataItem } from "@/utils";
+import { FetcherGet, FormatDataList, type IDataItem } from "@/utils";
 import KisiDataGridOzet from "../_anasayfa/KisiDataGridOzet";
 import TalepOzet from "../_anasayfa/TalepOzet";
+import TalepOnayDatagrid from "../_anasayfa/talep-onay/TalepOnayDatagrid";
 import ImzaAtmaGrid from "./_components/imza-atma-grid";
-import { DataItem, fetcherGet, formatDataList } from "@/utils";
-import { useSession } from "next-auth/react";
 import { PieChartComp } from "./_components/pie-chart";
-import Image from "next/image";
 
 export default function ProfilePage() {
   const kullanıcı = {
@@ -33,7 +34,7 @@ export default function ProfilePage() {
     tasksCompleted: 35,
     activeTasks: 5,
   };
-  const currentUser = useCurrentUser();
+  const currentUser = UseCurrentUser();
   const [user, setUser] = useState<ExtendedUser | undefined>(undefined);
   const session = useSession();
 
@@ -43,8 +44,8 @@ export default function ProfilePage() {
   const [yaratma, setYaratma] = useState<[]>([]);
   const [imzaAtma, setImzaAtma] = useState<[]>([]);
   const [imzaAtanan, setImzaAtanan] = useState<[]>([]);
-  const [gunlukTalepYaratma, setGunlukTalepYaratma] = useState<DataItem[]>([]);
-  const [gunlukImzaAtma, setGunlukImzaAtma] = useState<DataItem[]>([]);
+  const [gunlukTalepYaratma, setGunlukTalepYaratma] = useState<IDataItem[]>([]);
+  const [gunlukImzaAtma, setGunlukImzaAtma] = useState<IDataItem[]>([]);
   const [talepTipi, setTalepTipi] = useState<[]>([]);
   const [combineArray, setCombineArray] = useState([]);
 
@@ -66,15 +67,15 @@ export default function ProfilePage() {
         risk,
         kisiselRoller,
       ] = await Promise.all([
-        fetcherGet("/Matris/talep-yaratma-matris", session.data?.token),
-        fetcherGet("/Matris/imza-atma-matris", session.data?.token),
-        fetcherGet("/Matris/imza-atanan-matris", session.data?.token),
-        fetcherGet("/Matris/talep-yaratma-gunluk-matris", session.data?.token),
-        fetcherGet("/Matris/imza-atma-gunluk-matris", session.data?.token),
-        fetcherGet("/Matris/talep-tipi-matris", session.data?.token),
-        fetcherGet("/Matris/kisi-verimlilik-matris", session.data?.token),
-        fetcherGet("/Matris/kisi-risk-matris", session.data?.token),
-        fetcherGet("/Kisi/ozet-bilgi", session.data?.token),
+        FetcherGet("/Matris/talep-yaratma-matris", session.data?.token),
+        FetcherGet("/Matris/imza-atma-matris", session.data?.token),
+        FetcherGet("/Matris/imza-atanan-matris", session.data?.token),
+        FetcherGet("/Matris/talep-yaratma-gunluk-matris", session.data?.token),
+        FetcherGet("/Matris/imza-atma-gunluk-matris", session.data?.token),
+        FetcherGet("/Matris/talep-tipi-matris", session.data?.token),
+        FetcherGet("/Matris/kisi-verimlilik-matris", session.data?.token),
+        FetcherGet("/Matris/kisi-risk-matris", session.data?.token),
+        FetcherGet("/Kisi/ozet-bilgi", session.data?.token),
       ]);
       setTalepTipi(talepTipi);
       setYaratma(rolAtamalar);
@@ -87,10 +88,10 @@ export default function ProfilePage() {
       const roller = kisiselRoller[0]?.roller || [];
       setKisiselRoller(roller);
 
-      const formattedGunlukTalepYaratma = formatDataList(gunlukTalepYaratma);
+      const formattedGunlukTalepYaratma = FormatDataList(gunlukTalepYaratma);
       setGunlukTalepYaratma(formattedGunlukTalepYaratma);
 
-      const formattedGunlukImzaAtma = formatDataList(gunlukImzaAtma);
+      const formattedGunlukImzaAtma = FormatDataList(gunlukImzaAtma);
       setGunlukImzaAtma(formattedGunlukImzaAtma);
 
       const object3 = imzaAtanan.map((item1: { id: any }) => {
@@ -113,11 +114,11 @@ export default function ProfilePage() {
         <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col space-y-4">
           {/* Profil Resmi */}
           <Image
-            className="rounded-full mx-auto"
-            src="/user.png"
             alt="User Avatar"
-            width={96}
+            className="rounded-full mx-auto"
             height={96}
+            src="/user.png"
+            width={96}
           />
 
           {/* Temel Bilgiler */}
@@ -187,9 +188,9 @@ export default function ProfilePage() {
         <div className="lg:col-span-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="bg-white shadow-lg rounded-lg p-6">
             <TalepOnayDatagrid
+              waitingKisiYetkiEdit={[]}
               waitingRolAtamalar={[]}
               waitingRolCikarmalar={[]}
-              waitingKisiYetkiEdit={[]}
             />
           </div>
           <div className="bg-white shadow-lg rounded-lg p-6">

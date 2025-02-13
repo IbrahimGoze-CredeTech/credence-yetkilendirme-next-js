@@ -1,20 +1,20 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import * as z from "zod";
+import { useForm } from "react-hook-form";
+import type * as z from "zod";
+import { login } from "@/actions/login";
+import FormError from "@/components/form-error";
+import FormSuccess from "@/components/form-success";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { LoginSchema } from "@/schemas";
-import { login } from "@/actions/login";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -22,23 +22,23 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import FormError from "@/components/form-error";
-import FormSuccess from "@/components/form-success";
+import { Input } from "@/components/ui/input";
+import { loginSchema } from "@/schemas";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       name: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = (values: z.infer<typeof loginSchema>) => {
     setError("");
     setSuccess("");
 
@@ -66,7 +66,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-[radial-gradient(ellipse_at_bottom,var(--tw-gradient-stops))] from-sky-200 to-azure-radiance-500">
+    <div className="flex items-center justify-center h-screen bg-[radial-gradient(ellipse_at_bottom,var(--tw-gradient-stops))] from-sky-200 to-azure-radiance-500 w-full">
       <div className="p-6 rounded-lg shadow-lg bg-white w-96">
         <Card className="shadow-lg">
           <CardHeader>
@@ -80,9 +80,9 @@ export default function LoginPage() {
           <CardContent>
             <Form {...form}>
               <form
+                className="space-y-4"
                 method="POST"
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
               >
                 <FormField
                   control={form.control}
@@ -93,8 +93,8 @@ export default function LoginPage() {
                       <FormControl>
                         <Input
                           {...field}
-                          disabled={isPending}
                           className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
+                          disabled={isPending}
                         />
                       </FormControl>
                     </FormItem>
@@ -109,13 +109,9 @@ export default function LoginPage() {
                       <FormControl>
                         <Input
                           {...field}
-                          type="password"
-                          // id="username"
-                          // value={username}
-                          disabled={isPending}
-                          // onChange={(e) => setUsername(e.target.value)}
-                          // required
                           className="border-gray-300 rounded-md focus:ring focus:ring-blue-500 transition duration-150"
+                          disabled={isPending}
+                          type="password"
                         />
                       </FormControl>
                     </FormItem>
@@ -126,9 +122,9 @@ export default function LoginPage() {
                   <FormError message={error} />
                   <FormSuccess message={success} />
                   <Button
-                    type="submit"
-                    disabled={isPending}
                     className="bg-blue-600 text-white w-full rounded-md hover:bg-blue-700 transition duration-200"
+                    disabled={isPending}
+                    type="submit"
                   >
                     Giriş Yap
                   </Button>

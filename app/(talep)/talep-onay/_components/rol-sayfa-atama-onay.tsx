@@ -1,21 +1,21 @@
+import type { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
+import DataGrid, {
+  Button,
+  Column,
+  Editing,
+  Pager,
+  Paging,
+  SearchPanel,
+} from "devextreme-react/data-grid";
+import React, { useState } from "react";
 import { PreviousRolSayfaAtama } from "@/actions/previous-demands";
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { WaitingRolSayfaAtama } from "@/actions/waiting-demands";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/hooks/use-toast";
-import { IPreviousRolSayfaAtama, IWaitingRolSayfaAtama } from "@/types";
-import DataGrid, {
-  Button,
-  Column,
-  Editing,
-  SearchPanel,
-  Pager,
-  Paging,
-} from "devextreme-react/data-grid";
-import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import React, { useState } from "react";
+import type { IPreviousRolSayfaAtama, IWaitingRolSayfaAtama } from "@/types";
 
-interface Props {
+interface IProps {
   data: IWaitingRolSayfaAtama[];
   previousKisiSayfaAtama: IPreviousRolSayfaAtama[];
 }
@@ -23,7 +23,7 @@ interface Props {
 export default function RolSayfaAtamaOnay({
   data,
   previousKisiSayfaAtama,
-}: Props) {
+}: IProps) {
   const [gridData, setGridData] = useState<IWaitingRolSayfaAtama[]>(data);
   const [previousGrid, setPreviousGrid] = useState<IPreviousRolSayfaAtama[]>(
     previousKisiSayfaAtama
@@ -85,24 +85,24 @@ export default function RolSayfaAtamaOnay({
           dataSource={gridData}
           noDataText="Şu anda bekleyen talep bulunmamaktadır."
         >
-          <SearchPanel visible={true} placeholder="Arama Yapın..." />
+          <SearchPanel placeholder="Arama Yapın..." visible={true} />
           <Editing mode="row" useIcons={true} />
-          <Column dataField="RolAdi" caption="Rol Adı" />
-          <Column dataField="SayfaRoute" caption="Sayfa" />
-          <Column dataField="BaslangicTarihi" caption="Başlama Tarihi" />
-          <Column dataField="BitisTarihi" caption="Bitiş Tarihi" />
+          <Column caption="Rol Adı" dataField="RolAdi" />
+          <Column caption="Sayfa" dataField="SayfaRoute" />
+          <Column caption="Başlama Tarihi" dataField="BaslangicTarihi" />
+          <Column caption="Bitiş Tarihi" dataField="BitisTarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"
-              visible={true}
               onClick={(e) => onClick(true, e)}
               text="Onay"
+              visible={true}
             />
             <Button
               hint="Ret"
-              visible={true}
               onClick={(e) => onClick(false, e)}
               text="Ret"
+              visible={true}
             />
           </Column>
         </DataGrid>
@@ -117,9 +117,9 @@ export default function RolSayfaAtamaOnay({
         >
           <Paging defaultPageSize={5} />
           <Pager
+            allowedPageSizes="auto"
+            displayMode="compact"
             visible={true}
-            allowedPageSizes={"auto"}
-            displayMode={"compact"}
           />
         </DataGrid>
       </div>

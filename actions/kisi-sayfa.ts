@@ -1,15 +1,15 @@
 "use server";
 
+import type { z } from "zod";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import {
-  TalepKisiSayfaAtamaSchema,
-  TalepKisiSayfaCikarmaSchema,
-  TalepKisiSayfaEditSchema,
+  talepKisiSayfaAtamaSchema,
+  talepKisiSayfaCikarmaSchema,
+  talepKisiSayfaEditSchema,
 } from "@/schemas";
-import { KisiSayfaFromType } from "@/types";
-import { fetcherGet, fetcherPost } from "@/utils";
-import { z } from "zod";
+import type { KisiSayfaFromType } from "@/types";
+import { FetcherGet, FetcherPost } from "@/utils";
 
 type KisiSayfaType = {
   kisiId: number;
@@ -24,7 +24,7 @@ export async function kisininSayfalar(
 ): Promise<KisiSayfaFromType[]> {
   const session = await auth();
 
-  //Get the kisi surname from the name by splinting the spaces
+  // Get the kisi surname from the name by splinting the spaces
   const kisiNameArray = kisiName.split(" ");
   const kisiSurname = kisiNameArray[kisiNameArray.length - 1];
   const kisi = await db.kisi.findFirst({
@@ -32,7 +32,7 @@ export async function kisininSayfalar(
       Soyad: kisiSurname,
     },
   });
-  const pages: KisiSayfaFromType[] = await fetcherGet(
+  const pages: KisiSayfaFromType[] = await FetcherGet(
     `/Sayfa/kisi-sayfa/${kisi?.KisiId}`,
     session?.token
   );
@@ -50,7 +50,7 @@ export async function kisiAtanabilirSayfalar(
 ): Promise<string[]> {
   const session = await auth();
 
-  //Get the kisi surname from the name by splinting the spaces
+  // Get the kisi surname from the name by splinting the spaces
   const kisiNameArray = kisiAd.split(" ");
   const kisiSurname = kisiNameArray[kisiNameArray.length - 1];
   const kisi = await db.kisi.findFirst({
@@ -59,7 +59,7 @@ export async function kisiAtanabilirSayfalar(
     },
   });
 
-  const kisiSayfalar: KisiSayfaType[] = await fetcherGet(
+  const kisiSayfalar: KisiSayfaType[] = await FetcherGet(
     `/Sayfa/kisi-sayfa/${kisi?.KisiId}`,
     session?.token
   );
@@ -83,7 +83,7 @@ export async function kisiCikarilabilirSayfalar(
 ): Promise<string[]> {
   const session = await auth();
 
-  //Get the kisi surname from the name by splinting the spaces
+  // Get the kisi surname from the name by splinting the spaces
   const kisiNameArray = kisiAd.split(" ");
   const kisiSurname = kisiNameArray[kisiNameArray.length - 1];
   const kisi = await db.kisi.findFirst({
@@ -92,7 +92,7 @@ export async function kisiCikarilabilirSayfalar(
     },
   });
 
-  const kisiSayfalar: KisiSayfaType[] = await fetcherGet(
+  const kisiSayfalar: KisiSayfaType[] = await FetcherGet(
     `/Sayfa/kisi-sayfa/${kisi?.KisiId}`,
     session?.token
   );
@@ -102,12 +102,12 @@ export async function kisiCikarilabilirSayfalar(
   return kisiSayfaRoutes;
 }
 
-//#region Post Requests
+// #region Post Requests
 
 export async function kisiSayfaEditPost(
-  values: z.infer<typeof TalepKisiSayfaEditSchema>
+  values: z.infer<typeof talepKisiSayfaEditSchema>
 ) {
-  type KisiSayfaEditRequest = {
+  type KisiSayfaEditRequestType = {
     kisiAdi: string;
     sayfaRoute: string;
     isPermitted: boolean;
@@ -119,7 +119,7 @@ export async function kisiSayfaEditPost(
 
   const session = await auth();
 
-  const validateFields = TalepKisiSayfaEditSchema.safeParse(values);
+  const validateFields = talepKisiSayfaEditSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -127,7 +127,7 @@ export async function kisiSayfaEditPost(
 
   const {
     kisiAdi,
-    SayfaRoute,
+    sayfaRoute,
     isPermitted,
     baslamaTarihi,
     bitisTarihi,
@@ -142,9 +142,9 @@ export async function kisiSayfaEditPost(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const kisiSayfaEditRequest: KisiSayfaEditRequest = {
+  const kisiSayfaEditRequest: KisiSayfaEditRequestType = {
     kisiAdi: kisiAdi,
-    sayfaRoute: SayfaRoute,
+    sayfaRoute,
     isPermitted: isPermitted,
     baslangicTarihi: baslamaTarihi.toISOString(),
     bitisTarihi: bitisTarihi.toISOString(),
@@ -152,7 +152,7 @@ export async function kisiSayfaEditPost(
     ekstraImza: ekstraImzaArray,
   };
 
-  await fetcherPost(
+  await FetcherPost(
     "/Talep/kisi-sayfa-edit",
     session?.token,
     JSON.stringify(kisiSayfaEditRequest)
@@ -161,9 +161,9 @@ export async function kisiSayfaEditPost(
 }
 
 export async function kisiSayfaAtamaPost(
-  values: z.infer<typeof TalepKisiSayfaAtamaSchema>
+  values: z.infer<typeof talepKisiSayfaAtamaSchema>
 ) {
-  type KisiSayfaAtamaRequest = {
+  type KisiSayfaAtamaRequestType = {
     kisiAdi: string;
     sayfaRoute: string;
     baslangicTarihi: string;
@@ -174,7 +174,7 @@ export async function kisiSayfaAtamaPost(
 
   const session = await auth();
 
-  const validateFields = TalepKisiSayfaAtamaSchema.safeParse(values);
+  const validateFields = talepKisiSayfaAtamaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -182,7 +182,7 @@ export async function kisiSayfaAtamaPost(
 
   const {
     kisiAdi,
-    SayfaRoute,
+    sayfaRoute,
     baslamaTarihi,
     bitisTarihi,
     ciftImza,
@@ -196,16 +196,16 @@ export async function kisiSayfaAtamaPost(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const kisiSayfaAtamaRequest: KisiSayfaAtamaRequest = {
+  const kisiSayfaAtamaRequest: KisiSayfaAtamaRequestType = {
     kisiAdi: kisiAdi,
-    sayfaRoute: SayfaRoute,
+    sayfaRoute,
     baslangicTarihi: baslamaTarihi.toISOString(),
     bitisTarihi: bitisTarihi.toISOString(),
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  const response = await fetcherPost(
+  const response = await FetcherPost(
     "/Talep/kisi-sayfa-atama",
     session?.token,
     JSON.stringify(kisiSayfaAtamaRequest)
@@ -215,9 +215,9 @@ export async function kisiSayfaAtamaPost(
 }
 
 export async function kisiSayfaCikarmaPost(
-  values: z.infer<typeof TalepKisiSayfaCikarmaSchema>
+  values: z.infer<typeof talepKisiSayfaCikarmaSchema>
 ) {
-  type KisiSayfaCikarmaRequest = {
+  type KisiSayfaCikarmaRequestType = {
     kisiAdi: string;
     sayfaRoute: string;
     baslangicTarihi: string;
@@ -228,7 +228,7 @@ export async function kisiSayfaCikarmaPost(
 
   const session = await auth();
 
-  const validateFields = TalepKisiSayfaCikarmaSchema.safeParse(values);
+  const validateFields = talepKisiSayfaCikarmaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -236,7 +236,7 @@ export async function kisiSayfaCikarmaPost(
 
   const {
     kisiAdi,
-    SayfaRoute,
+    sayfaRoute,
     baslamaTarihi,
     bitisTarihi,
     ciftImza,
@@ -250,16 +250,16 @@ export async function kisiSayfaCikarmaPost(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const kisiSayfaAtamaRequest: KisiSayfaCikarmaRequest = {
+  const kisiSayfaAtamaRequest: KisiSayfaCikarmaRequestType = {
     kisiAdi: kisiAdi,
-    sayfaRoute: SayfaRoute,
+    sayfaRoute,
     baslangicTarihi: baslamaTarihi.toISOString(),
     bitisTarihi: bitisTarihi.toISOString(),
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  const response = await fetcherPost(
+  const response = await FetcherPost(
     "/Talep/kisi-sayfa-cikarma",
     session?.token,
     JSON.stringify(kisiSayfaAtamaRequest)
@@ -267,4 +267,4 @@ export async function kisiSayfaCikarmaPost(
 
   return { success: response.success, error: response.error };
 }
-//#endregion
+// #endregion

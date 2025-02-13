@@ -1,23 +1,23 @@
 "use server";
 
+import type { z } from "zod";
 import { auth } from "@/auth";
-import { TalepRolSayfaAtamaSchema } from "@/schemas";
-import { RolSayfa } from "@/types";
-import { fetcherPost } from "@/utils";
-import { z } from "zod";
+import { talepRolSayfaAtamaSchema } from "@/schemas";
+import type { IRolSayfa } from "@/types";
+import { FetcherPost } from "@/utils";
 
-type SayfaAtamaRequest = {
-  sayfaAtama: RolSayfa;
+type SayfaAtamaRequestType = {
+  sayfaAtama: IRolSayfa;
   ciftImza: boolean;
   ekstraImza: string[];
 };
 
 export async function sayfaAtama(
-  values: z.infer<typeof TalepRolSayfaAtamaSchema>
+  values: z.infer<typeof talepRolSayfaAtamaSchema>
 ) {
   const session = await auth();
 
-  const validateFields = TalepRolSayfaAtamaSchema.safeParse(values);
+  const validateFields = talepRolSayfaAtamaSchema.safeParse(values);
 
   if (!validateFields.success) {
     return { success: "", error: validateFields.error.errors[0].message };
@@ -25,7 +25,7 @@ export async function sayfaAtama(
 
   const {
     rolAdi,
-    SayfaRoute,
+    sayfaRoute,
     baslamaTarihi,
     bitisTarihi,
     ciftImza,
@@ -39,22 +39,22 @@ export async function sayfaAtama(
     ekstraImzaArray = ekstraImza.map((ekstraImza) => ekstraImza.value);
   }
 
-  const sayfaAtama: RolSayfa = {
+  const sayfaAtama: IRolSayfa = {
     rolAdi,
-    sayfaRoute: SayfaRoute,
+    sayfaRoute,
     sayfaBaslangicTarihi: baslamaTarihi.toISOString(),
     sayfaBitisTarihi: bitisTarihi.toISOString(),
     rolId: "",
     sayfaId: "",
   };
 
-  const sayfaAtamaRequest: SayfaAtamaRequest = {
+  const sayfaAtamaRequest: SayfaAtamaRequestType = {
     sayfaAtama,
     ciftImza: ciftImza,
     ekstraImza: ekstraImzaArray,
   };
 
-  await fetcherPost(
+  await FetcherPost(
     "/Sayfa/rol-sayfa",
     session?.token,
     JSON.stringify(sayfaAtamaRequest)

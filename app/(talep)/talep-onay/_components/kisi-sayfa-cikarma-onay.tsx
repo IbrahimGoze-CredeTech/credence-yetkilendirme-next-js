@@ -1,21 +1,21 @@
+import type { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
+import DataGrid, {
+  Button,
+  Column,
+  Editing,
+  Pager,
+  Paging,
+  SearchPanel,
+} from "devextreme-react/data-grid";
+import React, { useState } from "react";
 import { PreviousKisiSayfaCikarma } from "@/actions/previous-demands";
 import { talepOnayla } from "@/actions/talep-onaylama";
 import { WaitingKisiSayfaCikarma } from "@/actions/waiting-demands";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/hooks/use-toast";
-import { IPreviousKisiSayfaCikarma, IWaitingKisiSayfaCikarma } from "@/types";
-import DataGrid, {
-  Button,
-  Column,
-  Editing,
-  SearchPanel,
-  Pager,
-  Paging,
-} from "devextreme-react/data-grid";
-import { ColumnButtonClickEvent } from "devextreme/ui/data_grid";
-import React, { useState } from "react";
+import type { IPreviousKisiSayfaCikarma, IWaitingKisiSayfaCikarma } from "@/types";
 
-interface Props {
+interface IProps {
   data: IWaitingKisiSayfaCikarma[];
   previousKisiSayfaAtama: IPreviousKisiSayfaCikarma[];
 }
@@ -23,7 +23,7 @@ interface Props {
 export default function KisiSayfaCikarmaOnay({
   data,
   previousKisiSayfaAtama,
-}: Props) {
+}: IProps) {
   const [gridData, setGridData] = useState<IWaitingKisiSayfaCikarma[]>(data);
   const [previousGrid, setPreviousGrid] = useState<IPreviousKisiSayfaCikarma[]>(
     previousKisiSayfaAtama
@@ -47,7 +47,7 @@ export default function KisiSayfaCikarmaOnay({
         title: "Onaylandı",
         description: "Talebiniz başarıyla onaylandı",
         action: (
-          <ToastAction altText="Goto schedule to undo" onClick={() => {}}>
+          <ToastAction altText="Goto schedule to undo" onClick={() => { }}>
             Iptal
           </ToastAction>
         ),
@@ -68,7 +68,7 @@ export default function KisiSayfaCikarmaOnay({
         description:
           "Talebiniz başarıyla reddedildi ve supervisor onayı beklemektedir.",
         action: (
-          <ToastAction altText="Goto schedule to undo" onClick={() => {}}>
+          <ToastAction altText="Goto schedule to undo" onClick={() => { }}>
             Iptal
           </ToastAction>
         ),
@@ -83,24 +83,24 @@ export default function KisiSayfaCikarmaOnay({
           dataSource={gridData}
           noDataText="Şu anda bekleyen talep bulunmamaktadır."
         >
-          <SearchPanel visible={true} placeholder="Arama Yapın..." />
+          <SearchPanel placeholder="Arama Yapın..." visible={true} />
           <Editing mode="row" useIcons={true} />
-          <Column dataField="KisiAdi" caption="Kişi Adı" />
-          <Column dataField="SayfaRoute" caption="Sayfa" />
-          <Column dataField="BaslangicTarihi" caption="Başlama Tarihi" />
-          <Column dataField="BitisTarihi" caption="Bitiş Tarihi" />
+          <Column caption="Kişi Adı" dataField="KisiAdi" />
+          <Column caption="Sayfa" dataField="SayfaRoute" />
+          <Column caption="Başlama Tarihi" dataField="BaslangicTarihi" />
+          <Column caption="Bitiş Tarihi" dataField="BitisTarihi" />
           <Column type="buttons" width={120}>
             <Button
               hint="Onay"
-              visible={true}
               onClick={(e) => onClick(true, e)}
               text="Onay"
+              visible={true}
             />
             <Button
               hint="Ret"
-              visible={true}
               onClick={(e) => onClick(false, e)}
               text="Ret"
+              visible={true}
             />
           </Column>
         </DataGrid>
@@ -113,9 +113,9 @@ export default function KisiSayfaCikarmaOnay({
         >
           <Paging defaultPageSize={5} />
           <Pager
+            allowedPageSizes="auto"
+            displayMode="compact"
             visible={true}
-            allowedPageSizes={"auto"}
-            displayMode={"compact"}
           />
         </DataGrid>
       </div>

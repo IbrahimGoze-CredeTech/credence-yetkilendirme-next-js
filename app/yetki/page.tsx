@@ -1,32 +1,30 @@
-// page.tsx
-
 "use client";
 
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState, useTransition } from "react";
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableRow,
   TableCell,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import { fetcherGet } from "@/utils";
-import { useSession } from "next-auth/react";
+import { FetcherGet } from "@/utils";
 
-interface Yetki {
+interface IYetki {
   yetkiId: number;
   yetkiAdi: string;
 }
 
 const YetkiDataTable = () => {
   const session = useSession();
-  const [yetkiler, setYetkiler] = useState<Yetki[]>([]);
+  const [yetkiler, setYetkiler] = useState<IYetki[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     startTransition(async () => {
-      const data = await fetcherGet("/yetki", session.data?.token);
+      const data = await FetcherGet("/yetki", session.data?.token);
       setYetkiler(data);
     });
 
@@ -48,11 +46,11 @@ const YetkiDataTable = () => {
       </h1>
       <div className="mb-4">
         <input
-          type="text"
-          placeholder="Yetki adı ile ara..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Yetki adı ile ara..."
+          type="text"
+          value={searchTerm}
         />
       </div>
       <Table className="w-full text-left border-collapse">
@@ -65,8 +63,8 @@ const YetkiDataTable = () => {
           {filteredYetki.length > 0 ? (
             filteredYetki.map((yetki) => (
               <TableRow
-                key={yetki.yetkiId}
                 className="odd:bg-gray-100 hover:bg-gray-200"
+                key={yetki.yetkiId}
               >
                 <TableCell className="p-3 border-t border-gray-200">
                   {yetki.yetkiAdi}

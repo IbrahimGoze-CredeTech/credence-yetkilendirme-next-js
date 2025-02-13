@@ -1,27 +1,27 @@
 import { DataGrid } from "devextreme-react";
 import React from "react";
-import { BarChartData } from "./bar-chart";
+import type { IBarChartData } from "./bar-chart";
 import { MultipleBarChartComp } from "./bar-chart-multiple";
 
-interface Props {
-  data: BarChartData[];
+interface IProps {
+  data: IBarChartData[];
 }
 
-export default function ImzaOranıGrid({ data }: Props) {
+export default function ImzaOranıGrid({ data }: IProps) {
   return (
     <>
       <div>
-        <DataGrid dataSource={data}></DataGrid>
+        <DataGrid dataSource={data} />
       </div>
       <div className="mt-4">
         <MultipleBarChartComp
-          chartLabel={"İmza Atma Oranı"}
           chartDescription="Gelen taleplerin kaçına imza atıldığını gösterir. "
+          chartLabel="İmza Atma Oranı"
           data={data}
-          firstQuantityValue="imzaSayısı"
           firstQuantityLabel="Gelen İmza Sayısı"
-          secondQuantityValue="imzaAtilanTalepSayısı"
+          firstQuantityValue="imzaSayısı"
           secondQuantityLabel="Atılan İmza Sayısı"
+          secondQuantityValue="imzaAtilanTalepSayısı"
         />
       </div>
     </>

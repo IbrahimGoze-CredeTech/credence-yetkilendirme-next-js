@@ -10,13 +10,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+// import type {
+//   ChartConfig
+// } from "@/components/ui/chart";
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { DataItem } from "@/utils"
+import type { IDataItem } from "@/utils"
 
 const chartConfig = {
   desktop: {
@@ -29,15 +32,15 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-interface AreaChartProps {
-  data: DataItem[]
+interface IAreaChartProps {
+  data: IDataItem[]
   chartLabel: string,
   chartDescription?: string,
   quantityValue: string,
   quantityLabel: string,
 }
 
-export function AreaChartComp({ data, chartLabel, chartDescription, quantityValue, quantityLabel }: AreaChartProps) {
+export function AreaChartComp({ data, chartLabel, chartDescription, quantityValue, quantityLabel }: IAreaChartProps) {
   return (
     <Card>
       <CardHeader>
@@ -47,7 +50,7 @@ export function AreaChartComp({ data, chartLabel, chartDescription, quantityValu
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[300px]">
+        <ChartContainer className="min-h-[300px]" config={chartConfig}>
           <AreaChart
             accessibilityLayer
             data={data}
@@ -63,42 +66,40 @@ export function AreaChartComp({ data, chartLabel, chartDescription, quantityValu
             <XAxis
               dataKey="date"
               tick={{ fontSize: 10 }}
+              tickFormatter={(value) => value}
               tickMargin={8}
               tickSize={6}
-              tickFormatter={(value) => value}
             />
             <YAxis tickMargin={12} />
             <ChartTooltip
-              cursor={false}
               content={<ChartTooltipContent indicator="line" />}
+              cursor={false}
             />
             <Area
+              activeDot={{
+                r: 6,
+              }}
               dataKey={quantityValue}
-              label={quantityLabel}
-              type="natural"
-              fill="#3b82f6"
-              fillOpacity={0.4}
               dot={{
                 fill: "#3b82f6",
                 opacity: 1,
               }}
+              fill="#3b82f6"
+              fillOpacity={0.4}
+              label={quantityLabel}
               stroke="#3b82f6"
-              activeDot={{
-                r: 6,
-              }}
+              type="natural"
             >
               <LabelList
-                position="top"
-                offset={12}
                 className="fill-foreground"
-                fontSize={12} />
+                fontSize={12}
+                offset={12}
+                position="top" />
             </Area>
           </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
-
-      </CardFooter>
+      <CardFooter />
     </Card>
   )
 }
