@@ -22,6 +22,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -67,7 +68,7 @@ const items = [
     icon: Search,
   },
   {
-    title: "Talepler",
+    title: "Talepler İşlemleri",
     icon: FileText,
     submenu: [
       {
@@ -132,8 +133,11 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarContent className="bg-azure-radiance-600 ">
+    <Sidebar className="overflow-x-hidden bg-azure-radiance-600" collapsible="icon">
+      <SidebarHeader>
+        Yetkilendirme
+      </SidebarHeader>
+      <SidebarContent className=" ">
         <SidebarGroup>
           <SidebarGroupLabel className="font-bold text-2xl text-white mb-4">
             Yetkilendirme
@@ -143,7 +147,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   {item.submenu ? (
-                    <Collapsible onOpenChange={() => toggleSubMenu(item.title)} open={openSubMenus[item.title]} >
+                    <Collapsible
+                      onOpenChange={() => toggleSubMenu(item.title)}
+                      open={state === "collapsed" ? false : openSubMenus[item.title]}
+                    >
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton className="hover:bg-azure-radiance-700 rounded-md transition-colors duration-200 w-full">
                           <item.icon className="text-white text-base font-semibold" />
